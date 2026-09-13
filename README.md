@@ -111,7 +111,7 @@ vc-site/
 - `whoToHire` —— One-stop 营销高潮段落
 - `approachSteps` / `approachIntro` —— BRIEF → DELIVER 六步
 - `lab` —— VC LAB 与 Local Brain
-- `contact` —— 联系方式（微信已上线，邮箱仍缺，见下方「上线前必做」）
+- `contact` —— 联系方式（微信与邮箱都已上线，只差表单端点，见下方「上线前必做」）
 - `footer` / `seo`
 
 ### 改项目 → `content/projects.ts`
@@ -344,13 +344,13 @@ npm start         # 本地验证生产构建
 |---|---|---|
 | 微信号 | `contact.channels[0].value` | `Vc1242856346` + 一键复制 |
 | 微信二维码 | `contact.qrImage` | `brand/wechat-qr`（从名片裁掉个人信息后生成，二维码本身可解码） |
+| 联系邮箱 | `contact.channels[1].value` | `lxy13738164923@outlook.com`（`href` 故意留 `null`，由 `ChannelValue` 拼 `mailto:`，地址只写一处） |
 | 古格 credits | `content/projects.ts` | 三条真实分工 |
 
 还没给的（给到就能直接填）：
 
 | 字段 | 位置 | 现状 |
 |---|---|---|
-| 联系邮箱 | `contact.channels[1].value` | `null` → 页面显示「待补充：正式联系邮箱」 |
 | 需求表单端点 | `contact.formEndpoint` | `''` → 目前是「复制需求 + 加微信」流程，不是坏了 |
 | 正式域名 | `next.config.ts` / `metadataBase` | 未设置 |
 | 部署 | 腾讯云 EdgeOne Pages | 未做（构建命令 `npm run build`，输出 `.next`，大陆节点需 ICP 备案） |

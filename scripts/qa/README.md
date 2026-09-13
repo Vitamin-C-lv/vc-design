@@ -37,6 +37,7 @@ node scripts/qa/shoot.mjs         # 全站回归（最慢，几分钟）
 | `verify-particle.mjs` | 青花粒子：兜底图是否退场、是否绘制、器物是否被裁切、切阶段是否重绘 | 四项断言全过 |
 | `verify-snapshot.mjs` | 观潮内嵌副本可用性 | 标题正确、4xx/5xx 为 0、帧内导航可点 |
 | `verify-decode.mjs` | 点云解码正确性（纯 Node，**不需要站点在跑**） | 解出的 bbox 逐轴等于 `pointcloud.json` 的 bbox |
+| `verify-fastscroll.mjs` | 快速滚动（冷启动 + 真实滚轮猛甩）下懒加载是否既够懒、又不会卡死 | 案例页静置不滚动时点云 0 请求、canvas 仍 300×150；首页冷启动猛甩后点云被请求且 canvas 已按真实尺寸初始化；视口内无未揭示元素 / 未加载图片 |
 
 ## 环境变量
 

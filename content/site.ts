@@ -299,12 +299,13 @@ export const contact = {
       id: 'email',
       label: 'EMAIL',
       zh: '邮箱',
-      // Still unset on purpose: inventing an address is forbidden by the brief,
-      // and a plausible-looking fake is worse than a stated gap.
-      value: null,
+      value: 'lxy13738164923@outlook.com',
       valueHint: '正式联系邮箱',
       pendingNote: '待补充：正式联系邮箱',
+      // Left null on purpose: `ChannelValue` falls back to `mailto:` + value, so
+      // the address stays in one place instead of being written twice.
       href: null,
+      actionNote: '点开即可发邮件',
     },
   ] as ContactChannel[],
   /**

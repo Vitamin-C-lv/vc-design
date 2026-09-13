@@ -27,11 +27,13 @@ export function VcVideo({
   className,
   sizes = '100vw',
   aspect,
+  onLive,
 }: {
   video: VideoRef;
   className?: string;
   sizes?: string;
   aspect?: number;
+  onLive?: () => void;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [inView, setInView] = useState(false);
@@ -117,6 +119,7 @@ export function VcVideo({
             height={Math.round(1600 / ratio)}
             className="media-cover absolute inset-0"
             aria-label={video.caption ?? '项目演示视频'}
+            onPlaying={onLive}
           >
             <source src={video.webm} type="video/webm" />
             <source src={video.mp4} type="video/mp4" />

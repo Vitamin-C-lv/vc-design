@@ -4,8 +4,6 @@ const browser = await chromium.launch({ executablePath: process.env.CHROMIUM || 
 const ROUTES = ['/', '/work', '/lab', '/work/guge', '/work/luahua', '/work/lihuahua', '/work/guanchao', '/work/qinghua-zaojing'];
 const VPS = [{n:'1600',w:1600,h:1000},{n:'390',w:390,h:844}];
 
-const lum = (c) => { const m = String(c).match(/[\d.]+/g); if(!m) return null; const [r,g,b]=m.map(Number); return 0.2126*r+0.7152*g+0.0722*b; };
-const alpha = (c) => { const m = String(c).match(/[\d.]+/g); return m && m.length===4 ? Number(m[3]) : 1; };
 
 for (const vp of VPS) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, locale: 'zh-CN' });

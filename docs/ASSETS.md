@@ -143,8 +143,10 @@ cd vc-site && npm run check && npm run build
 | 项目 | 现状 | 上线前需要 |
 |---|---|---|
 | VC Logo | 用 `VC` 文字标识；`public/brand/icon.svg` 为几何构造的 favicon | 正式 Logo（可选） |
-| 微信二维码 | `content/site.ts` → `contact.qrImage = null`，UI 显示显式占位框 | 真实二维码图片，放到 `public/brand/` 后填入路径 |
-| 联系邮箱 / 微信号 | `contact.channels[].value = null`，UI 显示显式占位 | 真实值 |
+| 微信二维码 | **已就位**：`public/brand/wechat-qr.png`，`contact.qrImage = 'brand/wechat-qr'` | — |
+| 微信号 | **已就位**：`contact.channels[0].value = 'Vc1242856346'`（点击即复制） | — |
+| 联系邮箱 | **已就位**：`contact.channels[1].value = 'lxy13738164923@outlook.com'`，`href` 保持 `null` 由 `ChannelValue` 拼 `mailto:` | 无 |
+| 表单接口 | `contact.formEndpoint = ''`，按钮因此是「复制需求」而不是「发送需求」 | 一个接收 POST 的接口地址 |
 | 正式域名 | 未提供 | 填入 `metadataBase` 与页脚 |
 | 客户评价 / Client Logo | **禁止编造**，因此网站目前完全没有这一层 | 真实评价出现后再加 |
 | 李花花产品 UI | MVP 阶段 | 精修 UI 出来后替换 `lihuahua/*` 三张图 |

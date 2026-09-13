@@ -84,6 +84,7 @@ export function EmbeddedProduct({
   note,
   heightClassName = 'h-[34rem] md:h-[42rem]',
   className,
+  onLive,
 }: {
   src: string;
   title: string;
@@ -93,6 +94,7 @@ export function EmbeddedProduct({
   note?: string;
   heightClassName?: string;
   className?: string;
+  onLive?: () => void;
 }) {
   const [live, setLive] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -140,7 +142,10 @@ export function EmbeddedProduct({
             src={src}
             title={title}
             loading="lazy"
-            onLoad={() => setLive(true)}
+            onLoad={() => {
+              setLive(true);
+              onLive?.();
+            }}
             onError={() => setFailed(true)}
             className={cx(
               'h-full w-full border-0 transition-opacity duration-700',

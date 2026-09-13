@@ -79,7 +79,6 @@ await page.waitForTimeout(14000);
 const state = await page.evaluate(() => {
   const canvas = document.querySelector('#live-particle canvas');
   const img = document.querySelector('#live-particle img');
-  const root = document.querySelector('#live-particle');
   if (!canvas) return { error: 'no canvas found in #live-particle' };
   const cr = canvas.getBoundingClientRect();
   const cs = getComputedStyle(canvas);

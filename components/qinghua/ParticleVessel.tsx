@@ -20,6 +20,7 @@ import {
 } from './particlePresets';
 import { loadPointCloud, type DecodedPointCloud } from './pointcloud';
 import { vesselFragmentShader, vesselVertexShader } from './particleShaders';
+import { useNearViewport } from '@/lib/motion/nearViewport';
 
 export interface ParticleVesselProps {
   /** 使用哪个点云模型 */
@@ -34,6 +35,7 @@ export interface ParticleVesselProps {
   /** 静止兜底图（低端设备 / reduced-motion / 加载失败时显示） */
   fallbackSrc?: string;
   fallbackAlt?: string;
+  onLive?: () => void;
 }
 
 type ThreeModule = typeof import('three');
@@ -281,6 +283,7 @@ export function ParticleVessel({
   className,
   fallbackSrc,
   fallbackAlt = '青花造境器物粒子效果静态图',
+  onLive,
 }: ParticleVesselProps) {
   const profile = useDeviceProfile();
   const selectedPreset = getParticlePreset(stage);
@@ -294,6 +297,8 @@ export function ParticleVessel({
   const revealRef = useRef(clamp(reveal ?? 0));
   const failedConfigRef = useRef<string | null>(null);
   const mountedRef = useRef(true);
+  const drewRef = useRef(false);
+  const onLiveRef = useRef(onLive);
   /*
    * `live` means "the real renderer has drawn its first frame". Until then the
    * fallback capture is the honest thing to show; after it, the capture is stale
@@ -301,9 +306,16 @@ export function ParticleVessel({
    */
   const [live, setLive] = useState(false);
   const markLive = useCallback(() => {
-    if (mountedRef.current) setLive(true);
+    if (!mountedRef.current) return;
+    setLive(true);
+    onLiveRef.current?.();
   }, []);
   const configKey = `${selectedModel}:${framing}:${canUseThree}:${profile.isCompact}`;
+  const { ref: nearRef, near: committed } = useNearViewport<HTMLDivElement>();
+  const attachRoot = useCallback((node: HTMLDivElement | null) => {
+    rootRef.current = node;
+    nearRef(node);
+  }, [nearRef]);
 
   useEffect(
     () => () => {
@@ -317,10 +329,15 @@ export function ParticleVessel({
   }, [stage]);
 
   useEffect(() => {
+    onLiveRef.current = onLive;
+  }, [onLive]);
+
+  useEffect(() => {
     const root = rootRef.current;
     const canvas = canvasRef.current;
     if (!root || !canvas || !canUseThree || failedConfigRef.current === configKey) return;
 
+    drewRef.current = false;
     let disposed = false;
     let loading = false;
     let rafId = 0;
@@ -337,6 +354,10 @@ export function ParticleVessel({
         rafId = 0;
         if (disposed || !runtimeRef.current || !visibleRef.current || document.hidden) return;
         runtimeRef.current.render(time * 0.001);
+        if (!drewRef.current) {
+          drewRef.current = true;
+          markLive();
+        }
         rafId = requestAnimationFrame(frame);
       };
       rafId = requestAnimationFrame(frame);
@@ -359,27 +380,23 @@ export function ParticleVessel({
     canvas.addEventListener('webglcontextlost', onContextLost, false);
 
     const boot = async () => {
-      if (loading || runtimeRef.current || disposed || !visibleRef.current || document.hidden) return;
+      if (loading || runtimeRef.current || disposed || !committed || document.hidden) return;
       loading = true;
       try {
-        // This is intentionally inside the visibility callback. Three and the
+        // This remains behind the near-viewport commitment. Three and the
         // point-cloud bytes are absent from the initial route and are never
         // requested by low-tier or reduced-motion visitors.
         const THREE = await import('three');
-        if (disposed || !visibleRef.current || document.hidden) return;
+        if (disposed || !committed || document.hidden) return;
         const maxPoints = framing === 'focus' ? 15000 : 8000;
         const data = await loadPointCloud(DATA_ROOT, selectedModel, profile.isCompact ? Math.floor(maxPoints * 0.6) : maxPoints, controller.signal);
-        if (disposed || !visibleRef.current || document.hidden) return;
+        if (disposed || !committed || document.hidden) return;
         const nextRuntime = buildRuntime(THREE, canvas, data, stageRef.current, framing, profile.isCompact, root);
         nextRuntime.setReveal(revealRef.current);
         runtimeRef.current = nextRuntime;
         resizeObserver = new ResizeObserver(() => runtimeRef.current?.resize());
         resizeObserver.observe(root);
         start();
-        // `start()` draws on the next animation frame, so by the time it returns
-        // the capture underneath is already covered by the opaque canvas. Handing
-        // the crossfade to a plain state flip keeps it in CSS.
-        markLive();
       } catch (error) {
         if (!disposed && !(error instanceof DOMException && error.name === 'AbortError')) fail();
       } finally {
@@ -390,12 +407,18 @@ export function ParticleVessel({
       (entries) => {
         const entry = entries[0];
         visibleRef.current = Boolean(entry?.isIntersecting);
-        if (visibleRef.current) void boot();
+        if (visibleRef.current) {
+          // Loading may finish while the vessel is crossing the viewport; a
+          // later re-entry must restart a runtime that has not drawn yet.
+          start();
+          void boot();
+        }
         else stop();
       },
       { threshold: 0.01 },
     );
     observer.observe(root);
+    if (committed) void boot();
     const onVisibilityChange = () => {
       if (document.hidden) stop();
       else if (visibleRef.current) start();
@@ -410,7 +433,7 @@ export function ParticleVessel({
       canvas.removeEventListener('webglcontextlost', onContextLost);
       disposeRuntime();
     };
-  }, [canUseThree, configKey, framing, markLive, profile.isCompact, selectedModel]);
+  }, [canUseThree, committed, configKey, framing, markLive, profile.isCompact, selectedModel]);
 
   useEffect(() => {
     if (reveal !== undefined) {
@@ -443,7 +466,7 @@ export function ParticleVessel({
 
   return (
     <div
-      ref={rootRef}
+      ref={attachRoot}
       className={cx('relative w-full min-w-0 overflow-hidden bg-[var(--tone-surface)]', className)}
       style={{ aspectRatio: '1 / 1' }}
       data-qinghua-vessel="true"

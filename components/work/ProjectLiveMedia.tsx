@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Project } from '@/content/types';
 import { VcImage } from '@/components/media/VcImage';
 import { VcVideo } from '@/components/media/VcVideo';
@@ -10,6 +10,7 @@ import { EmbeddedProduct } from './EmbeddedProduct';
 import { useDeviceProfile } from '@/lib/motion/device';
 import { MEDIA_SIZES, getMedia, mediaUrl, resolveMedia } from '@/lib/media';
 import { cx } from '@/lib/utils';
+import { useNearViewport } from '@/lib/motion/nearViewport';
 
 /**
  * The work itself, running on the home page.
@@ -24,10 +25,10 @@ import { cx } from '@/lib/utils';
  * Every heavy path is gated, using the same machinery the case pages already rely
  * on rather than a second set of rules:
  *
- * - **Nothing loads until it is nearly on screen.** An `IntersectionObserver` with
- *   a forward margin flips `near`; only then is a particle runtime imported, an
- *   iframe `src` attached, or a video fetched. Until that moment this is a static
- *   cover, so the home page's first paint is unchanged.
+ * - **Nothing loads until it is nearly on screen.** A near-viewport latch flips
+ *   `near`; only then is a particle runtime imported, an iframe `src` attached,
+ *   or a video fetched. Until that moment this is a static cover, so the home
+ *   page's first paint is unchanged.
  * - **Weak devices keep the cover, permanently.** The existing device profile
  *   classifies tier and reduced-motion. Below `high`, this never upgrades — asking
  *   a low-end phone for several WebGL canvases and a nested application is not a
@@ -88,27 +89,38 @@ export function ProjectLiveMedia({
   className?: string;
 }) {
   const profile = useDeviceProfile();
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [near, setNear] = useState(false);
+  const [liveReady, setLiveReady] = useState(false);
 
   // Below the top tier this stays a still image, on purpose. See the note above.
   const capable = profile.ready && !profile.static && profile.tier === 'high';
+  const { ref: rootRef, near } = useNearViewport<HTMLDivElement>();
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root || !capable) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setNear(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '400px 0px' },
-    );
-    observer.observe(root);
-    return () => observer.disconnect();
-  }, [capable]);
+    if (kind !== 'particle' || !near || !capable) return;
+
+    let cancelled = false;
+    let timeoutId: number | undefined;
+    let idleId: number | undefined;
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const warmThree = () => {
+      if (!cancelled) void import('three');
+    };
+
+    if (idleWindow.requestIdleCallback) {
+      idleId = idleWindow.requestIdleCallback(warmThree);
+    } else {
+      timeoutId = window.setTimeout(warmThree, 800);
+    }
+
+    return () => {
+      cancelled = true;
+      if (idleId !== undefined) idleWindow.cancelIdleCallback?.(idleId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+    };
+  }, [capable, kind, near]);
 
   const embed = project.sections.find((section) => section.embed)?.embed;
   const live = near && capable;
@@ -127,7 +139,7 @@ export function ProjectLiveMedia({
         fill
         imgClassName={cx(
           'transition-opacity duration-700',
-          live ? 'opacity-0' : 'opacity-100',
+          liveReady ? 'opacity-0' : 'opacity-100',
         )}
       />
 
@@ -138,6 +150,7 @@ export function ProjectLiveMedia({
           framing="wide"
           fallbackSrc={particleFallback(project)?.src}
           fallbackAlt={particleFallback(project)?.alt}
+          onLive={() => setLiveReady(true)}
           // The vessel projects square; stretching the container would distort the
           // cloud, so it is centred at full height and allowed to letterbox.
           className="!aspect-auto absolute inset-0 m-auto h-full"
@@ -151,13 +164,19 @@ export function ProjectLiveMedia({
           poster={embed.poster}
           openLabel={embed.openLabel}
           heightClassName="h-full"
+          onLive={() => setLiveReady(true)}
           // The chrome (label + open link) belongs to the case page, not here.
           className="absolute inset-0 [&>div:first-child]:hidden"
         />
       ) : null}
 
       {live && kind === 'video' && project.video ? (
-        <VcVideo video={project.video} sizes={sizes} className="absolute inset-0 h-full w-full" />
+        <VcVideo
+          video={project.video}
+          sizes={sizes}
+          onLive={() => setLiveReady(true)}
+          className="absolute inset-0 h-full w-full"
+        />
       ) : null}
 
       {/*
