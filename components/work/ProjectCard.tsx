@@ -5,6 +5,7 @@ import type { Project } from '@/content/types';
 import { MEDIA_SIZES } from '@/lib/media';
 import { cx, pad2 } from '@/lib/utils';
 import { TagList } from '@/components/primitives';
+import { MediaLinkBadge } from '@/components/primitives/MediaLinkBadge';
 import { VcImage } from '@/components/media/VcImage';
 
 export interface ProjectCardProps {
@@ -66,17 +67,25 @@ export function ProjectCard({
         className="group/media block focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--tone-accent)]"
         aria-label={project.titleZh}
       >
-        <VcImage
-          media={project.cover}
-          sizes={sizes}
-          priority={priority}
-          aspect={aspect}
-          wrapperClassName={cx(
-            'transition-transform duration-700 ease-[var(--ease-vc-out)] group-hover/media:scale-[1.012]',
-            mediaClassName,
-          )}
-          imgClassName={imageClassName}
-        />
+        <div className="relative min-w-0">
+          <VcImage
+            media={project.cover}
+            sizes={sizes}
+            priority={priority}
+            aspect={aspect}
+            wrapperClassName={cx(
+              'transition-transform duration-700 ease-[var(--ease-vc-out)] group-hover/media:scale-[1.012]',
+              mediaClassName,
+            )}
+            imgClassName={imageClassName}
+          />
+          {/*
+            Always-on, not hover-only: a cover image that leads to a case study
+            has to say so before the pointer arrives, and on touch there is no
+            hover to wait for. Hover only deepens the colour.
+          */}
+          <MediaLinkBadge label="进入案例" />
+        </div>
       </Link>
 
       {showDetails ? (

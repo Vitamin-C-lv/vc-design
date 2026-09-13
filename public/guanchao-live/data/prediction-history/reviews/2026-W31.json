@@ -1,0 +1,80 @@
+{
+  "abstainReasonDistribution": {},
+  "bestCalls": [],
+  "contractVersion": "prediction-ledger-v1",
+  "counts": {
+    "abstained": 0,
+    "current": 0,
+    "dataInsufficient": 0,
+    "dataInsufficientEvaluation": 0,
+    "evaluated": 0,
+    "insufficientData": 0,
+    "legacy": 0,
+    "matured": 0,
+    "notImplemented": 0,
+    "notTrained": 0,
+    "pending": 0,
+    "published": 0,
+    "records": 0,
+    "totalRecords": 0
+  },
+  "generatedAt": "2026-08-02T00:00:00Z",
+  "isoWeek": "2026-W31",
+  "largestErrors": [],
+  "machineRecommendations": {
+    "calibrationWarnings": [
+      "insufficient_current_target_samples"
+    ],
+    "featureCoverageProblems": [],
+    "gatePolicy": "do_not_lower_automatically",
+    "recommendedResearchActions": [
+      "accumulate_same_target_outcomes",
+      "audit_feature_coverage_without_lowering_gates"
+    ],
+    "recurringFailureModes": [],
+    "regimeInstability": []
+  },
+  "metricReasons": {
+    "abstentionRate": "insufficient_sample",
+    "auc": "insufficient_sample",
+    "baselineBrier": "insufficient_sample",
+    "brier": "insufficient_sample",
+    "brierSkill": "insufficient_sample",
+    "calibrationError": "insufficient_sample",
+    "ece": "insufficient_sample",
+    "predictionDispersion": "insufficient_sample",
+    "publicationRate": "insufficient_sample",
+    "rankIc": "insufficient_sample",
+    "topBottomSpread": "insufficient_sample",
+    "topBottomSpreadAfterCosts": "insufficient_sample",
+    "topQuartileHitRate": "insufficient_sample"
+  },
+  "metrics": {
+    "abstentionRate": null,
+    "auc": null,
+    "baselineBrier": null,
+    "brier": null,
+    "brierSkill": null,
+    "calibrationError": null,
+    "ece": null,
+    "predictionDispersion": null,
+    "publicationRate": null,
+    "rankIc": null,
+    "sampleSize": 0,
+    "topBottomSpread": null,
+    "topBottomSpreadAfterCosts": null,
+    "topQuartileHitRate": null
+  },
+  "modelVersionComparison": {},
+  "policy": {
+    "legacyExcludedFromCurrentMetrics": true,
+    "pendingAndAbstainedNeverCountedAsWrong": true,
+    "probabilityTargetsNeverMixed": true
+  },
+  "recommendations": [
+    "样本不足：继续积累同一概率目标的到期样本，不据此改模或解冻模型。"
+  ],
+  "schemaVersion": 1,
+  "slices": [],
+  "targetMetrics": {}
+}

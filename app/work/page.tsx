@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { VcImage } from '@/components/media/VcImage';
+import { MediaLinkBadge } from '@/components/primitives/MediaLinkBadge';
 import { Reveal } from '@/components/motion/Reveal';
 import { Bi, BiOnly } from '@/components/i18n/Bi';
 import { ArrowLink } from '@/components/primitives/ArrowLink';
@@ -72,12 +73,16 @@ function IndexProjectRow({ project, index }: { project: (typeof featuredProjects
             className="group/media block focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--tone-accent)]"
             aria-label={`打开${project.titleZh}详情`}
           >
-            <VcImage
-              media={project.cover}
-              sizes={MEDIA_SIZES.inset}
-              aspect={1.55}
-              wrapperClassName="transition-transform duration-700 ease-[var(--ease-vc-out)] group-hover/media:scale-[1.012]"
-            />
+            <div className="relative min-w-0">
+              <VcImage
+                media={project.cover}
+                sizes={MEDIA_SIZES.inset}
+                aspect={1.55}
+                wrapperClassName="transition-transform duration-700 ease-[var(--ease-vc-out)] group-hover/media:scale-[1.012]"
+              />
+              {/* Same rule as the featured covers: the hint is present at rest. */}
+              <MediaLinkBadge label="进入案例" />
+            </div>
           </Link>
           <BiOnly
             zh={project.meta[0]?.value ?? ''}

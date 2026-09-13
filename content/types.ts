@@ -67,7 +67,33 @@ export interface CaseSection {
   layout: 'statement' | 'full' | 'split' | 'pair' | 'reel' | 'sequence' | 'diagram';
   /** Required when `layout` is `diagram`. Selects a code-drawn figure. */
   diagram?: DiagramId;
+  /**
+   * A shipped product, embedded and running, for chapters whose argument is the
+   * artefact itself. Rendered below the chapter text and above any supporting
+   * captures, because a working copy is stronger evidence than a still.
+   */
+  embed?: EmbeddedProductRef;
   /** Optional footnote in a muted voice. */
+  note?: string;
+}
+
+/**
+ * A deployed product shown inside a case study as a working copy.
+ *
+ * `src` points at a **locally served static export** rather than the product's
+ * public URL, so the case page keeps working if that deployment moves, changes or
+ * disappears. `note` must say so, because a frozen copy presented without that
+ * caveat would read as live data.
+ */
+export interface EmbeddedProductRef {
+  /** Root-relative path to the exported copy, e.g. `/guanchao-live`. */
+  src: string;
+  /** Accessible name for the frame. */
+  title: string;
+  /** Shown while the frame loads, and if it fails. */
+  poster: MediaRef;
+  /** Label for the "open in a new tab" escape hatch. */
+  openLabel: string;
   note?: string;
 }
 

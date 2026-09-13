@@ -588,7 +588,18 @@
     padding-block: clamp(5rem, 11vw, 12rem);
   }
 
-  /* --- Interactive -------------------------------------------------- */
+  /*
+   * Affordance for a linked headline.
+   *
+   * The rule is drawn at rest, not on hover. It used to be `scaleX(0)` until the
+   * pointer arrived, which meant a visitor scanning the page saw plain text and
+   * had no way of knowing the titles lead to case studies — on touch devices
+   * there was no state in which the hint existed at all. Hover now only deepens
+   * the line; it never decides whether the information is there.
+   *
+   * The resting weight is deliberately restrained (a hairline at 40%) so the
+   * page still reads as typography rather than as a list of underlined links.
+   */
   .link-underline {
     position: relative;
     display: inline-block;
@@ -601,14 +612,16 @@
     height: 1px;
     width: 100%;
     background-color: currentColor;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.55s var(--ease-vc-out);
+    opacity: 0.4;
+    transform-origin: left;
+    transition:
+      opacity 0.45s var(--ease-vc-out),
+      transform 0.55s var(--ease-vc-out);
   }
   .link-underline:hover::after,
   .link-underline:focus-visible::after {
-    transform: scaleX(1);
-    transform-origin: left;
+    opacity: 1;
+    transform: translateY(1px);
   }
 
   .hairline {

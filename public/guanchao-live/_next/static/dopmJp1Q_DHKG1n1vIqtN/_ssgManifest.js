@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Farticles\u002F[id]","\u002Fmarket\u002Fprediction\u002F[market]\u002F[sector]","\u002Fmarkets\u002Fsectors\u002F[market]\u002F[code]","\u002Fweekly\u002F[id]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

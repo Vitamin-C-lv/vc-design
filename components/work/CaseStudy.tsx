@@ -9,6 +9,7 @@ import { CaseSectionBlock } from './CaseSectionBlock';
 import { CaseNav } from './CaseNav';
 import { RecognitionList } from './RecognitionList';
 import { ParticleShowcase } from './ParticleShowcase';
+import { EmbeddedProduct } from './EmbeddedProduct';
 
 export function CaseStudy({ project }: { project: Project }) {
   return (
@@ -38,6 +39,7 @@ export function CaseStudy({ project }: { project: Project }) {
       {project.sections.map((section, index) => {
         // Alternate, but start light so the first chapter continues the cover.
         const tone = index % 2 === 0 ? 'paper' : 'ink';
+        const embed = section.embed;
         return (
           <div key={section.id}>
             <Band tone={tone} id={section.id} accent={project.accent}>
@@ -45,6 +47,23 @@ export function CaseStudy({ project }: { project: Project }) {
               {section.id === 'vr' && project.video ? (
                 <Reveal variant="masked" delay={140} className="mt-16 md:mt-24">
                   <VcVideo video={project.video} sizes={MEDIA_SIZES.full} />
+                </Reveal>
+              ) : null}
+              {/*
+                The running product, given its own measure. Placed after the
+                chapter text so the visitor reads what it is before being handed
+                something to operate — and above the supporting captures, because
+                the working copy is the stronger evidence.
+              */}
+              {embed ? (
+                <Reveal variant="rise" delay={160} className="mt-12 md:mt-16">
+                  <EmbeddedProduct
+                    src={embed.src}
+                    title={embed.title}
+                    poster={embed.poster}
+                    openLabel={embed.openLabel}
+                    note={embed.note}
+                  />
                 </Reveal>
               ) : null}
             </Band>

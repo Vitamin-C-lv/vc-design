@@ -551,15 +551,26 @@ export const guanchao: Project = {
       title: 'It is running right now.',
       titleZh: '它现在就在运行。',
       body: [
-        '观潮不是概念稿。它有真实的数据、真实的每日更新和真实的访问地址 —— 这也是 VC 与「只会做图」之间最直接的区别。以下为线上版本的真实界面留存。',
+        '观潮不是概念稿。它有真实的数据、真实的每日更新和真实的访问地址 —— 这也是 VC 与「只会做图」之间最直接的区别。',
+        '下面嵌的就是它本身的界面：能点击、能翻页、能自己走一遍。为了让它长期可访问，这里放的是一份本地留存副本，数据停留在留存当天，而不是实时抓取。',
       ],
-      media: [
-        {
+      /*
+       * The embed is the point of this chapter, so the three captures drop to a
+       * supporting role: the first becomes the frame's poster/loading state, and
+       * the rest stay as a small record of what the live build looked like.
+       */
+      embed: {
+        src: '/guanchao-live',
+        title: '观潮 Daily Brief —— 可交互副本',
+        poster: {
           key: 'guanchao/live/desktop-view-01',
           alt: '观潮线上版本首屏：政策路径图表与 AI 解读卡片',
-          caption: '线上版本 · 首屏：先给结论，再给数据',
           surface: 'light',
         },
+        openLabel: '全屏打开副本',
+        note: '本地留存副本：结构与交互与线上一致，数据停留在留存当天。线上的实时版本可通过上方 LIVE PRODUCT 按钮访问。',
+      },
+      media: [
         {
           key: 'guanchao/live/desktop-view-02',
           alt: '观潮线上版本市场数据概览：A股、港股、美股三个市场并列',
@@ -574,7 +585,6 @@ export const guanchao: Project = {
         },
       ],
       layout: 'reel',
-      note: '点击首页的 LIVE PRODUCT 按钮可直接访问线上版本。',
     },
   ],
   credits: ['线上版本持续更新中，页面结构与信息模块可能随版本迭代调整。'],
