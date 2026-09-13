@@ -24,3 +24,8 @@ public/qinghua/*.bin linguist-generated=true
 
 # Lockfiles: keep them, but out of the way when reading history.
 package-lock.json linguist-generated=true -diff
+
+# The changelog is append-at-the-top: two branches adding an entry at the same
+# spot is the normal case, not a real conflict. Union-merge keeps both entries
+# instead of leaving conflict markers in a file whose whole job is to be read.
+CHANGELOG.md merge=union

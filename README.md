@@ -7,6 +7,8 @@ VC / 维C 的接单官网。以高质量滚动叙事展示 4 个旗舰项目，�
 
 内容主轴固定为：**作品 → 能力 → 方法 → 联系方式**。
 
+> 改这个项目之前，先看 **[`CHANGELOG.md`](CHANGELOG.md)**。那里只记「为什么这么改」和「改完怎么验证」——踩过的坑、被否掉的方案、不可回的取舍都在里面。**每做一个有实质改动的提交，就往 `## 未发布` 下加一条。**
+
 ---
 
 ## 快速开始
@@ -61,6 +63,7 @@ vc-site/
 │  ├─ work/[slug]/page.tsx    案例详情页（4 个旗舰共用模板）
 │  ├─ work/page.tsx           全部作品索引
 │  └─ lab/page.tsx            VC LAB
+├─ proxy.ts                   把 /guanchao-live/<目录> 重写到它的 index.html（见「内嵌观潮」）
 ├─ components/
 │  ├─ site/                   页头、页脚、移动菜单
 │  ├─ home/                   首页 9 个段落，一段一文件
@@ -80,13 +83,17 @@ vc-site/
 │  ├─ fonts.ts                字体 re-export
 │  └─ utils.ts
 ├─ public/
-│  ├─ works/                  素材管线的产物（响应式图片）
-│  └─ brand/                  图标等品牌资产
+│  ├─ works/                  素材管线的产物（响应式图片、视频、点云）
+│  ├─ brand/                  图标、微信二维码等品牌资产
+│  └─ guanchao-live/          观潮的离线静态副本（707 文件 / 24MB，构建产物，需提交）
 ├─ docs/
 │  └─ ASSETS.md               资产映射：原始文件 → 输出 key → 网站位置
-└─ scripts/
-   ├─ fetch-fonts.mjs         字体本地化
-   └─ sync-manifest.mjs       素材清单同步进内容层
+├─ scripts/
+│  ├─ fetch-fonts.mjs         字体本地化
+│  ├─ sync-manifest.mjs       素材清单同步进内容层
+│  └─ qa/                     本地验收脚本（不参与构建，见 scripts/qa/README.md）
+├─ CHANGELOG.md               开发日志：为什么改 + 怎么验证
+└─ proxy.ts
 ```
 
 ---
@@ -104,7 +111,7 @@ vc-site/
 - `whoToHire` —— One-stop 营销高潮段落
 - `approachSteps` / `approachIntro` —— BRIEF → DELIVER 六步
 - `lab` —— VC LAB 与 Local Brain
-- `contact` —— **联系方式（当前全部是显式占位，见下方「上线前必做」）**
+- `contact` —— 联系方式（微信已上线，邮箱仍缺，见下方「上线前必做」）
 - `footer` / `seo`
 
 ### 改项目 → `content/projects.ts`
@@ -138,6 +145,28 @@ vc-site/
 | `reel` | 横向滚动图像条（移动端可滑动） |
 | `sequence` | 编号流程列表 |
 | `diagram` | 文字 + 代码绘制的架构图（`diagram: DiagramId`） |
+
+#### 章节可以挂「实况」而不是截图
+
+`CaseSection` 上有三个可选的实况字段。有实况时，首页与案例页都用**真在跑的东西**替换静态封面（`components/work/ProjectLiveMedia.tsx`）：
+
+| 字段 | 跑什么 | 谁在用 |
+|---|---|---|
+| `particle` | 浏览器里实时渲染的点云序列 | 青花造境 |
+| `embed` | 内嵌一个可点击可滚动的真实产品副本（iframe） | 观潮 |
+| `video` | 自托管循环短片 | 古格 |
+
+优先级 `particle > embed > video`，都没有就退回静态封面（李花花目前就是封面）。低端设备 / reduced-motion / 省流量模式下**一个字节都不请求**，只显示封面图——封面同时是加载态和失败态。
+
+哪个项目跑起了什么，用 `node scripts/qa/probe-home-blocks.mjs` 一眼看完。
+
+> ⚠️ **`next build` 绝不能在 `next start` 运行期间执行。**
+>
+> `next build` 会重写 `.next`，而运行中的 next-server 内存里仍是旧构建的清单，它吐出的 HTML 引用的 chunk 已被覆盖删除 → Next 对缺失 chunk 返回 **500**，客户端加载失败，浏览器只显示一句 `This page couldn't load`（这是 Next 的失败视图，**不是**本站的 404 页，极易误判成网络问题）。
+>
+> 正确顺序：**停服务器 → `next build` → `next start`**。彻底恢复：`rm -rf .next && npm run build && npm start`。判断是否失配：`.next/BUILD_ID` 的修改时间晚于服务进程启动时间即已失配。
+>
+> 另外 `curl` 只能证明这一个 HTML 的状态码，**证明不了页面能用**。遇到「打不开」先跑 `node scripts/qa/diag-load.mjs`，它用真实浏览器加载并列出失败请求、4xx/5xx 和 JS 错误。
 
 ### 引用图片 → `MediaRef`
 
@@ -276,10 +305,13 @@ Hero 入场、作品图视差、pinned 段落、横向 reel。
 
 要点：
 
-- 原始素材在仓库外的 `_handoff/`，**不参与构建**。
+- 原始素材与素材管线脚本（`build-images.mjs` / `build-qr.mjs` / `capture-*.mjs`）在**仓库外**的工作区目录 `_handoff/` 与 `_build/`，不参与构建、不入库。仓库里提交的是它们的**产物**，所以 clone 下来能直接构建、能直接部署，但不能从零重跑素材管线。
 - `public/works/` 是管线产物，**需要提交**（部署时要用）。
+- `public/guanchao-live/` 是观潮的离线静态副本，同样是产物、同样需要提交，重建流程见 `CHANGELOG.md`。
 - 清单流：`public/works/_manifest.json` → `npm run sync-manifest` → `content/media.json` → `lib/media.ts` → `VcImage`。
 - 新增图片：先跑管线生成衍生图 → 同步清单 → 在 `content/projects.ts` 里写 `MediaRef`。
+
+> ⚠️ `public/works/_manifest.json` 的键序是**源目录遍历顺序**，不是字母序。加条目要**原地追加**（`obj[key] = v`），不要 `.sort()` 重排 —— 重排会把「加一条」变成几百行无意义的 diff。
 
 ---
 
@@ -298,24 +330,32 @@ npm start         # 本地验证生产构建
 2. 绑定自定义域名；中国大陆节点需要 **ICP 备案**。
 3. 备案与开发可以并行 —— 开发阶段不必等待备案，先用 preview 域名验证。
 
-> 上线前请在 `next.config.ts` / `app/layout.tsx` 里补 `metadataBase` 为正式域名，并把 `content/site.ts` 的占位联系信息替换为真实值。
+> 上线前请在 `next.config.ts` / `app/layout.tsx` 里补 `metadataBase` 为正式域名。
 
 ---
 
-## 上线前必做（联系信息占位）
+## 上线前必做
 
-**网站目前不会编造任何联系方式。** `content/site.ts` 的 `contact` 里所有真实值都是 `null`，UI 会渲染一个显式的 **CONTACT DETAILS PENDING** 占位块 —— 这是有意为之，不是未完成的 bug。
+**网站不编造任何联系方式。** 每个真实值都是用户给的；还没给的字段留 `null`，UI 渲染成显式的「待补充」区块，而不是一个看起来像真的假值。这是有意为之，不是未完成的 bug。
 
-上线前需要替换：
+已经真实的：
+
+| 字段 | 位置 | 值 |
+|---|---|---|
+| 微信号 | `contact.channels[0].value` | `Vc1242856346` + 一键复制 |
+| 微信二维码 | `contact.qrImage` | `brand/wechat-qr`（从名片裁掉个人信息后生成，二维码本身可解码） |
+| 古格 credits | `content/projects.ts` | 三条真实分工 |
+
+还没给的（给到就能直接填）：
 
 | 字段 | 位置 | 现状 |
 |---|---|---|
-| 微信号 | `contact.channels[0].value` | `null` |
-| 微信二维码 | `contact.qrImage` + 图片放到 `public/brand/` | `null` |
-| 联系邮箱 | `contact.channels[1].value` | `null` |
-| 需求表单端点 | `contact.formEndpoint` | `''`（占位模式） |
+| 联系邮箱 | `contact.channels[1].value` | `null` → 页面显示「待补充：正式联系邮箱」 |
+| 需求表单端点 | `contact.formEndpoint` | `''` → 目前是「复制需求 + 加微信」流程，不是坏了 |
 | 正式域名 | `next.config.ts` / `metadataBase` | 未设置 |
+| 部署 | 腾讯云 EdgeOne Pages | 未做（构建命令 `npm run build`，输出 `.next`，大陆节点需 ICP 备案） |
 | VC Logo | `public/brand/icon.svg` 是几何构造的临时 favicon | 可选替换 |
+| `misc/smart_planter_concept` 素材 | 归属项目未确认 | 保持不接入 |
 
 其余待补资产（李花花精修 UI、青花造境原始素材）见 `docs/ASSETS.md` 第 5 节。
 
@@ -339,9 +379,9 @@ npm run build        # 生产构建
 - [x] reduced-motion 全站生效
 - [x] 联系信息缺失时是**显式占位**而非虚构
 
-### 浏览器回归结果
+### 浏览器回归
 
-用 Chromium 对 7 条路由 × 4 个视口（1600 / 2560 / 1024 / 390）跑了一轮自动回归，另外单独验证了 reduced-motion、微信 WebView 与**禁用 JavaScript** 三条路径：
+用 Chromium 对 7 条路由 × 4 个视口（1600 / 2560 / 1024 / 390）跑自动回归，另外单独验证 reduced-motion、微信 WebView 与**禁用 JavaScript** 三条路径：
 
 | 检查项 | 结果 |
 |---|---|
@@ -353,13 +393,15 @@ npm run build        # 生产构建
 | 未加载 / 破图 | 0 |
 | `ASSET PENDING` 占位 | 0（所有引用的 key 都存在于清单中） |
 
-回归脚本放在仓库外的 `_build/`（不参与构建）：
+回归脚本在 **[`scripts/qa/`](scripts/qa/README.md)**（随仓库维护，不参与构建）：
 
-| 脚本 | 用途 |
-|---|---|
-| `_build/shoot.mjs` | 全路由 × 全视口截图 + 溢出/揭示/控制台错误汇总 |
-| `_build/reveal-check.mjs` | 逐元素定位未揭示的 `[data-reveal]` |
-| `_build/fallback-check.mjs` | reduced-motion 与禁用 JS 两条降级路径 |
-| `_build/diagnose.mjs` | 定位水平溢出元素与未揭示元素 |
-| `_build/review-shots.mjs` | 按屏抓图，用于人工视觉审阅 |
+```bash
+cd vc-site && npx next start -p 3000     # 另开一个终端
+node scripts/qa/shoot.mjs                # 全站回归
+node scripts/qa/diag-load.mjs            # 只问"站点能不能打开"
+```
+
+完整脚本清单、判据、环境变量见 **[`scripts/qa/README.md`](scripts/qa/README.md)**。
+
+> ⚠️ **验收脚本的输出是假设，不是判决。** 脚本报失败时先判断是不是脚本自己过期了（写死的旧端口、旧选择器、旧文案）；脚本报通过也不代表没缺陷 —— 曾经出现过「所有自动化指标全绿」与「每个汉字占一行、页面被撑高 4240px」同时存在的情况。**改完界面要用真实截图亲眼看一遍**（`node scripts/qa/shoot.mjs` 会把截图落到 `_qa-output/`）。
 

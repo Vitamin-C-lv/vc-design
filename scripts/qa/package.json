@@ -1,0 +1,22 @@
+{
+  "name": "vc-site-qa",
+  "private": true,
+  "type": "module",
+  "description": "Local verification tooling for the VC site. Not part of the app build — nothing here is imported by app/ or components/.",
+  "scripts": {
+    "check": "node run.mjs",
+    "load": "node diag-load.mjs",
+    "shoot": "node shoot.mjs",
+    "layout": "node layout-audit.mjs",
+    "particle": "node verify-particle.mjs",
+    "snapshot": "node verify-snapshot.mjs"
+  },
+  "dependencies": {
+    "@zxing/library": "^0.21.3",
+    "jsqr": "^1.4.0",
+    "jpeg-js": "^0.4.4",
+    "playwright-core": "^1.63.0",
+    "pngjs": "^7.0.0",
+    "sharp": "^0.35.4"
+  }
+}
