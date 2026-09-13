@@ -1,30 +1,23 @@
 {
-  "source": "guge_demo.mp4",
-  "duration": 10,
-  "width": 1900,
-  "height": 1204,
-  "poster": {
-    "webp": [
-      "poster-1200.webp",
-      "poster-1600.webp",
-      "poster-2048.webp"
-    ],
-    "avif": "poster-1200.avif",
-    "lqip": "poster-lqip.webp"
-  },
+  "source": "梦回古格.mp4",
+  "sourceBytes": 464801661,
+  "sourceSpec": "3838x2160, 30fps, 300s, h264 + aac",
+  "generated": "2026-09-13",
+  "note": "网页用版本。原片 5 分钟 / 464MB / 带音轨；页面只需要一段静音循环，因此取片头 0-12s（高原与古格遗址的实拍开场），缩放至 1600/1440 宽并去音轨。画面不做裁切，片头标题字与字幕按用户要求保留。",
+  "crop": null,
   "loop": {
-    "mp4": "guge-loop.mp4",
-    "webm": "guge-loop.webm",
-    "mp4Bytes": 1484859,
-    "webmBytes": 1678194,
-    "seconds": 10,
-    "width": 1280
+    "mp4": "mengu-loop.mp4",
+    "webm": "mengu-loop.webm",
+    "seconds": 12,
+    "startSeconds": 0,
+    "width": 1600,
+    "height": 900,
+    "mp4Bytes": 1867000,
+    "webmBytes": 1394000
   },
-  "frames": [
-    "frame-10.png",
-    "frame-30.png",
-    "frame-50.png",
-    "frame-70.png",
-    "frame-90.png"
-  ]
+  "poster": {
+    "sourceTimeSeconds": 0.2,
+    "jpg": ["poster-1200.jpg", "poster-1600.jpg", "poster-2048.jpg"],
+    "lqip": "poster-lqip.jpg"
+  }
 }

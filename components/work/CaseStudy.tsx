@@ -5,7 +5,7 @@ import { Reveal } from '@/components/motion/Reveal';
 import type { Project } from '@/content/types';
 import { MEDIA_SIZES } from '@/lib/media';
 import { CaseHero } from './CaseHero';
-import { CaseSectionBlock } from './CaseSectionBlock';
+import { CaseSectionBlock, PairMedia } from './CaseSectionBlock';
 import { CaseNav } from './CaseNav';
 import { RecognitionList } from './RecognitionList';
 import { ParticleShowcase } from './ParticleShowcase';
@@ -43,29 +43,54 @@ export function CaseStudy({ project }: { project: Project }) {
         return (
           <div key={section.id}>
             <Band tone={tone} id={section.id} accent={project.accent}>
-              <CaseSectionBlock section={section} total={project.sections.length} />
-              {section.id === 'vr' && project.video ? (
-                <Reveal variant="masked" delay={140} className="mt-16 md:mt-24">
-                  <VcVideo video={project.video} sizes={MEDIA_SIZES.full} />
-                </Reveal>
-              ) : null}
               {/*
-                The running product, given its own measure. Placed after the
-                chapter text so the visitor reads what it is before being handed
-                something to operate — and above the supporting captures, because
-                the working copy is the stronger evidence.
+                Where a chapter carries a working copy of the product, the frame
+                goes directly under the text — before the supporting captures, not
+                after. Ordering it last meant a reader arriving at "it is running
+                right now" hit the stills first and reasonably concluded the live
+                version was missing. The artefact answers the claim; the stills
+                only document it.
               */}
               {embed ? (
-                <Reveal variant="rise" delay={160} className="mt-12 md:mt-16">
-                  <EmbeddedProduct
-                    src={embed.src}
-                    title={embed.title}
-                    poster={embed.poster}
-                    openLabel={embed.openLabel}
-                    note={embed.note}
-                  />
-                </Reveal>
-              ) : null}
+                <div className="space-y-14 md:space-y-20">
+                  <CaseSectionBlock section={{ ...section, media: undefined }} total={project.sections.length} />
+                  <Reveal variant="rise" delay={140}>
+                    <EmbeddedProduct
+                      src={embed.src}
+                      title={embed.title}
+                      poster={embed.poster}
+                      openLabel={embed.openLabel}
+                      note={embed.note}
+                    />
+                  </Reveal>
+                  {section.media?.length ? (
+                    <div className="hairline pt-8">
+                      <p className="type-label tone-mute mb-6">界面留存 / CAPTURES</p>
+                      <div className="bleed-x flex min-w-0 snap-x gap-5 overflow-x-auto no-scrollbar">
+                        {section.media.map((media, index) => (
+                          <Reveal
+                            key={media.key}
+                            variant="masked"
+                            delay={index * 90}
+                            className="w-[78vw] min-w-0 shrink-0 snap-start md:w-[48vw] lg:w-[36vw]"
+                          >
+                            <PairMedia media={media} sizes={MEDIA_SIZES.reel} />
+                          </Reveal>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <>
+                  <CaseSectionBlock section={section} total={project.sections.length} />
+                  {section.id === 'vr' && project.video ? (
+                    <Reveal variant="masked" delay={140} className="mt-16 md:mt-24">
+                      <VcVideo video={project.video} sizes={MEDIA_SIZES.full} />
+                    </Reveal>
+                  ) : null}
+                </>
+              )}
             </Band>
             {section.id === 'outcome' && project.recognition?.length ? (
               <Band tone={tone === 'paper' ? 'ink' : 'paper'} accent={project.accent}>

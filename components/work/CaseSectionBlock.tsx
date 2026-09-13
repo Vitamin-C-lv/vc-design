@@ -152,7 +152,7 @@ function MediaStack({ media, sizes = MEDIA_SIZES.full }: { media?: MediaRef[]; s
   );
 }
 
-function PairMedia({ media, sizes }: { media: MediaRef; sizes: string }) {
+export function PairMedia({ media, sizes }: { media: MediaRef; sizes: string }) {
   return (
     <div data-case-media="true" className="min-w-0">
       <FramedMedia media={media} sizes={sizes} />

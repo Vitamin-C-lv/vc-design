@@ -17,8 +17,10 @@ import { MediaCaption } from './VcImage';
  * - `preload="none"` — the file is only fetched once the element scrolls into
  *   view, at which point playback starts;
  * - playback pauses whenever the element leaves the viewport;
- * - on a `low` tier device, or with reduced motion, the poster is shown on its
- *   own and the video is never fetched at all.
+ * - a muted self-hosted loop is the safest possible autoplay, so it is gated on
+ *   the visitor's *actual* constraints rather than on the general motion tier:
+ *   reduced motion, save-data and 2G keep the poster, but a modest CPU or a phone
+ *   does not, because a 1.5MB muted loop is not the thing that would hurt it.
  */
 export function VcVideo({
   video,
@@ -33,9 +35,36 @@ export function VcVideo({
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [inView, setInView] = useState(false);
-  const { ready, tier, static: isStatic } = useDeviceProfile();
+  const { ready, reducedMotion } = useDeviceProfile();
 
-  const showVideo = ready && tier === 'high' && !isStatic;
+  /*
+   * Deliberately not `tier === 'high'`.
+   *
+   * The tier collapses to `low` for several unrelated reasons — a 2-core laptop,
+   * a data-saver flag, reduced motion. For a muted, looping, delegate-loaded clip
+   * most of those reasons do not apply, and keying off the tier meant a perfectly
+   * capable machine showed a frozen frame. Only the signals that genuinely argue
+   * against fetching video are honoured here.
+   */
+  const [blocked, setBlocked] = useState(false);
+  useEffect(() => {
+    const nav = navigator as Navigator & {
+      deviceMemory?: number;
+      connection?: { saveData?: boolean; effectiveType?: string };
+    };
+    const effective = nav.connection?.effectiveType;
+    // A one-off read of a browser-only API, so it cannot happen during render:
+    // the server has no `navigator`, and deciding differently on the client than
+    // on the server would be a hydration mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBlocked(
+      nav.connection?.saveData === true ||
+        effective === 'slow-2g' ||
+        effective === '2g',
+    );
+  }, []);
+
+  const showVideo = ready && !reducedMotion && !blocked;
   const ratio = aspect ?? video.aspect;
 
   useEffect(() => {
@@ -80,6 +109,7 @@ export function VcVideo({
             muted
             loop
             playsInline
+            autoPlay
             preload="none"
             // Not a decorative background: it is the only moving evidence that
             // the prototype runs, so it keeps its intrinsic size.

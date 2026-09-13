@@ -12,6 +12,7 @@ import { useDeviceProfile } from '@/lib/motion/device';
 import { useGsapScope } from '@/lib/motion/useGsap';
 import { cx, pad2 } from '@/lib/utils';
 import { ProjectCard } from './ProjectCard';
+import { ProjectLiveMedia, liveMediaFor } from './ProjectLiveMedia';
 
 export type FeaturedProjectLayout = 'hero' | 'split-left' | 'split-right' | 'wide';
 
@@ -83,6 +84,55 @@ function BilingualEcho({
       <Bi as={as} zh={zh} en={en} hideSecondary primaryClassName={primaryClassName} />
       <Bi as={as} zh={en} en={zh} hideSecondary primaryClassName={secondaryClassName} />
     </>
+  );
+}
+
+/**
+ * The visual for one flagship block.
+ *
+ * Where a project shipped something interactive, this hands the visitor the thing
+ * itself instead of a still of it — see `ProjectLiveMedia`. Otherwise it stays the
+ * linked cover it always was. The block's own `aspect` only applies to the cover
+ * path: a live surface is framed by what the artefact actually is, and the grid is
+ * built to absorb the difference (see `project-row` in the band, which stretches
+ * each row's media cell to match the text column's height).
+ */
+function FeaturedMedia({
+  project,
+  priority,
+  sizes,
+  aspect,
+  mediaClassName,
+}: {
+  project: Project;
+  priority: boolean;
+  sizes: string;
+  aspect: number;
+  mediaClassName?: string;
+}) {
+  const live = liveMediaFor(project);
+
+  if (live) {
+    return (
+      <ProjectLiveMedia
+        project={project}
+        kind={live}
+        priority={priority}
+        sizes={sizes}
+        className="w-full border border-[var(--tone-line)]"
+      />
+    );
+  }
+
+  return (
+    <ProjectCard
+      project={project}
+      priority={priority}
+      sizes={sizes}
+      showDetails={false}
+      aspect={aspect}
+      mediaClassName={mediaClassName}
+    />
   );
 }
 
@@ -213,11 +263,10 @@ export function FeaturedProjectBlock({ project, index, priority, layout: request
       <article ref={rootRef} style={toneStyle} className="min-w-0 grid gap-8 md:gap-12">
         <MotionReveal disabled={motionDisabled} variant="masked" duration={1.15}>
           <div data-featured-media className="bleed relative min-w-0">
-            <ProjectCard
+            <FeaturedMedia
               project={project}
               priority={priority}
               sizes={MEDIA_SIZES.full}
-              showDetails={false}
               aspect={1.55}
             />
           </div>
@@ -256,11 +305,10 @@ export function FeaturedProjectBlock({ project, index, priority, layout: request
         )}
       >
         <div data-featured-media className="min-w-0">
-          <ProjectCard
+          <FeaturedMedia
             project={project}
             priority={priority}
             sizes={wide ? MEDIA_SIZES.full : MEDIA_SIZES.half}
-            showDetails={false}
             aspect={wide ? 2.25 : 1.34}
             mediaClassName={cx(wide ? 'aspect-[1.9] md:aspect-[2.25]' : 'aspect-[1.28] md:aspect-[1.34]')}
           />

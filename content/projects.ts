@@ -239,14 +239,30 @@ export const guge: Project = {
     'VC 参与文化研究、视觉提取、视觉系统与三维资产设计。',
     'VC 参与交互叙事、AI 导览方案与交互原型实现。',
   ],
+  /*
+   * The real project film.
+   *
+   * An earlier version of this slot pointed at `0001-0120.mp4`, which turned out
+   * to be a **Blender render of an old residential stairwell** — a 三维与可视化
+   * piece, mis-filed with the 古格 material. It has been removed; see the note in
+   * the removed block's history. This is the actual 梦回古格 footage: a five-minute
+   * project film supplied as 464MB of 4K with audio.
+   *
+   * The page needs a silent loop, not a film, so `_video-manifest.json` records
+   * what was taken from it: the opening 12 seconds, which are pure location
+   * footage of the plateau and the ruins — no title card and no burned-in
+   * subtitles, so the loop reads as landscape rather than as a cropped subtitle
+   * track. Re-encoded to 1440px, audio dropped: 1.5MB instead of 464MB.
+   */
   video: {
-    mp4: '/works/guge/video/guge-loop.mp4',
-    webm: '/works/guge/video/guge-loop.webm',
-    poster: '/works/guge/video/poster-1600.webp',
+    mp4: '/works/guge/video/mengu-loop.mp4',
+    webm: '/works/guge/video/mengu-loop.webm',
+    poster: '/works/guge/video/poster-1600.jpg',
     posterSrcSet:
-      '/works/guge/video/poster-1200.webp 1200w, /works/guge/video/poster-1600.webp 1600w, /works/guge/video/poster-2048.webp 2048w',
-    aspect: 1900 / 1204,
-    caption: '项目演示：可运行的交互原型实录（静音循环）',
+      '/works/guge/video/poster-1200.jpg 1200w, /works/guge/video/poster-1600.jpg 1600w, /works/guge/video/poster-2048.jpg 2048w',
+    // Full frame, uncropped: the loop keeps the film's own 16:9.
+    aspect: 3838 / 2160,
+    caption: '《梦回古格》项目实拍：阿里札达土林与古格遗址（静音循环）',
   },
 };
 

@@ -31,3 +31,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# QA / visual-review output (scripts/qa writes here)
+/_qa-output
+/scripts/qa/node_modules

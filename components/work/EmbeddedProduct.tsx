@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Bi, BiOnly } from '@/components/i18n/Bi';
 import { VcImage } from '@/components/media/VcImage';
 import type { MediaRef } from '@/content/types';
@@ -31,6 +31,51 @@ import { cx } from '@/lib/utils';
  * frame has been scrolled near. The export is ~24MB of assets, and nobody should
  * pay for it while still reading the hero.
  */
+/**
+ * Renders the frame at a fixed desktop width and scales it to fit.
+ *
+ * Left to its own devices the iframe is as wide as its box, so in a narrow column
+ * the product's own responsive CSS kicks in and swaps to its phone layout — the
+ * embedded app sprouted a mobile bottom nav bar and a stacked single column,
+ * which read as a picture of a phone rather than of a data product. Cropping it
+ * would hide content; forcing a minimum width would push the layout around.
+ *
+ * Scaling is the honest option: the app is laid out once at a real desktop width,
+ * then the whole surface is zoomed down as one piece. Nothing reflows, nothing is
+ * cut off, and text stays proportional instead of being squeezed.
+ */
+const FRAME_WIDTH = 1360;
+
+function ScaledFrame({ children }: { children: React.ReactNode }) {
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const box = boxRef.current;
+    if (!box) return;
+    const update = () => setScale(Math.min(1, box.clientWidth / FRAME_WIDTH));
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(box);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={boxRef} className="absolute inset-0 overflow-hidden">
+      <div
+        style={{
+          width: FRAME_WIDTH,
+          height: `${100 / scale}%`,
+          transform: `scale(${scale})`,
+          transformOrigin: 'top left',
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export function EmbeddedProduct({
   src,
   title,
@@ -90,17 +135,19 @@ export function EmbeddedProduct({
           </div>
         ) : null}
 
-        <iframe
-          src={src}
-          title={title}
-          loading="lazy"
-          onLoad={() => setLive(true)}
-          onError={() => setFailed(true)}
-          className={cx(
-            'h-full w-full border-0 transition-opacity duration-700',
-            live ? 'opacity-100' : 'opacity-0',
-          )}
-        />
+        <ScaledFrame>
+          <iframe
+            src={src}
+            title={title}
+            loading="lazy"
+            onLoad={() => setLive(true)}
+            onError={() => setFailed(true)}
+            className={cx(
+              'h-full w-full border-0 transition-opacity duration-700',
+              live ? 'opacity-100' : 'opacity-0',
+            )}
+          />
+        </ScaledFrame>
       </div>
 
       {note ? (
