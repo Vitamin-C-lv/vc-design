@@ -9,6 +9,7 @@ import { contact } from '@/content/site';
 import { buildBriefMessage, cx, isFilled } from '@/lib/utils';
 
 type FormStatus = 'idle' | 'loading' | 'copied' | 'sent' | 'error';
+type CopyState = 'idle' | 'copied' | 'failed';
 
 function ChannelValue({ channel }: { channel: (typeof contact.channels)[number] }) {
   if (isFilled(channel.value)) {
@@ -23,42 +24,76 @@ function ChannelValue({ channel }: { channel: (typeof contact.channels)[number] 
   return (
     <div className="mt-3 border border-dashed border-[var(--tone-line)] p-4">
       <p className="type-label-sm tone-mute">{contact.pendingHeadline}</p>
-      <p className="type-body tone-fg-2 mt-3">此处将放：{channel.expected}</p>
+      <p className="type-body tone-fg-2 mt-3">此处将放：{channel.valueHint}</p>
+      {/* Explains the gap rather than leaving it looking like an oversight. */}
+      <p className="type-label-sm tone-mute mt-3 max-w-[46ch] leading-relaxed">{contact.pendingBody}</p>
       <p className="type-label-sm tone-mute mt-2">{channel.pendingNote}</p>
     </div>
   );
 }
 
-function ContactDetails() {
-  const wechatChannel = contact.channels.find((channel) => channel.id === 'wechat');
-  const wechatExpected = wechatChannel?.expected ?? '微信二维码';
+/**
+ * The WeChat ID, as a real one-tap affordance.
+ *
+ * A bare ID string gives the visitor nothing to do with it: they would have to
+ * select nine characters by hand on a phone. Clicking copies it and says so, and
+ * the icon makes the copy action visible before the click rather than after it.
+ */
+function WeChatId({ value }: { value: string }) {
+  const [state, setState] = useState<CopyState>('idle');
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(value);
+      setState('copied');
+    } catch {
+      setState('failed');
+    }
+  }
 
   return (
-    <div className="mt-14 grid min-w-0 gap-5 md:grid-cols-2">
-      <div className="min-w-0 border border-dashed border-[var(--tone-line)] p-5 md:p-7">
-        <p className="type-label tone-fg">{contact.pendingHeadline}</p>
-        <p className="type-body tone-fg-2 mt-5 max-w-[48ch]">{contact.pendingBody}</p>
+    <button
+      type="button"
+      onClick={copy}
+      aria-label={`复制微信号 ${value}`}
+      className="group/copy mt-4 flex w-full min-w-0 items-center justify-between gap-4 border border-[var(--tone-line)] px-4 py-3 text-left transition-colors duration-500 hover:border-[var(--tone-accent)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--tone-accent)]"
+    >
+      <span className="min-w-0">
+        <span className="type-label-sm tone-mute block">WECHAT ID</span>
+        <span className="type-lead tone-fg mt-1 block truncate font-mono tracking-wide">{value}</span>
+      </span>
+      <span
+        aria-live="polite"
+        className="type-label-sm tone-mute shrink-0 transition-colors duration-500 group-hover/copy:text-[var(--tone-accent)]"
+      >
+        {state === 'copied' ? '已复制 ✓' : state === 'failed' ? '请手动复制' : '点击复制'}
+      </span>
+    </button>
+  );
+}
 
-        <div className="mt-8 space-y-6">
-          {contact.channels.map((channel) => (
-            <div key={channel.id} className="hairline min-w-0 pt-4">
-              <p className="type-label-sm tone-mute">{channel.label}</p>
-              <ChannelValue channel={channel} />
-            </div>
-          ))}
-        </div>
-      </div>
+function ContactDetails() {
+  const wechat = contact.channels.find((channel) => channel.id === 'wechat');
+  const others = contact.channels.filter((channel) => channel.id !== 'wechat');
+  const qrAlt = wechat?.value ? `微信号 ${wechat.value} 的二维码` : 'VC 微信二维码';
 
-      <div className="flex min-w-0 flex-col border border-dashed border-[var(--tone-line)] p-5 md:p-7">
-        <p className="type-label tone-fg">{contact.pendingHeadline}</p>
-        <p className="type-body tone-fg-2 mt-3">此处将放：{wechatExpected}</p>
+  return (
+    <div className="mt-14 grid min-w-0 gap-6 border-t border-[var(--tone-line)] pt-10 md:grid-cols-12 md:gap-10">
+      {/* The QR is the primary action, so it gets the larger column and the
+          heading. Everything else is secondary detail. */}
+      <div className="min-w-0 md:col-span-5">
+        <p className="type-label tone-fg">扫码添加微信</p>
+        <p className="type-body tone-fg-2 mt-3">
+          微信是我们回得最快的地方。扫码添加，直接说需求。
+        </p>
         {isFilled(contact.qrImage) ? (
-          <VcImage
-            media={{ key: contact.qrImage, alt: wechatExpected }}
-            sizes="(min-width: 768px) 24rem, 80vw"
-            aspect={1}
-            wrapperClassName="mt-6"
-          />
+          <div className="relative mt-6 border border-[var(--tone-line)]">
+            <VcImage
+              media={{ key: contact.qrImage, alt: qrAlt }}
+              sizes="(min-width: 768px) 22rem, 80vw"
+              aspect={1}
+            />
+          </div>
         ) : (
           <div className="hairline mt-6 flex aspect-square min-w-0 items-end border border-dashed border-[var(--tone-line)] p-5">
             <div>
@@ -67,6 +102,30 @@ function ContactDetails() {
             </div>
           </div>
         )}
+      </div>
+
+      <div className="min-w-0 md:col-span-6 md:col-start-7 md:pt-1">
+        {isFilled(wechat?.value) ? (
+          <div>
+            <p className="type-label tone-fg">{wechat?.zh ?? '微信'} · {wechat?.label}</p>
+            <WeChatId value={wechat.value as string} />
+            {wechat?.actionNote ? (
+              <p className="type-label-sm tone-mute mt-3">{wechat.actionNote}</p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {/* Channels still missing a real value keep their explicit placeholder,
+            so a gap in the contact details is never mistaken for an oversight. */}
+        {others.map((channel) => (
+          <div key={channel.id} className="hairline mt-8 min-w-0 pt-6">
+            <p className="type-label-sm tone-mute">
+              {channel.label}
+              {channel.zh ? ` · ${channel.zh}` : ''}
+            </p>
+            <ChannelValue channel={channel} />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -209,7 +268,7 @@ export function BriefForm() {
                   exit={{ opacity: 0, y: -8 }}
                   className="type-label-sm tone-mute mt-5 max-w-[58ch]"
                 >
-                  {status === 'copied' ? '需求已复制。联系方式补齐后，即可发送给 VC。' : null}
+                  {status === 'copied' ? '需求已复制。加上方微信，把这段直接发给我们即可。' : null}
                   {status === 'sent' ? contact.responseNote : null}
                   {status === 'error' ? '暂时无法复制或发送，请保留这段需求，稍后再试。' : null}
                 </motion.p>

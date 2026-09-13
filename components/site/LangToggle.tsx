@@ -44,6 +44,10 @@ function subscribe(onChange: () => void): () => void {
 
 function applyLang(next: Lang): void {
   document.documentElement.dataset.lang = next;
+  // `data-lang` is what the CSS gates on; `lang` is what assistive technology and
+  // crawlers read. They have to move together, or an English-mode page keeps
+  // announcing itself as Chinese.
+  document.documentElement.lang = next === 'en' ? 'en' : 'zh-CN';
   try {
     window.localStorage.setItem(STORAGE_KEY, next);
   } catch {

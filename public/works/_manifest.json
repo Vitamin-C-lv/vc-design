@@ -796,5 +796,28 @@
     ],
     "lqip": "qinghua/mobile-step-01-lqip.webp",
     "fallback": "qinghua/mobile-step-01-2048.jpg"
+  },
+  "brand/wechat-qr": {
+    "src": "brand/wechat-qr",
+    "original": {
+      "width": 669,
+      "height": 669,
+      "bytes": 117701
+    },
+    "aspect": 1,
+    "widths": [
+      480,
+      669
+    ],
+    "webp": [
+      "brand/wechat-qr-480.webp",
+      "brand/wechat-qr-669.webp"
+    ],
+    "avif": [
+      "brand/wechat-qr-480.avif",
+      "brand/wechat-qr-669.avif"
+    ],
+    "lqip": "brand/wechat-qr-lqip.webp",
+    "fallback": "brand/wechat-qr-669.jpg"
   }
 }

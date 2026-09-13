@@ -216,6 +216,13 @@ export interface ParticleStage {
   en: string;
   /** One line shown while the stage is active. */
   note: string;
+  /**
+   * English counterpart of `note`. The seven notes are short and concrete ("a
+   * vessel is born from clay, fire and glaze"), and the tablist already names the
+   * stages in both languages — leaving this blank would drop the caption back to
+   * Chinese in English mode, which reads as a seam in an otherwise bilingual block.
+   */
+  noteEn: string;
   model: ParticleModelId;
   /** Particle colour for this stage, taken from the source project. */
   color: string;

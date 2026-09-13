@@ -1,4 +1,4 @@
-import { ArrowLink } from '@/components/primitives/ArrowLink';
+import { SignalCircle } from '@/components/primitives/SignalCircle';
 import { Band, Eyebrow } from '@/components/primitives';
 import { Bi, BiOnly } from '@/components/i18n/Bi';
 import { Reveal } from '@/components/motion/Reveal';
@@ -33,9 +33,15 @@ export function ContactPanel() {
             ))}
           </div>
           <p className="type-body tone-fg-2 mt-8 max-w-[34ch]">{contact.headlineZh}</p>
-          <ArrowLink href="#contact-brief" variant="solid" className="mt-10">
+          {/*
+            The one signal-coloured element on the site. It anchors the bottom of
+            the left column and crosses a hairline into the gutter, so the final
+            band ends on a single unmistakable action rather than another bordered
+            button that reads like every other link.
+          */}
+          <SignalCircle href="#contact-brief" sublabel="WECHAT / 微信" className="mt-12">
             <BiOnly zh="把需求发给我们" en={contact.ctaLabel} />
-          </ArrowLink>
+          </SignalCircle>
         </div>
 
         <div className="min-w-0 lg:col-span-6 lg:col-start-7">

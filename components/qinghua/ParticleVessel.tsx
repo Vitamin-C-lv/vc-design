@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   BufferGeometry,
   PerspectiveCamera,
@@ -126,15 +126,33 @@ function buildRuntime(
     0.25,
   );
 
+  /*
+   * The vessel sits on the project's own surface, not on whatever happens to be
+   * behind it.
+   *
+   * Two things depend on this being opaque:
+   *
+   * - `fallbackSrc` is a *loading* state, so it only has to hold until the first
+   *   frame lands. An opaque canvas retires it visually without any z-index or
+   *   unmounting work, and the fade in the JSX then crossfades the static
+   *   capture into the live render instead of hard-cutting between them.
+   * - the particle layers use additive blending against a dark ground, so the
+   *   ground has to come from us. Clearing to fully transparent used to let the
+   *   fallback screenshot show through the gaps between points, which stacked two
+   *   sets of typography on top of each other — the slate naming the current
+   *   stage, and the captured frame's own title.
+   */
+  const groundColor = cssColor(colorRoot, '--tone-surface', '#141414');
+
   const renderer = new THREE.WebGLRenderer({
     canvas,
-    alpha: true,
+    alpha: false,
     antialias: !isCompact,
     depth: true,
     stencil: false,
     powerPreference: 'high-performance',
   });
-  renderer.setClearColor(0, 0);
+  renderer.setClearColor(new THREE.Color(groundColor), 1);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isCompact ? 1.5 : 2));
 
   const scene = new THREE.Scene();
@@ -275,7 +293,24 @@ export function ParticleVessel({
   const visibleRef = useRef(false);
   const revealRef = useRef(clamp(reveal ?? 0));
   const failedConfigRef = useRef<string | null>(null);
+  const mountedRef = useRef(true);
+  /*
+   * `live` means "the real renderer has drawn its first frame". Until then the
+   * fallback capture is the honest thing to show; after it, the capture is stale
+   * information and fades out.
+   */
+  const [live, setLive] = useState(false);
+  const markLive = useCallback(() => {
+    if (mountedRef.current) setLive(true);
+  }, []);
   const configKey = `${selectedModel}:${framing}:${canUseThree}:${profile.isCompact}`;
+
+  useEffect(
+    () => () => {
+      mountedRef.current = false;
+    },
+    [],
+  );
 
   useEffect(() => {
     stageRef.current = stage;
@@ -341,6 +376,10 @@ export function ParticleVessel({
         resizeObserver = new ResizeObserver(() => runtimeRef.current?.resize());
         resizeObserver.observe(root);
         start();
+        // `start()` draws on the next animation frame, so by the time it returns
+        // the capture underneath is already covered by the opaque canvas. Handing
+        // the crossfade to a plain state flip keeps it in CSS.
+        markLive();
       } catch (error) {
         if (!disposed && !(error instanceof DOMException && error.name === 'AbortError')) fail();
       } finally {
@@ -371,7 +410,7 @@ export function ParticleVessel({
       canvas.removeEventListener('webglcontextlost', onContextLost);
       disposeRuntime();
     };
-  }, [canUseThree, configKey, framing, profile.isCompact, selectedModel]);
+  }, [canUseThree, configKey, framing, markLive, profile.isCompact, selectedModel]);
 
   useEffect(() => {
     if (reveal !== undefined) {
@@ -411,6 +450,12 @@ export function ParticleVessel({
       data-qinghua-model={selectedModel}
       data-qinghua-stage={stage}
     >
+      {/*
+        The capture is a loading state, not a layer. It stays mounted (so weak
+        devices and WebGL failures keep a real image) but fades out the moment the
+        live render is up — otherwise the frame's own typography and the slate
+        above the canvas end up stacked on top of each other.
+      */}
       {fallbackSrc ? (
         <img
           src={fallbackSrc}
@@ -418,13 +463,21 @@ export function ParticleVessel({
           loading="lazy"
           decoding="async"
           draggable={false}
-          className="absolute inset-0 h-full w-full object-cover"
+          aria-hidden={live}
+          className={cx(
+            'absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-[var(--ease-vc-out)]',
+            live ? 'opacity-0' : 'opacity-100',
+          )}
         />
       ) : (
         <div className="absolute inset-0 flex items-end p-5 md:p-7" aria-hidden="true">
           <span className="type-label-sm text-[var(--tone-mute)]">QINGHUA / PARTICLE VESSEL</span>
         </div>
       )}
+      {/*
+        No background class: the renderer clears to `--tone-surface` itself, which
+        is what makes the live frame able to cover the capture.
+      */}
       <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 h-full w-full" />
     </div>
   );

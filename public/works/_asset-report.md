@@ -20,7 +20,8 @@
 | lihuahua/sleep.jpg | lihuahua/sleep | 691 × 1536 | 花花宠物应用的 sleep 状态界面，像素风三色小狗闭眼蜷睡，页面以柔和米色营造安静氛围。 |
 | misc/smart_planter_concept.jpeg | misc/smart_planter_concept | 1024 × 1536 | 智能花盆产品概念图，白色环抱式容器内生长绿植，黑色屏幕显示湿度72%与温度23℃。 |
 
-共 17 张源图；失败 0 张。
+| brand/wechat-qr.jpeg（裁剪自微信名片） | brand/wechat-qr | 669 × 669 | VC 维C 微信二维码，紫色码点居中放置微信图标，扫码可添加为好友。 |
+共 18 张源图；失败 0 张。
 
 ## Live 站点截图
 
@@ -60,3 +61,4 @@
 - 工序主题：01 数字拉坯 / THROWING WORKBENCH；移动端初始画面展示成形中的金色器物。
 - 逐字标题与文案：“PORCELAIN CREATION STUDIO · 01”“数字拉坯”“THROWING WORKBENCH”“以轮为轴，在旋转中建立属于你的器型。”
 - 画面与 UI：390×844 CSS 视口、2 倍像素输出；深墨绿纵向画面，器物居中偏右并放大，左侧为标题与说明，下方有“形态记录”“撤销 / 重做 / 重置”“陶轮已就绪”，右侧有“操作方式”“拖动器物轮廓，改变对应高度的半径。”，底部为“01 / THROWING”与按钮“完成塑形”。
+

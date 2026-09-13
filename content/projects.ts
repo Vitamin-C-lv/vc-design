@@ -228,10 +228,16 @@ export const guge: Project = {
       mediaKey: 'awards/guge_milan_design_week_second_prize',
     },
   ],
+  /*
+   * Credits state authorship plainly and stay within what is actually known.
+   * An earlier draft ended with "现有资料未逐项记录协作方分工" — a research note
+   * about our own sources, which reads as a disclaimer on a sales page and
+   * undercuts the work it is meant to attribute.
+   */
   credits: [
     '本项目为团队协作完成的研究与设计实践，所获奖项归属于项目本身。',
-    'VC 参与了从文化研究、视觉系统、三维资产到 AI 导览与交互实现的核心设计与开发工作。',
-    '完整作者与分工信息可按需求在详情页 Credits 中补充。',
+    'VC 参与文化研究、视觉提取、视觉系统与三维资产设计。',
+    'VC 参与交互叙事、AI 导览方案与交互原型实现。',
   ],
   video: {
     mp4: '/works/guge/video/guge-loop.mp4',
@@ -756,13 +762,13 @@ export const qinghua: Project = {
       surface: 'dark',
     },
     stages: [
-      { id: 'origin', zh: '泥土初生', en: 'CLAY AWAKENING', note: '万物始于一抔土', model: 'clay', color: '#bfc8be' },
-      { id: 'pulling', zh: '拉坯', en: 'FORMING THE VESSEL', note: '以轮为轴，使泥土向上生长', model: 'pulling', color: '#c2c0aa' },
-      { id: 'trimming', zh: '修型', en: 'REFINING THE SILHOUETTE', note: '削繁为简，轮廓渐明', model: 'bisque', color: '#dedfd6' },
-      { id: 'painting', zh: '绘饰', en: 'COBALT AS INK', note: '以钴为墨，在素坯之上落笔', model: 'bisque', color: '#4f79a5' },
-      { id: 'glazing', zh: '施釉', en: 'SEALING THE BRUSHWORK', note: '一层清釉，封存笔意', model: 'bisque', color: '#a7d5d0' },
-      { id: 'firing', zh: '烧制', en: 'TEMPERED BY FIRE', note: '高温淬炼，釉色初现', model: 'bisque', color: '#ff8d52' },
-      { id: 'finished', zh: '成器', en: 'A VESSEL IS BORN', note: '泥、火、釉与纹样相合', model: 'bisque', color: '#d6ece8' },
+      { id: 'origin', zh: '泥土初生', en: 'CLAY AWAKENING', note: '万物始于一抔土', noteEn: 'Everything begins with a handful of earth', model: 'clay', color: '#bfc8be' },
+      { id: 'pulling', zh: '拉坯', en: 'FORMING THE VESSEL', note: '以轮为轴，使泥土向上生长', noteEn: 'On the wheel, the clay is drawn upward', model: 'pulling', color: '#c2c0aa' },
+      { id: 'trimming', zh: '修型', en: 'REFINING THE SILHOUETTE', note: '削繁为简，轮廓渐明', noteEn: 'Trimming away until the silhouette reads', model: 'bisque', color: '#dedfd6' },
+      { id: 'painting', zh: '绘饰', en: 'COBALT AS INK', note: '以钴为墨，在素坯之上落笔', noteEn: 'Cobalt laid on raw clay like ink on paper', model: 'bisque', color: '#4f79a5' },
+      { id: 'glazing', zh: '施釉', en: 'SEALING THE BRUSHWORK', note: '一层清釉，封存笔意', noteEn: 'A clear glaze seals the brushwork in', model: 'bisque', color: '#a7d5d0' },
+      { id: 'firing', zh: '烧制', en: 'TEMPERED BY FIRE', note: '高温淬炼，釉色初现', noteEn: 'Heat tempers the body and wakes the glaze', model: 'bisque', color: '#ff8d52' },
+      { id: 'finished', zh: '成器', en: 'A VESSEL IS BORN', note: '泥、火、釉与纹样相合', noteEn: 'Clay, fire, glaze and pattern become one', model: 'bisque', color: '#d6ece8' },
     ],
   },
   credits: ['本页截图为线上版本的本地留存，页面内容可能随版本迭代调整。'],

@@ -45,8 +45,20 @@ function assertManifest(manifest: PointCloudManifest, model: PointCloudModelMani
 }
 
 /**
- * Decode the worker's packed layout. Positions intentionally use the source
- * mapping exactly: bbox.min + (int16 / 32767) * (bbox.max - bbox.min) * 0.5.
+ * Decode the worker's packed layout.
+ *
+ * The positions are unsigned-quantised across the model's bounding box, so the
+ * inverse has to undo *both* halves of that mapping. The build step
+ * (`_build/qinghua-extract/build-pointcloud.mjs`) does:
+ *
+ *   quantize:   t = (v - min) / (max - min)   →  int16 in [-32767, 32767]
+ *   inverse:    v = min + ((q + 32767) / 65534) * (max - min)
+ *
+ * An earlier version used `min + (q / 32767) * (max - min) * 0.5`. That drops the
+ * `+ 32767` re-centring term, so every negative `q` — half the range — collapses
+ * towards the wrong end and the whole cloud shifts by half the bounding box. The
+ * vessel then sits off-centre, and since the render group rotates about Y, the
+ * offset swings it out of frame as it turns.
  */
 export function decodePointCloud(
   buffer: ArrayBuffer,
@@ -71,10 +83,12 @@ export function decodePointCloud(
     const sourceOffset = index * manifest.bytesPerPoint;
     const pointOffset = index * 3;
     for (let axis = 0; axis < 3; axis += 1) {
-      const value = model.bbox.min[axis] +
-        (view.getInt16(sourceOffset + axis * 2, true) / 32767) *
-        (model.bbox.max[axis] - model.bbox.min[axis]) *
-        0.5;
+      const size = model.bbox.max[axis] - model.bbox.min[axis];
+      const value =
+        size === 0
+          ? model.bbox.min[axis]
+          : model.bbox.min[axis] +
+            ((view.getInt16(sourceOffset + axis * 2, true) + 32767) / 65534) * size;
       position[pointOffset + axis] = value;
       decodedMin[axis] = Math.min(decodedMin[axis], value);
       decodedMax[axis] = Math.max(decodedMax[axis], value);

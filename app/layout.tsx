@@ -48,7 +48,7 @@ export const viewport: Viewport = {
 };
 
 /**
- * Runs *before first paint*. Two jobs, both of which must not flash:
+ * Runs *before first paint*. Three jobs, none of which may flash:
  *
  * 1. Marks the document as scripted. The scroll-reveal CSS only hides elements
  *    while `data-js="on"` is present, so if this script never runs — scripting
@@ -59,11 +59,14 @@ export const viewport: Viewport = {
  *    already ships `data-lang="zh"` (the primary audience), and CSS hides the
  *    other language's slots, so without this the page would paint Chinese and
  *    then visibly snap to English.
+ * 3. Keeps `<html lang>` in step with that choice. `data-lang` only drives CSS;
+ *    assistive technology and search engines read `lang`, so leaving it at
+ *    `zh-CN` meant an English-mode page announced itself as Chinese.
  *
  * Deliberately inline, synchronous and tiny: any async or bundled version would
  * reintroduce the flash it exists to prevent.
  */
-const BOOT_SCRIPT = `(function(){try{var d=document.documentElement;d.dataset.js='on';var l=localStorage.getItem('vc-lang');if(l==='en'||l==='zh'){d.dataset.lang=l;}}catch(e){document.documentElement.dataset.js='on';}})();`;
+const BOOT_SCRIPT = `(function(){try{var d=document.documentElement;d.dataset.js='on';var l=localStorage.getItem('vc-lang');if(l==='en'||l==='zh'){d.dataset.lang=l;d.lang=l==='en'?'en':'zh-CN';}}catch(e){document.documentElement.dataset.js='on';}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

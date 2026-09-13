@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { ParticleSequence } from '@/content/types';
 import { ParticleVessel } from '@/components/qinghua/ParticleVessel';
-import { BiOnly } from '@/components/i18n/Bi';
+import { Bi, BiOnly } from '@/components/i18n/Bi';
 import { Reveal } from '@/components/motion/Reveal';
 import { getMedia, mediaUrl, resolveMedia } from '@/lib/media';
 import { cx, pad2 } from '@/lib/utils';
@@ -102,16 +102,39 @@ export function ParticleShowcase({
                   }}
                 />
                 <span className="type-label-sm tone-mute w-6 shrink-0">{pad2(i + 1)}</span>
-                <span className="type-lead min-w-0 flex-1 truncate">{s.zh}</span>
-                <span className="type-label-sm hidden shrink-0 opacity-60 sm:inline">{s.en}</span>
+                {/*
+                  Language-gated rather than raw text: this tablist is the only
+                  place the seven stages are named, so in English mode the English
+                  name has to be the one in the reading slot. `Bi as={null}` emits
+                  the slots as siblings so each can carry its own flex behaviour.
+                */}
+                <Bi
+                  as={null}
+                  zh={s.zh}
+                  en={s.en}
+                  primaryClassName="type-lead min-w-0 flex-1 truncate"
+                  secondaryClassName="type-label-sm hidden shrink-0 opacity-60 sm:inline"
+                />
               </button>
             );
           })}
         </div>
 
-        <p className="type-body tone-fg-2 mt-6 min-h-[3.5rem]" aria-live="polite">
-          {stage.note}
-        </p>
+        {/*
+          Gated on language like everything else here: the note names what the
+          stage actually does, so it is information, not texture. `aria-live`
+          sits on the wrapper because `Bi` emits its own slots inside.
+        */}
+        <div aria-live="polite">
+          <Bi
+            as="p"
+            zh={stage.note}
+            en={stage.noteEn}
+            hideSecondary
+            className="min-h-[3.5rem]"
+            primaryClassName="type-body tone-fg-2 mt-6 block"
+          />
+        </div>
       </div>
 
       {/* ---- Live render ---- */}
