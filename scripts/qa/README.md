@@ -38,6 +38,8 @@ node scripts/qa/shoot.mjs         # 全站回归（最慢，几分钟）
 | `verify-snapshot.mjs` | 观潮内嵌副本可用性 | 标题正确、4xx/5xx 为 0、帧内导航可点 |
 | `verify-decode.mjs` | 点云解码正确性（纯 Node，**不需要站点在跑**） | 解出的 bbox 逐轴等于 `pointcloud.json` 的 bbox |
 | `verify-fastscroll.mjs` | 快速滚动（冷启动 + 真实滚轮猛甩）下懒加载是否既够懒、又不会卡死 | 案例页静置不滚动时点云 0 请求、canvas 仍 300×150；首页冷启动猛甩后点云被请求且 canvas 已按真实尺寸初始化；视口内无未揭示元素 / 未加载图片 |
+| `verify-headline.mjs` | 标题逐行揭示的断行与首页列宽适配回归 | 案例页行拼回隐藏槽位里的完整 `titleZh`、切口不切拉丁单词、不以中文收尾标点开头且每行只占一视觉行；首页 390/768/1024/1280/1440/1728px 六档下四个旗舰标题每行只占一视觉行且不超 `container-type` 父列宽 |
+| `verify-reveal-instant.mjs` | 快滚门限 `data-reveal-instant` 不能两头失效：既不能误伤阅读速度下的揭示动画，也不能甩完不摘掉、导致全站从此没有揭示动画 | 静止时 `rise`/`fade` 过渡为 `0.9s, 1.044s`、`masked` 子元素为 `1.05s`；猛甩期间两者塌成 `0s` 且标记出现；停下后标记摘掉、过渡恢复；阅读速度（110px/280ms）全程标记**不出现**且能采到真实的动画中间态（opacity 或 clip-path）。时序敏感，单次失败先重跑一次再判定 |
 
 ## 环境变量
 

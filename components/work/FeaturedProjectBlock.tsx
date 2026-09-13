@@ -7,6 +7,7 @@ import { MetaGrid, TagList } from '@/components/primitives';
 import { ArrowLink } from '@/components/primitives/ArrowLink';
 import { Reveal } from '@/components/motion/Reveal';
 import type { Project } from '@/content/types';
+import { headlineWeight, splitHeadline } from '@/lib/headline';
 import { MEDIA_SIZES } from '@/lib/media';
 import { useDeviceProfile } from '@/lib/motion/device';
 import { useGsapScope } from '@/lib/motion/useGsap';
@@ -29,10 +30,6 @@ function getLayout(index: number, layout?: FeaturedProjectLayout): FeaturedProje
   if (index === 1) return 'split-left';
   if (index === 2) return 'split-right';
   return 'wide';
-}
-
-function splitTitle(title: string) {
-  return title.split(/(?=AI|Daily|VC-AI|·)/).filter(Boolean);
 }
 
 function MotionReveal({
@@ -137,10 +134,21 @@ function FeaturedMedia({
 }
 
 function ProjectHeading({ project, motionDisabled }: { project: Project; motionDisabled: boolean }) {
-  const titleLines = splitTitle(project.titleZh);
+  const titleLines = splitHeadline(project.titleZh);
+  // `.type-column-fit` sizes the headline so this row fits the column, which is
+  // what keeps a pre-split line from wrapping anyway.
+  const longestLine = Math.max(...titleLines.map(headlineWeight), 1);
 
   return (
-    <div>
+    /*
+     * `container-type` so `.type-column-fit` on the headline can measure this
+     * column rather than the viewport: the same title sits in a 395px column here
+     * and an 864px one on its case page.
+     */
+    <div
+      className="[container-type:inline-size]"
+      style={{ '--headline-weight': longestLine } as CSSProperties}
+    >
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
         <span className="type-label tone-accent-text border-t border-[var(--tone-accent)] pt-2">
           {pad2(project.order)}
@@ -170,7 +178,7 @@ function ProjectHeading({ project, motionDisabled }: { project: Project; motionD
                 zh={line}
                 en={index === 0 ? project.title : ''}
                 hideSecondary
-                primaryClassName="type-xl type-display tone-fg block"
+                primaryClassName="type-xl type-column-fit type-display tone-fg block"
               />
             </Link>
           </MotionReveal>

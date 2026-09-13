@@ -256,6 +256,26 @@
     will-change: auto;
   }
 
+  /*
+   * Fast-scroll override: while the page is being flung, reveals snap instead of
+   * animating.
+   *
+   * A 0.9s fade is not an animation when the content is flying past — it is
+   * unreadable half-transparent text caught mid-transition. The visitor reported
+   * exactly that ("快速滚动时字是一半加载出来的") with a screenshot of a
+   * description paragraph sitting at partial opacity next to fully opaque labels.
+   *
+   * `data-reveal-instant` is set on <html> by SmoothScrollProvider whenever Lenis
+   * reports velocity above the fling threshold, and cleared once the scroll
+   * settles. This only removes the transition: the IntersectionObserver still
+   * decides *whether* an element is revealed, so nothing below the fold appears
+   * early. Deliberate reading-speed scrolling keeps the animation.
+   */
+  [data-js='on'][data-reveal-instant='true'] [data-reveal],
+  [data-js='on'][data-reveal-instant='true'] [data-reveal] > [data-reveal-mask] {
+    transition: none;
+  }
+
   /* Reduced motion: content is simply present. */
   @media (prefers-reduced-motion: reduce) {
     [data-js='on'] [data-reveal],
@@ -338,6 +358,37 @@
     line-height: 0.94;
     letter-spacing: -0.04em;
     text-wrap: balance;
+  }
+
+  /*
+   * A headline that also answers to its column.
+   *
+   * `.type-xl` is sized against the viewport, which is right on the case pages —
+   * their heading column is 864px — and wrong on the home page, where the same
+   * headline can land in a 395px column (`split-left` / `split-right` layouts).
+   * At 135px a line holds about three characters there, so "观潮 Daily Brief"
+   * stacked one word per line and the text column towered over its media while
+   * the media side sat half empty.
+   *
+   * The size is driven by `--headline-weight` — the width of the *longest line*
+   * the headline was split into, in CJK units, set by the component. Sizing
+   * against the longest line rather than the column is what stops a line from
+   * wrapping anyway once it is in place: "智能导览系统" is six units and needs
+   * 6 × 15.7cqw = 94cqw of a 739px column, so it lands on one line instead of two.
+   *
+   * `min()` keeps the viewport cap wherever the column is wide enough, so wide
+   * layouts are untouched and only the narrow ones shrink. Needs
+   * `container-type: inline-size` on an ancestor; with no query container in
+   * scope, `cqw` resolves against the viewport and this is a no-op.
+   *
+   * The outer `min(..., max(9.4vw, min(2.9rem, --fit)))` keeps `.type-xl`'s phone
+   * floor: below roughly a 494px viewport `9.4vw` drops under `2.9rem`, and without
+   * this the headline would come out about a fifth smaller on a phone than it does
+   * today. The floor yields as soon as the column is genuinely too narrow for it.
+   */
+  .type-column-fit {
+    --fit: calc(94cqw / var(--headline-weight, 5));
+    font-size: min(9.5rem, var(--fit), max(9.4vw, min(2.9rem, var(--fit))));
   }
 
   .type-lg {

@@ -10,24 +10,7 @@ import { useGsapScope } from '@/lib/motion/useGsap';
 import type { CaseSection, MediaRef } from '@/content/types';
 import { MEDIA_SIZES } from '@/lib/media';
 import { cx } from '@/lib/utils';
-
-function splitHeadline(value: string): string[] {
-  const clauses = value.match(/[^，。！？；：]+[，。！？；：]?/g)?.filter(Boolean) ?? [value];
-  const clean = (lines: string[]) => lines.map((line) => line.trim()).filter(Boolean);
-  if (clauses.length === 2 || clauses.length === 3) return clean(clauses);
-  if (clauses.length > 3) {
-    const firstCut = Math.ceil(clauses.length / 3);
-    const secondCut = Math.ceil((clauses.length * 2) / 3);
-    return clean([clauses.slice(0, firstCut), clauses.slice(firstCut, secondCut), clauses.slice(secondCut)]
-      .map((group) => group.join(''))
-      .filter(Boolean));
-  }
-
-  const chars = Array.from(value);
-  if (chars.length < 8) return [value];
-  const midpoint = Math.ceil(chars.length / 2);
-  return clean([chars.slice(0, midpoint).join(''), chars.slice(midpoint).join('')]);
-}
+import { splitHeadline } from '@/lib/headline';
 
 function ChineseHeadline({ value }: { value: string }) {
   const profile = useDeviceProfile();
