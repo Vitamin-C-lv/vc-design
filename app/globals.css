@@ -1,0 +1,644 @@
+@import 'tailwindcss';
+
+/* ============================================================================
+   VC / 维C — design tokens
+   ----------------------------------------------------------------------------
+   Brand rule: VC stays neutral, the work carries the colour. The base is a warm
+   near-black; type is bone rather than pure white; every case study may inject
+   its own accent through --tone-accent.
+   ========================================================================= */
+
+@theme {
+  /* --- Neutral palette --------------------------------------------------
+     Tuned against the visual reference's measured values: paper #FDFDFD and
+     ink #0F0F0F, i.e. a *flat* near-white page with near-black type and no
+     background gradient or noise. VC keeps a trace of warmth in the paper and
+     the hairlines — the brief specifies 黑 / 白 / 暖灰 — but the paper is now
+     near-white rather than beige, and the ink is near-black rather than warm
+     charcoal. That contrast is what reads as "high-end" at a glance.
+     -------------------------------------------------------------------- */
+  --color-ink: #0f0f0f; /* page base, dark acts */
+  --color-ink-2: #161615; /* elevated surface */
+  --color-ink-3: #1d1d1b; /* card / panel */
+  --color-bone: #f7f5f1; /* primary type on ink */
+  --color-bone-2: #cfcbc4; /* secondary type on ink */
+  --color-mute: #8a857c; /* tertiary type on ink */
+  --color-line: rgb(247 245 241 / 0.16);
+  --color-line-soft: rgb(247 245 241 / 0.07);
+
+  /* --- Inverted (paper) surfaces -------------------------------------- */
+  --color-paper: #fbfaf8; /* near-white, faintly warm */
+  --color-paper-2: #f1efeb;
+  --color-paper-3: #e4e1da;
+  --color-paper-ink: #0f0f0f;
+  --color-paper-mute: #6f6a62;
+  --color-paper-line: rgb(15 15 15 / 0.16);
+
+  /* --- The single signal colour ----------------------------------------
+     One saturated accent for the whole site, used only for the primary CTA,
+     one keyword, and current-state markers — never as decoration. Everything
+     else is monochrome; the *projects* carry their own colours through
+     `--tone-accent`.
+     -------------------------------------------------------------------- */
+  --color-signal: #e0402a;
+
+  /* --- Type families --------------------------------------------------- */
+  /* Latin webfonts are self-hosted (app/fonts). CJK deliberately falls back to
+     the system stack: it is smaller, renders better in WeChat WebView, and
+     avoids a multi-megabyte CJK download on mobile. */
+  --font-display:
+    var(--font-vc-display), 'Archivo', 'PingFang SC', 'HarmonyOS Sans SC', 'Hiragino Sans GB',
+    'Source Han Sans SC', 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-sans:
+    var(--font-vc-sans), 'Inter', 'PingFang SC', 'HarmonyOS Sans SC', 'Hiragino Sans GB',
+    'Source Han Sans SC', 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-mono:
+    var(--font-vc-mono), 'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
+
+  /* --- Breakpoints ------------------------------------------------------ */
+  /* Adds a 4K-class stop on top of Tailwind's defaults. */
+  --breakpoint-3xl: 120rem; /* 1920 */
+  --breakpoint-4xl: 160rem; /* 2560 */
+
+  /* --- Motion ----------------------------------------------------------- */
+  /* A single easing vocabulary keeps movement feeling like one hand made it. */
+  --ease-vc-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-vc-inout: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ============================================================================
+   Tone system
+   ----------------------------------------------------------------------------
+   Every major band of the page declares data-tone="ink" | "paper". That single
+   attribute re-points the surface, type and hairline variables, which is how the
+   site gets its editorial light/dark rhythm without duplicating component CSS.
+   ========================================================================= */
+
+@layer base {
+  [data-tone='ink'] {
+    --tone-bg: var(--color-ink);
+    --tone-fg: var(--color-bone);
+    --tone-fg-2: var(--color-bone-2);
+    --tone-mute: var(--color-mute);
+    --tone-line: var(--color-line);
+    --tone-line-soft: var(--color-line-soft);
+    --tone-surface: var(--color-ink-3);
+    --tone-accent: var(--color-bone);
+  }
+
+  [data-tone='paper'] {
+    --tone-bg: var(--color-paper);
+    --tone-fg: var(--color-paper-ink);
+    --tone-fg-2: #3a3730;
+    --tone-mute: var(--color-paper-mute);
+    --tone-line: var(--color-paper-line);
+    --tone-line-soft: rgb(10 10 9 / 0.06);
+    --tone-surface: var(--color-paper-2);
+    --tone-accent: var(--color-paper-ink);
+  }
+
+  :root {
+    /* Fallback so any component rendered outside a tone band still resolves. */
+    --tone-bg: var(--color-ink);
+    --tone-fg: var(--color-bone);
+    --tone-fg-2: var(--color-bone-2);
+    --tone-mute: var(--color-mute);
+    --tone-line: var(--color-line);
+    --tone-line-soft: var(--color-line-soft);
+    --tone-surface: var(--color-ink-3);
+    --tone-accent: var(--color-bone);
+
+    color-scheme: dark;
+    scrollbar-color: rgb(242 239 233 / 0.22) transparent;
+  }
+
+  * {
+    border-color: var(--tone-line);
+  }
+
+  /*
+   * ── Layout containment ────────────────────────────────────────────────────
+   * Flex and grid items default to `min-width: auto`, whose "transferred size
+   * suggestion" lets a descendant's `aspect-ratio` combined with a fixed height
+   * dictate the track width. Concretely: a media box with `aspect-ratio: 1.78`
+   * and `height: 641px` made a grid track resolve to 1101.62px inside a **390px**
+   * viewport.
+   *
+   * That is worse than a horizontal scrollbar: `<html>`/`<body>` use
+   * `overflow-x: clip`, so the overflowing content is silently *cropped* — the
+   * visitor sees the left third of an image and never learns the rest exists.
+   *
+   * `min-width: 0` is a no-op for ordinary block boxes (their `auto` already
+   * computes to 0), so applying it broadly costs nothing and only changes the
+   * behaviour of genuine flex/grid items — exactly the ones that need to be
+   * allowed to shrink. `:where()` keeps specificity at 0 so any component can
+   * still opt out.
+   */
+  :where(main) :where(div, article, section, figure, ul, ol, li, form, header, footer) {
+    min-width: 0;
+  }
+
+  html {
+    /* Lenis drives scrolling; native smooth-scroll must stay off or the two
+       implementations fight each other. */
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* See the <body> note below: `clip`, never `hidden`. */
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /*
+     * `clip`, never `hidden`.
+     *
+     * `overflow-x: hidden` forces the other axis to `auto`, which silently turns
+     * <body> into a scroll container. That breaks every `position: sticky`
+     * descendant — the pinned who-to-hire stage and the approach rail both rely
+     * on it — because sticky then resolves against body's scrollport instead of
+     * the viewport. `overflow-x: clip` suppresses the overflow *without*
+     * creating a scroll container, so sticky keeps working.
+     *
+     * This is a safety net only. The real fix for sideways scroll is not using
+     * `100vw` for full-bleed elements; see `.bleed` below.
+     */
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: var(--color-bone);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Chinese copy needs slightly looser leading than Latin at the same size. */
+  :lang(zh) {
+    line-height: 1.75;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+/* ============================================================================
+   Reveal system
+   ----------------------------------------------------------------------------
+   Scroll reveals ride an IntersectionObserver + CSS transition rather than a
+   JS animation library: it cannot miss an element, it costs nothing on scroll,
+   and it degrades safely. `data-js="on"` is set by an inline script in <head>,
+   so if scripting fails entirely every element stays visible by default.
+
+   RULE: never give the **observed** element a hidden state that changes its
+   geometry or clip. `clip-path` in particular zeroes the intersection area, so
+   the observer ratio stays 0, the threshold is never crossed and the element
+   stays invisible forever. Geometry-neutral hidden states (opacity, transform)
+   are safe on the observed element; clipped states must go on a child.
+   ========================================================================= */
+
+@layer base {
+  /* --- rise / fade: hidden state is geometry-neutral, safe to self-apply --- */
+  [data-js='on'] [data-reveal='rise'],
+  [data-js='on'] [data-reveal='fade'] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 1.75rem), 0);
+    transition:
+      opacity var(--reveal-duration, 0.9s) var(--ease-vc-out) var(--reveal-delay, 0ms),
+      transform calc(var(--reveal-duration, 0.9s) * 1.16) var(--ease-vc-out)
+        var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  [data-js='on'] [data-reveal='fade'] {
+    --reveal-y: 0rem;
+  }
+
+  [data-js='on'] [data-reveal='rise'][data-revealed='true'],
+  [data-js='on'] [data-reveal='fade'][data-revealed='true'] {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /* --- masked: the clip lives on the CHILD, never on the observed element --- */
+  [data-js='on'] [data-reveal='masked'] > [data-reveal-mask] {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path var(--reveal-duration, 1.1s) var(--ease-vc-out)
+      var(--reveal-delay, 0ms);
+    will-change: clip-path;
+  }
+
+  [data-js='on'] [data-reveal='masked'][data-revealed='true'] > [data-reveal-mask] {
+    clip-path: inset(0 0 0 0);
+    will-change: auto;
+  }
+
+  /* Reduced motion: content is simply present. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-js='on'] [data-reveal],
+    [data-js='on'] [data-reveal] > [data-reveal-mask] {
+      opacity: 1 !important;
+      transform: none !important;
+      clip-path: none !important;
+    }
+  }
+}
+
+/* ============================================================================
+   Media fade-in
+   ----------------------------------------------------------------------------
+   Images fade in over their LQIP once the real bitmap decodes, so a slow
+   connection shows a soft placeholder instead of an empty box.
+
+   The hidden state is applied by CSS, **never** as a class in the markup. The
+   server renders these <img> tags; emitting `opacity-0` from React would bake a
+   hidden state into the HTML, so a visitor without scripting would see a page
+   where every single image is invisible. Gating on `[data-js='on']` (set by the
+   inline script in <head>) means the no-script default is simply "visible".
+   ========================================================================= */
+
+@layer base {
+  [data-js='on'] img[data-vc-media]:not([data-loaded='true']) {
+    opacity: 0;
+  }
+}
+
+/* ============================================================================
+   Language swap
+   ----------------------------------------------------------------------------
+   Chinese is the default reading language; English is available in full and
+   occupies the same slots when selected. Both languages are always in the DOM —
+   CSS decides which one is displayed, so the switch costs one attribute flip
+   instead of a re-render, and every section stays a server component.
+
+   See `components/i18n/Bi.tsx` for the component side and the inline script in
+   `app/layout.tsx` for how the stored preference is applied before first paint.
+   ========================================================================= */
+
+@layer base {
+  [data-lang='zh'] [data-lang-en],
+  [data-lang='en'] [data-lang-zh] {
+    display: none !important;
+  }
+}
+
+/* ============================================================================
+   Typography utilities
+   ----------------------------------------------------------------------------
+   Fluid display sizes, tight editorial tracking, and a shared measure so that
+   "big type + big whitespace" holds together from 360px to 4K.
+   ========================================================================= */
+
+@layer components {
+  .type-display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .type-hero {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(4.5rem, 21vw, 22rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+  }
+
+  .type-xl {
+    font-family: var(--font-display);
+    /* Pushed larger on purpose: the reference language for this site is
+       typographic dominance, where the headline is the visual, not a caption
+       above one. */
+    font-size: clamp(2.9rem, 9.4vw, 9.5rem);
+    line-height: 0.94;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .type-lg {
+    font-family: var(--font-display);
+    font-size: clamp(2.1rem, 5.4vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .type-md {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.75rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .type-lead {
+    font-size: clamp(1.0625rem, 1.35vw, 1.5rem);
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+    text-wrap: pretty;
+  }
+
+  .type-body {
+    font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+    line-height: 1.75;
+    text-wrap: pretty;
+  }
+
+  /* --- CJK tuning ----------------------------------------------------------
+     Chinese is now the primary reading language, and it wants the *opposite*
+     tuning from Latin: Han glyphs are already square and tightly fitted, so the
+     Latin -0.04em tracking visibly closes them up, and display sizes need a
+     little more leading to keep the counters readable. Applied only while the
+     Chinese slots are the ones on screen. */
+  [data-lang='zh'] :where(.type-xl, .type-lg, .type-md) {
+    letter-spacing: -0.012em;
+    line-height: 1.08;
+  }
+
+  [data-lang='zh'] .type-hero {
+    letter-spacing: -0.02em;
+    line-height: 0.94;
+  }
+
+  /* --- Editorial devices ---------------------------------------------------
+     Vocabulary borrowed from the visual reference: a full-width hairline rule
+     whose two ends carry tiny mono metadata, and a numbered index row where an
+     oversized title sits next to its own number. Both are pure layout — they
+     carry the "spec sheet" quality the reference gets from typography rather
+     than decoration. */
+  .meta-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 0.8rem;
+    border-top: 1px solid var(--tone-line);
+  }
+
+  .meta-row-start {
+    border-top: 0;
+  }
+
+  /* A soft elliptical hand-off between two bands, used where the page moves
+     from the light body into a dark closing act. Amplitude is expressed in svh
+     so the curve keeps its proportion on tall phones instead of flattening. */
+  .band-curve-top {
+    border-top-left-radius: 50% 14svh;
+    border-top-right-radius: 50% 14svh;
+  }
+
+  .band-curve-bottom {
+    border-bottom-left-radius: 50% 14svh;
+    border-bottom-right-radius: 50% 14svh;
+  }
+
+  /* --- Reference devices ---------------------------------------------------
+     Vocabulary taken from the visual reference: a low-contrast mono field that
+     gives the giant type something to sit against, and a single saturated
+     circle that is the only large coloured geometry on the page.
+     ---------------------------------------------------------------------- */
+
+  /*
+   * Faint character/data field.
+   *
+   * The reference fills its hero with a multi-grey canvas of type fragments that
+   * reads as a technical draft. Reproduced here as a CSS-only texture: it is
+   * pure background, so it costs no DOM, no JS and no layout, and the mask fades
+   * it out before the band ends so there is never a hard edge.
+   */
+  .data-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    line-height: 1.4;
+    letter-spacing: 0.05em;
+    color: var(--tone-fg);
+    opacity: 0.06;
+    word-break: break-word;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 96%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 96%);
+  }
+
+  /* The primary CTA. One solid circle, crossing a hairline. */
+  .signal-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--color-signal);
+    color: #fff;
+    transition: transform 0.5s var(--ease-vc-out);
+  }
+
+  .signal-circle:hover,
+  .signal-circle:focus-visible {
+    transform: scale(1.07);
+  }
+
+  /* A 1px rule the CTA circle sits on, so the circle reads as crossing it
+     rather than floating. */
+  .hairline-under {
+    position: relative;
+  }
+
+  .hairline-under::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background-color: var(--tone-line);
+  }
+
+  /* Small caps-ish label used for eyebrows, tags and metadata. */
+  .type-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .type-label-sm {
+    font-family: var(--font-mono);
+    /* 11px, not 10px. This class is used for Chinese metadata too (「4 个旗舰
+       项目」「真实上线，可直接访问。」), and Han glyphs at 10px lose their
+       counters — the Latin 10px convention does not transfer. */
+    font-size: 0.6875rem;
+    line-height: 1.35;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Wide uppercase tracking is a Latin display convention. On Han text it just
+     adds air between already-square glyphs, so the label classes tighten up when
+     the Chinese slots are the ones on screen. */
+  [data-lang='zh'] :where(.type-label, .type-label-sm) {
+    letter-spacing: 0.06em;
+    text-transform: none;
+  }
+
+  /* --- Tone helpers ------------------------------------------------- */
+  .tone-surface {
+    background-color: var(--tone-bg);
+    color: var(--tone-fg);
+  }
+  .tone-fg {
+    color: var(--tone-fg);
+  }
+  .tone-fg-2 {
+    color: var(--tone-fg-2);
+  }
+  .tone-mute {
+    color: var(--tone-mute);
+  }
+  .tone-border {
+    border-color: var(--tone-line);
+  }
+  .tone-accent-text {
+    color: var(--tone-accent);
+  }
+  .tone-accent-bg {
+    background-color: var(--tone-accent);
+  }
+
+  /* --- Layout ------------------------------------------------------- */
+  .shell {
+    /* Exposed so descendants can escape the gutter without hardcoding it. */
+    --shell-pad: 1.25rem;
+    width: 100%;
+    margin-inline: auto;
+    max-width: 108rem; /* 1728px */
+    padding-inline: var(--shell-pad);
+  }
+  @media (min-width: 768px) {
+    .shell {
+      --shell-pad: 2.5rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .shell {
+      --shell-pad: 4rem;
+    }
+  }
+  @media (min-width: 1920px) {
+    .shell {
+      --shell-pad: 5.5rem;
+    }
+  }
+
+  /*
+   * Full-bleed escape hatch.
+   *
+   * Deliberately NOT `width: 100vw`. `100vw` includes the classic scrollbar, so
+   * a `w-screen` child of `.shell` is always slightly wider than the viewport and
+   * grows the document — the exact cause of horizontal page scroll. Cancelling
+   * the shell's own gutter instead produces a true edge-to-edge element whose
+   * width is defined by the layout rather than by a viewport unit.
+   */
+  .bleed {
+    width: auto;
+    margin-inline: calc(var(--shell-pad, 0px) * -1);
+  }
+
+  /* Full-bleed while keeping the text inset — used by horizontal scrollers so the
+     first and last item still line up with the type grid. */
+  .bleed-x {
+    width: auto;
+    margin-inline: calc(var(--shell-pad, 0px) * -1);
+    padding-inline: var(--shell-pad, 0px);
+  }
+
+  /* Bands are the light/dark rhythm units of the page. */
+  .band {
+    position: relative;
+    background-color: var(--tone-bg);
+    color: var(--tone-fg);
+    padding-block: clamp(5rem, 11vw, 12rem);
+  }
+
+  /* --- Interactive -------------------------------------------------- */
+  .link-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.15em;
+    height: 1px;
+    width: 100%;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.55s var(--ease-vc-out);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .hairline {
+    border-top: 1px solid var(--tone-line);
+  }
+
+  /* Fine grid used behind hero / lab bands. Kept as a background-image (not a
+     DOM element) so it costs no layout and never participates in CLS. */
+  .grid-field {
+    background-image:
+      linear-gradient(to right, var(--tone-line-soft) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--tone-line-soft) 1px, transparent 1px);
+    background-size: 5rem 5rem;
+  }
+}
+
+@layer utilities {
+  /* Applied by VcImage while the real bitmap decodes. */
+  .media-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

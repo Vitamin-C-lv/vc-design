@@ -1,0 +1,800 @@
+{
+  "awards/guge_china_creative_first_prize": {
+    "src": "awards/guge_china_creative_first_prize",
+    "original": {
+      "width": 1079,
+      "height": 1518,
+      "bytes": 1039488
+    },
+    "aspect": 0.7108,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "awards/guge_china_creative_first_prize-480.webp",
+      "awards/guge_china_creative_first_prize-768.webp"
+    ],
+    "avif": [
+      "awards/guge_china_creative_first_prize-480.avif",
+      "awards/guge_china_creative_first_prize-768.avif"
+    ],
+    "lqip": "awards/guge_china_creative_first_prize-lqip.webp",
+    "fallback": "awards/guge_china_creative_first_prize-768.jpg"
+  },
+  "awards/guge_milan_design_week_second_prize": {
+    "src": "awards/guge_milan_design_week_second_prize",
+    "original": {
+      "width": 1206,
+      "height": 1686,
+      "bytes": 512950
+    },
+    "aspect": 0.7153,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "awards/guge_milan_design_week_second_prize-480.webp",
+      "awards/guge_milan_design_week_second_prize-768.webp",
+      "awards/guge_milan_design_week_second_prize-1200.webp"
+    ],
+    "avif": [
+      "awards/guge_milan_design_week_second_prize-480.avif",
+      "awards/guge_milan_design_week_second_prize-768.avif",
+      "awards/guge_milan_design_week_second_prize-1200.avif"
+    ],
+    "lqip": "awards/guge_milan_design_week_second_prize-lqip.webp",
+    "fallback": "awards/guge_milan_design_week_second_prize-1200.jpg"
+  },
+  "awards/guge_ncda_third_prize": {
+    "src": "awards/guge_ncda_third_prize",
+    "original": {
+      "width": 1080,
+      "height": 1490,
+      "bytes": 480643
+    },
+    "aspect": 0.7248,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "awards/guge_ncda_third_prize-480.webp",
+      "awards/guge_ncda_third_prize-768.webp"
+    ],
+    "avif": [
+      "awards/guge_ncda_third_prize-480.avif",
+      "awards/guge_ncda_third_prize-768.avif"
+    ],
+    "lqip": "awards/guge_ncda_third_prize-lqip.webp",
+    "fallback": "awards/guge_ncda_third_prize-768.jpg"
+  },
+  "blender/flooded_corridor": {
+    "src": "blender/flooded_corridor",
+    "original": {
+      "width": 2048,
+      "height": 1152,
+      "bytes": 4549735
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "blender/flooded_corridor-480.webp",
+      "blender/flooded_corridor-768.webp",
+      "blender/flooded_corridor-1200.webp",
+      "blender/flooded_corridor-1600.webp",
+      "blender/flooded_corridor-2048.webp"
+    ],
+    "avif": [
+      "blender/flooded_corridor-480.avif",
+      "blender/flooded_corridor-768.avif",
+      "blender/flooded_corridor-1200.avif",
+      "blender/flooded_corridor-1600.avif",
+      "blender/flooded_corridor-2048.avif"
+    ],
+    "lqip": "blender/flooded_corridor-lqip.webp",
+    "fallback": "blender/flooded_corridor-2048.jpg"
+  },
+  "blender/liquid_material_study": {
+    "src": "blender/liquid_material_study",
+    "original": {
+      "width": 1080,
+      "height": 1920,
+      "bytes": 2202566
+    },
+    "aspect": 0.5625,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "blender/liquid_material_study-480.webp",
+      "blender/liquid_material_study-768.webp"
+    ],
+    "avif": [
+      "blender/liquid_material_study-480.avif",
+      "blender/liquid_material_study-768.avif"
+    ],
+    "lqip": "blender/liquid_material_study-lqip.webp",
+    "fallback": "blender/liquid_material_study-768.jpg"
+  },
+  "blender/old_apartment_scene_01": {
+    "src": "blender/old_apartment_scene_01",
+    "original": {
+      "width": 2048,
+      "height": 1297,
+      "bytes": 5478863
+    },
+    "aspect": 1.579,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "blender/old_apartment_scene_01-480.webp",
+      "blender/old_apartment_scene_01-768.webp",
+      "blender/old_apartment_scene_01-1200.webp",
+      "blender/old_apartment_scene_01-1600.webp",
+      "blender/old_apartment_scene_01-2048.webp"
+    ],
+    "avif": [
+      "blender/old_apartment_scene_01-480.avif",
+      "blender/old_apartment_scene_01-768.avif",
+      "blender/old_apartment_scene_01-1200.avif",
+      "blender/old_apartment_scene_01-1600.avif",
+      "blender/old_apartment_scene_01-2048.avif"
+    ],
+    "lqip": "blender/old_apartment_scene_01-lqip.webp",
+    "fallback": "blender/old_apartment_scene_01-2048.jpg"
+  },
+  "blender/old_apartment_scene_02": {
+    "src": "blender/old_apartment_scene_02",
+    "original": {
+      "width": 2048,
+      "height": 1297,
+      "bytes": 4847766
+    },
+    "aspect": 1.579,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "blender/old_apartment_scene_02-480.webp",
+      "blender/old_apartment_scene_02-768.webp",
+      "blender/old_apartment_scene_02-1200.webp",
+      "blender/old_apartment_scene_02-1600.webp",
+      "blender/old_apartment_scene_02-2048.webp"
+    ],
+    "avif": [
+      "blender/old_apartment_scene_02-480.avif",
+      "blender/old_apartment_scene_02-768.avif",
+      "blender/old_apartment_scene_02-1200.avif",
+      "blender/old_apartment_scene_02-1600.avif",
+      "blender/old_apartment_scene_02-2048.avif"
+    ],
+    "lqip": "blender/old_apartment_scene_02-lqip.webp",
+    "fallback": "blender/old_apartment_scene_02-2048.jpg"
+  },
+  "guanchao/dashboard": {
+    "src": "guanchao/dashboard",
+    "original": {
+      "width": 2048,
+      "height": 1299,
+      "bytes": 473889
+    },
+    "aspect": 1.5766,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guanchao/dashboard-480.webp",
+      "guanchao/dashboard-768.webp",
+      "guanchao/dashboard-1200.webp",
+      "guanchao/dashboard-1600.webp",
+      "guanchao/dashboard-2048.webp"
+    ],
+    "avif": [
+      "guanchao/dashboard-480.avif",
+      "guanchao/dashboard-768.avif",
+      "guanchao/dashboard-1200.avif",
+      "guanchao/dashboard-1600.avif",
+      "guanchao/dashboard-2048.avif"
+    ],
+    "lqip": "guanchao/dashboard-lqip.webp",
+    "fallback": "guanchao/dashboard-2048.jpg"
+  },
+  "guge/guge_landscape_01": {
+    "src": "guge/guge_landscape_01",
+    "original": {
+      "width": 1536,
+      "height": 863,
+      "bytes": 441077
+    },
+    "aspect": 1.7798,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/guge_landscape_01-480.webp",
+      "guge/guge_landscape_01-768.webp",
+      "guge/guge_landscape_01-1200.webp"
+    ],
+    "avif": [
+      "guge/guge_landscape_01-480.avif",
+      "guge/guge_landscape_01-768.avif",
+      "guge/guge_landscape_01-1200.avif"
+    ],
+    "lqip": "guge/guge_landscape_01-lqip.webp",
+    "fallback": "guge/guge_landscape_01-1200.jpg"
+  },
+  "guge/guge_landscape_02": {
+    "src": "guge/guge_landscape_02",
+    "original": {
+      "width": 1536,
+      "height": 863,
+      "bytes": 441891
+    },
+    "aspect": 1.7798,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/guge_landscape_02-480.webp",
+      "guge/guge_landscape_02-768.webp",
+      "guge/guge_landscape_02-1200.webp"
+    ],
+    "avif": [
+      "guge/guge_landscape_02-480.avif",
+      "guge/guge_landscape_02-768.avif",
+      "guge/guge_landscape_02-1200.avif"
+    ],
+    "lqip": "guge/guge_landscape_02-lqip.webp",
+    "fallback": "guge/guge_landscape_02-1200.jpg"
+  },
+  "guge/guge_landscape_03": {
+    "src": "guge/guge_landscape_03",
+    "original": {
+      "width": 1536,
+      "height": 863,
+      "bytes": 417351
+    },
+    "aspect": 1.7798,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/guge_landscape_03-480.webp",
+      "guge/guge_landscape_03-768.webp",
+      "guge/guge_landscape_03-1200.webp"
+    ],
+    "avif": [
+      "guge/guge_landscape_03-480.avif",
+      "guge/guge_landscape_03-768.avif",
+      "guge/guge_landscape_03-1200.avif"
+    ],
+    "lqip": "guge/guge_landscape_03-lqip.webp",
+    "fallback": "guge/guge_landscape_03-1200.jpg"
+  },
+  "guge/guge_master_poster": {
+    "src": "guge/guge_master_poster",
+    "original": {
+      "width": 1448,
+      "height": 2048,
+      "bytes": 827859
+    },
+    "aspect": 0.707,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/guge_master_poster-480.webp",
+      "guge/guge_master_poster-768.webp",
+      "guge/guge_master_poster-1200.webp"
+    ],
+    "avif": [
+      "guge/guge_master_poster-480.avif",
+      "guge/guge_master_poster-768.avif",
+      "guge/guge_master_poster-1200.avif"
+    ],
+    "lqip": "guge/guge_master_poster-lqip.webp",
+    "fallback": "guge/guge_master_poster-1200.jpg"
+  },
+  "guge/guge_world_layers": {
+    "src": "guge/guge_world_layers",
+    "original": {
+      "width": 1639,
+      "height": 2048,
+      "bytes": 3398292
+    },
+    "aspect": 0.8003,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/guge_world_layers-480.webp",
+      "guge/guge_world_layers-768.webp",
+      "guge/guge_world_layers-1200.webp",
+      "guge/guge_world_layers-1600.webp"
+    ],
+    "avif": [
+      "guge/guge_world_layers-480.avif",
+      "guge/guge_world_layers-768.avif",
+      "guge/guge_world_layers-1200.avif",
+      "guge/guge_world_layers-1600.avif"
+    ],
+    "lqip": "guge/guge_world_layers-lqip.webp",
+    "fallback": "guge/guge_world_layers-1600.jpg"
+  },
+  "lihuahua/finding": {
+    "src": "lihuahua/finding",
+    "original": {
+      "width": 691,
+      "height": 1536,
+      "bytes": 48680
+    },
+    "aspect": 0.4499,
+    "widths": [
+      480
+    ],
+    "webp": [
+      "lihuahua/finding-480.webp"
+    ],
+    "avif": [
+      "lihuahua/finding-480.avif"
+    ],
+    "lqip": "lihuahua/finding-lqip.webp",
+    "fallback": "lihuahua/finding-480.jpg"
+  },
+  "lihuahua/relaxed": {
+    "src": "lihuahua/relaxed",
+    "original": {
+      "width": 691,
+      "height": 1536,
+      "bytes": 84156
+    },
+    "aspect": 0.4499,
+    "widths": [
+      480
+    ],
+    "webp": [
+      "lihuahua/relaxed-480.webp"
+    ],
+    "avif": [
+      "lihuahua/relaxed-480.avif"
+    ],
+    "lqip": "lihuahua/relaxed-lqip.webp",
+    "fallback": "lihuahua/relaxed-480.jpg"
+  },
+  "lihuahua/sleep": {
+    "src": "lihuahua/sleep",
+    "original": {
+      "width": 691,
+      "height": 1536,
+      "bytes": 77402
+    },
+    "aspect": 0.4499,
+    "widths": [
+      480
+    ],
+    "webp": [
+      "lihuahua/sleep-480.webp"
+    ],
+    "avif": [
+      "lihuahua/sleep-480.avif"
+    ],
+    "lqip": "lihuahua/sleep-lqip.webp",
+    "fallback": "lihuahua/sleep-480.jpg"
+  },
+  "misc/smart_planter_concept": {
+    "src": "misc/smart_planter_concept",
+    "original": {
+      "width": 1024,
+      "height": 1536,
+      "bytes": 384228
+    },
+    "aspect": 0.6667,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "misc/smart_planter_concept-480.webp",
+      "misc/smart_planter_concept-768.webp"
+    ],
+    "avif": [
+      "misc/smart_planter_concept-480.avif",
+      "misc/smart_planter_concept-768.avif"
+    ],
+    "lqip": "misc/smart_planter_concept-lqip.webp",
+    "fallback": "misc/smart_planter_concept-768.jpg"
+  },
+  "qinghua/desktop-full": {
+    "src": "qinghua/desktop-full",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 1311101
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "qinghua/desktop-full-480.webp",
+      "qinghua/desktop-full-768.webp",
+      "qinghua/desktop-full-1200.webp",
+      "qinghua/desktop-full-1600.webp"
+    ],
+    "avif": [
+      "qinghua/desktop-full-480.avif",
+      "qinghua/desktop-full-768.avif",
+      "qinghua/desktop-full-1200.avif",
+      "qinghua/desktop-full-1600.avif"
+    ],
+    "lqip": "qinghua/desktop-full-lqip.webp",
+    "fallback": "qinghua/desktop-full-2048.jpg"
+  },
+  "qinghua/desktop-view-01": {
+    "src": "qinghua/desktop-view-01",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 1316872
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "qinghua/desktop-view-01-480.webp",
+      "qinghua/desktop-view-01-768.webp",
+      "qinghua/desktop-view-01-1200.webp",
+      "qinghua/desktop-view-01-1600.webp"
+    ],
+    "avif": [
+      "qinghua/desktop-view-01-480.avif",
+      "qinghua/desktop-view-01-768.avif",
+      "qinghua/desktop-view-01-1200.avif",
+      "qinghua/desktop-view-01-1600.avif"
+    ],
+    "lqip": "qinghua/desktop-view-01-lqip.webp",
+    "fallback": "qinghua/desktop-view-01-2048.jpg"
+  },
+  "qinghua/desktop-view-02": {
+    "src": "qinghua/desktop-view-02",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 1314689
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "qinghua/desktop-view-02-480.webp",
+      "qinghua/desktop-view-02-768.webp",
+      "qinghua/desktop-view-02-1200.webp",
+      "qinghua/desktop-view-02-1600.webp"
+    ],
+    "avif": [
+      "qinghua/desktop-view-02-480.avif",
+      "qinghua/desktop-view-02-768.avif",
+      "qinghua/desktop-view-02-1200.avif",
+      "qinghua/desktop-view-02-1600.avif"
+    ],
+    "lqip": "qinghua/desktop-view-02-lqip.webp",
+    "fallback": "qinghua/desktop-view-02-2048.jpg"
+  },
+  "qinghua/desktop-view-03": {
+    "src": "qinghua/desktop-view-03",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 1314999
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "qinghua/desktop-view-03-480.webp",
+      "qinghua/desktop-view-03-768.webp",
+      "qinghua/desktop-view-03-1200.webp",
+      "qinghua/desktop-view-03-1600.webp"
+    ],
+    "avif": [
+      "qinghua/desktop-view-03-480.avif",
+      "qinghua/desktop-view-03-768.avif",
+      "qinghua/desktop-view-03-1200.avif",
+      "qinghua/desktop-view-03-1600.avif"
+    ],
+    "lqip": "qinghua/desktop-view-03-lqip.webp",
+    "fallback": "qinghua/desktop-view-03-2048.jpg"
+  },
+  "qinghua/mobile-full": {
+    "src": "qinghua/mobile-full",
+    "original": {
+      "width": 780,
+      "height": 1688,
+      "bytes": 842217
+    },
+    "aspect": 0.4621,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "qinghua/mobile-full-480.webp",
+      "qinghua/mobile-full-768.webp"
+    ],
+    "avif": [
+      "qinghua/mobile-full-480.avif",
+      "qinghua/mobile-full-768.avif"
+    ],
+    "lqip": "qinghua/mobile-full-lqip.webp",
+    "fallback": "qinghua/mobile-full-2048.jpg"
+  },
+  "guanchao/live/desktop-full": {
+    "src": "guanchao/live/desktop-full",
+    "original": {
+      "width": 1600,
+      "height": 4563,
+      "bytes": 882738
+    },
+    "aspect": 0.3506,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guanchao/live/desktop-full-480.webp",
+      "guanchao/live/desktop-full-768.webp",
+      "guanchao/live/desktop-full-1200.webp",
+      "guanchao/live/desktop-full-1600.webp"
+    ],
+    "avif": [
+      "guanchao/live/desktop-full-480.avif",
+      "guanchao/live/desktop-full-768.avif",
+      "guanchao/live/desktop-full-1200.avif",
+      "guanchao/live/desktop-full-1600.avif"
+    ],
+    "lqip": "guanchao/live/desktop-full-lqip.webp",
+    "fallback": "guanchao/live/desktop-full-2048.jpg"
+  },
+  "guanchao/live/desktop-view-01": {
+    "src": "guanchao/live/desktop-view-01",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 279822
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guanchao/live/desktop-view-01-480.webp",
+      "guanchao/live/desktop-view-01-768.webp",
+      "guanchao/live/desktop-view-01-1200.webp",
+      "guanchao/live/desktop-view-01-1600.webp"
+    ],
+    "avif": [
+      "guanchao/live/desktop-view-01-480.avif",
+      "guanchao/live/desktop-view-01-768.avif",
+      "guanchao/live/desktop-view-01-1200.avif",
+      "guanchao/live/desktop-view-01-1600.avif"
+    ],
+    "lqip": "guanchao/live/desktop-view-01-lqip.webp",
+    "fallback": "guanchao/live/desktop-view-01-2048.jpg"
+  },
+  "guanchao/live/desktop-view-02": {
+    "src": "guanchao/live/desktop-view-02",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 289728
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guanchao/live/desktop-view-02-480.webp",
+      "guanchao/live/desktop-view-02-768.webp",
+      "guanchao/live/desktop-view-02-1200.webp",
+      "guanchao/live/desktop-view-02-1600.webp"
+    ],
+    "avif": [
+      "guanchao/live/desktop-view-02-480.avif",
+      "guanchao/live/desktop-view-02-768.avif",
+      "guanchao/live/desktop-view-02-1200.avif",
+      "guanchao/live/desktop-view-02-1600.avif"
+    ],
+    "lqip": "guanchao/live/desktop-view-02-lqip.webp",
+    "fallback": "guanchao/live/desktop-view-02-2048.jpg"
+  },
+  "guanchao/live/desktop-view-03": {
+    "src": "guanchao/live/desktop-view-03",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 221887
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guanchao/live/desktop-view-03-480.webp",
+      "guanchao/live/desktop-view-03-768.webp",
+      "guanchao/live/desktop-view-03-1200.webp",
+      "guanchao/live/desktop-view-03-1600.webp"
+    ],
+    "avif": [
+      "guanchao/live/desktop-view-03-480.avif",
+      "guanchao/live/desktop-view-03-768.avif",
+      "guanchao/live/desktop-view-03-1200.avif",
+      "guanchao/live/desktop-view-03-1600.avif"
+    ],
+    "lqip": "guanchao/live/desktop-view-03-lqip.webp",
+    "fallback": "guanchao/live/desktop-view-03-2048.jpg"
+  },
+  "guanchao/live/mobile-full": {
+    "src": "guanchao/live/mobile-full",
+    "original": {
+      "width": 780,
+      "height": 13514,
+      "bytes": 1337057
+    },
+    "aspect": 0.0577,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guanchao/live/mobile-full-480.webp",
+      "guanchao/live/mobile-full-768.webp"
+    ],
+    "avif": [
+      "guanchao/live/mobile-full-480.avif",
+      "guanchao/live/mobile-full-768.avif"
+    ],
+    "lqip": "guanchao/live/mobile-full-lqip.webp",
+    "fallback": "guanchao/live/mobile-full-2048.jpg"
+  },
+  "qinghua/step-01": {
+    "src": "qinghua/step-01",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 1088284
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "qinghua/step-01-480.webp",
+      "qinghua/step-01-768.webp",
+      "qinghua/step-01-1200.webp",
+      "qinghua/step-01-1600.webp"
+    ],
+    "avif": [
+      "qinghua/step-01-480.avif",
+      "qinghua/step-01-768.avif",
+      "qinghua/step-01-1200.avif",
+      "qinghua/step-01-1600.avif"
+    ],
+    "lqip": "qinghua/step-01-lqip.webp",
+    "fallback": "qinghua/step-01-2048.jpg"
+  },
+  "qinghua/step-02": {
+    "src": "qinghua/step-02",
+    "original": {
+      "width": 1600,
+      "height": 1000,
+      "bytes": 1088654
+    },
+    "aspect": 1.6,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "qinghua/step-02-480.webp",
+      "qinghua/step-02-768.webp",
+      "qinghua/step-02-1200.webp",
+      "qinghua/step-02-1600.webp"
+    ],
+    "avif": [
+      "qinghua/step-02-480.avif",
+      "qinghua/step-02-768.avif",
+      "qinghua/step-02-1200.avif",
+      "qinghua/step-02-1600.avif"
+    ],
+    "lqip": "qinghua/step-02-lqip.webp",
+    "fallback": "qinghua/step-02-2048.jpg"
+  },
+  "qinghua/mobile-step-01": {
+    "src": "qinghua/mobile-step-01",
+    "original": {
+      "width": 780,
+      "height": 1688,
+      "bytes": 888418
+    },
+    "aspect": 0.46208530805687204,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "qinghua/mobile-step-01-480.webp",
+      "qinghua/mobile-step-01-768.webp"
+    ],
+    "avif": [
+      "qinghua/mobile-step-01-480.avif",
+      "qinghua/mobile-step-01-768.avif"
+    ],
+    "lqip": "qinghua/mobile-step-01-lqip.webp",
+    "fallback": "qinghua/mobile-step-01-2048.jpg"
+  }
+}

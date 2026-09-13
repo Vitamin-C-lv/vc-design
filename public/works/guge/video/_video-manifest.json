@@ -1,0 +1,30 @@
+{
+  "source": "guge_demo.mp4",
+  "duration": 10,
+  "width": 1900,
+  "height": 1204,
+  "poster": {
+    "webp": [
+      "poster-1200.webp",
+      "poster-1600.webp",
+      "poster-2048.webp"
+    ],
+    "avif": "poster-1200.avif",
+    "lqip": "poster-lqip.webp"
+  },
+  "loop": {
+    "mp4": "guge-loop.mp4",
+    "webm": "guge-loop.webm",
+    "mp4Bytes": 1484859,
+    "webmBytes": 1678194,
+    "seconds": 10,
+    "width": 1280
+  },
+  "frames": [
+    "frame-10.png",
+    "frame-30.png",
+    "frame-50.png",
+    "frame-70.png",
+    "frame-90.png"
+  ]
+}

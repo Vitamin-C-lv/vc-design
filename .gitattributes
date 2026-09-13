@@ -1,0 +1,26 @@
+# Normalise text so the repo behaves the same on every machine.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending translated. The qinghua point clouds
+# are raw Float32/Uint8 buffers — a CRLF rewrite would silently corrupt them.
+*.bin binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.gif binary
+*.ico binary
+*.mp4 binary
+*.webm binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+
+# Generated media is committed on purpose (EdgeOne builds straight from the
+# repo), but it should not dominate diffs or merge statistics.
+public/works/** linguist-generated=true
+public/qinghua/*.bin linguist-generated=true
+
+# Lockfiles: keep them, but out of the way when reading history.
+package-lock.json linguist-generated=true -diff
