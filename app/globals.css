@@ -499,6 +499,52 @@
     mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 96%);
   }
 
+  /* Single-canvas hero underprint. The paper fade keeps the field dissolving
+     into the next viewport edge instead of ending on a visible rectangle. */
+  .hero-field {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.62;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 66%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 66%, transparent 100%);
+  }
+
+  .hero-field::after {
+    position: absolute;
+    inset: auto 0 0;
+    height: 30%;
+    content: '';
+    background: linear-gradient(to bottom, transparent, var(--tone-bg));
+  }
+
+  .hero-field-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-wordmark-mask {
+    display: inline-block;
+    overflow: hidden;
+    line-height: 0.94;
+    vertical-align: bottom;
+  }
+
+  .hero-wordmark {
+    display: inline-flex;
+    align-items: flex-end;
+  }
+
+  .hero-wordmark-char {
+    display: inline-block;
+    line-height: 0.94;
+    will-change: transform, opacity;
+  }
+
   /* The primary CTA. One solid circle, crossing a hairline. */
   .signal-circle {
     display: inline-flex;

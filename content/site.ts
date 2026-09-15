@@ -40,14 +40,54 @@ export const brand = {
   definitionEn: 'An independent creative unit working across product, visual, 3D and AI.',
   disciplineLine: 'PRODUCT / VISUAL / 3D / DIGITAL / AI',
   heroEyebrow: 'INDEPENDENT CREATIVE UNIT',
+  heroEyebrowZh: '独立创意单元',
   heroSubline: 'WE MAKE IDEAS VISIBLE.',
   scrollHint: 'SCROLL TO EXPLORE',
+  scrollHintZh: '向下探索',
 } as const;
 
 /** The locked brand slogan. Both languages, both used. */
 export const slogan = {
   lines: ['YOU BRING THE BRIEF.', 'WE FIGURE OUT THE REST.'],
   zh: '把需求交给 VC，剩下的交给我们。',
+  zhLines: ['把需求交给 VC，', '剩下的交给我们。'],
+} as const;
+
+/**
+ * Hero information field. These are real VC vocabulary, not filler or random
+ * noise: the canvas turns them into a quiet technical underprint beneath the
+ * wordmark.
+ */
+export const heroField = {
+  words: [
+    'BRIEF',
+    'MAKE',
+    'SOLVE',
+    'BUILD',
+    'PRODUCT',
+    'VISUAL',
+    '3D',
+    'DIGITAL',
+    'AI',
+    'INTERACTION',
+    'SYSTEM',
+    'PROTOTYPE',
+    'RENDER',
+    'INTERFACE',
+    'MOTION',
+    'RESEARCH',
+    'VALIDATION',
+    'TYPE',
+    'FORM',
+    'CODE',
+    'LOCAL AI',
+    'DELIVER',
+    'VC LAB',
+    'PROCESS',
+    'OUTPUT',
+  ],
+  gridColumns: 5,
+  gridRows: 5,
 } as const;
 
 export const seo = {

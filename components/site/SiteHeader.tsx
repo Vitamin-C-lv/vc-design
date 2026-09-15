@@ -52,8 +52,21 @@ export function SiteHeader() {
 
   return (
     <>
+      {/*
+        Motion writes `initial` out as an inline style, so with JavaScript
+        disabled the whole header — wordmark, nav, CTA — stays pinned at
+        `opacity: 0` while its links remain clickable. That is worse than a
+        missing header: it is an invisible tap target sitting over the hero.
+        Nothing here needs JS to be *readable*, only to animate, so the
+        no-script case is restored with one plain rule.
+      */}
+      <noscript>
+        <style>{`[data-site-header]{opacity:1 !important;transform:none !important}`}</style>
+      </noscript>
+
       <motion.header
         ref={headerRef}
+        data-site-header
         data-tone={tone}
         aria-label="主导航"
         initial={{ opacity: 0, y: -18 }}

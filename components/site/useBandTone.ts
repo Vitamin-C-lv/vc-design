@@ -23,7 +23,15 @@ export type BandTone = 'ink' | 'paper';
  * always intersect a header-height strip.
  */
 export function useBandTone(elementRef: React.RefObject<HTMLElement | null>): BandTone {
-  const [tone, setTone] = useState<BandTone>('ink');
+  /**
+   * Starts on `paper`, not `ink`.
+   *
+   * Every page here opens on a light band, and this hook can only correct its
+   * guess after hydration. Starting from the dark-band palette meant the first
+   * paint — and with JavaScript disabled the *only* paint — put bone-white type
+   * on a paper hero: the header was present but unreadable.
+   */
+  const [tone, setTone] = useState<BandTone>('paper');
 
   useEffect(() => {
     let frame = 0;
