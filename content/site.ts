@@ -51,6 +51,14 @@ export const slogan = {
 } as const;
 
 export const seo = {
+  /**
+   * Canonical origin of the deployed site.
+   *
+   * Feeds `metadataBase`. Without it Next emits Open Graph / Twitter image URLs
+   * as paths relative to an unknown host, so no social platform can fetch the
+   * share card — WeChat shows the link as bare text with no thumbnail.
+   */
+  siteUrl: 'https://vc-design.online',
   title: 'VC / 维C — Independent Creative Unit',
   titleTemplate: '%s — VC / 维C',
   description:

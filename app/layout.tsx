@@ -8,12 +8,14 @@ import { SiteFooter } from '@/components/site/SiteFooter';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(seo.siteUrl),
   title: {
     default: seo.title,
     template: seo.titleTemplate,
   },
   description: seo.description,
   keywords: [...seo.keywords],
+  alternates: { canonical: '/' },
   applicationName: `${brand.name} / ${brand.nameZh}`,
   authors: [{ name: `${brand.name} / ${brand.nameZh}` }],
   creator: `${brand.name} / ${brand.nameZh}`,
@@ -23,6 +25,7 @@ export const metadata: Metadata = {
     siteName: `${brand.name} / ${brand.nameZh}`,
     title: seo.title,
     description: seo.description,
+    url: '/',
     locale: 'zh_CN',
   },
   twitter: {

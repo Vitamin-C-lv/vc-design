@@ -13,6 +13,16 @@ export default defineConfig([
     'node_modules/**',
     '_build/**',
     'public/**',
+    /*
+     * Deploy artifacts. The EdgeOne CLI compiles into `.edgeone/` (a full copy
+     * of the built site, minified bundles included) and stages uploads in
+     * `.tef_dist/`. Both are gitignored — but ESLint does not read .gitignore, so
+     * without these two lines `npm run check` reports thousands of findings
+     * inside vendor code and the gate never turns green again. A check that can
+     * only fail stops being a check.
+     */
+    '.edgeone/**',
+    '.tef_dist/**',
     'next-env.d.ts',
   ]),
 
