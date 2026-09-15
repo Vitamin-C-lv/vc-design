@@ -13,7 +13,7 @@ import { observeReveal } from '@/lib/motion/reveal';
  * Reduced motion is handled in CSS: the element is simply visible, and no
  * observer is even created.
  *
- * ── Why `masked` renders an extra inner element ──────────────────────────────
+ * ── Why `masked` and `rule` render an extra inner element ───────────────────
  * The masked variant wipes content upward by clipping it. That clip must **not**
  * live on the observed element itself: `clip-path: inset(0 0 100% 0)` reduces the
  * element's intersection area to zero, so its IntersectionObserver ratio stays
@@ -21,14 +21,15 @@ import { observeReveal } from '@/lib/motion/reveal';
  * Anything below the fold would then stay invisible permanently — above-the-fold
  * elements only looked correct because `flushVisibleReveals()` caught them.
  *
- * So the observed element keeps its normal geometry, and the clip is applied to
- * an inner wrapper matched by `[data-reveal-mask]` in globals.css.
+ * So the observed element keeps its normal geometry, and the visual transition
+ * is applied to an inner wrapper matched by `[data-reveal-mask]` or
+ * `[data-reveal-rule]` in globals.css.
  */
 export interface RevealProps {
   children: React.ReactNode;
   className?: string;
-  /** `rise` fades + lifts; `masked` wipes upward; `fade` is opacity only. */
-  variant?: 'rise' | 'masked' | 'fade';
+  /** `rise` fades + lifts; `masked` wipes upward; `fade` is opacity only; `rule` draws a line. */
+  variant?: 'rise' | 'masked' | 'fade' | 'rule';
   /** Stagger in milliseconds. */
   delay?: number;
   /** Seconds. Defaults are tuned per variant in globals.css. */
@@ -63,6 +64,14 @@ export function Reveal({
     return (
       <div ref={ref} data-reveal="masked" className={className} style={style}>
         <div data-reveal-mask>{children}</div>
+      </div>
+    );
+  }
+
+  if (variant === 'rule') {
+    return (
+      <div ref={ref} data-reveal="rule" className={className} style={style}>
+        <div data-reveal-rule>{children}</div>
       </div>
     );
   }

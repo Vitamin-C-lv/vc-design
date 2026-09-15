@@ -1,4 +1,5 @@
 import { cx } from '@/lib/utils';
+import { Reveal } from '@/components/motion/Reveal';
 
 /**
  * Server-safe layout and typography primitives.
@@ -139,6 +140,7 @@ export function SectionIntro({
   className,
   size = 'lg',
   titleClassName,
+  reveal = false,
 }: {
   eyebrow?: string;
   title?: React.ReactNode;
@@ -148,25 +150,57 @@ export function SectionIntro({
   className?: string;
   size?: 'md' | 'lg' | 'xl';
   titleClassName?: string;
+  /** Opt into the shared editorial opener choreography on home-page bands. */
+  reveal?: boolean;
 }) {
   const titleSize = size === 'xl' ? 'type-xl' : size === 'lg' ? 'type-lg' : 'type-md';
   return (
     <div className={cx(align === 'center' && 'text-center', className)}>
       {eyebrow ? (
-        <Eyebrow className={cx('mb-6 md:mb-8', align === 'center' && 'justify-center')}>
-          {eyebrow}
-        </Eyebrow>
+        reveal ? (
+          <Reveal variant="fade" className="mb-6 md:mb-8">
+            <Eyebrow className={cx(align === 'center' && 'justify-center')}>{eyebrow}</Eyebrow>
+          </Reveal>
+        ) : (
+          <Eyebrow className={cx('mb-6 md:mb-8', align === 'center' && 'justify-center')}>
+            {eyebrow}
+          </Eyebrow>
+        )
       ) : null}
-      {title ? <h2 className={cx(titleSize, 'type-display', titleClassName)}>{title}</h2> : null}
+      {title ? (
+        reveal ? (
+          <Reveal variant="masked" delay={75}>
+            <h2 className={cx(titleSize, 'type-display', titleClassName)}>{title}</h2>
+          </Reveal>
+        ) : (
+          <h2 className={cx(titleSize, 'type-display', titleClassName)}>{title}</h2>
+        )
+      ) : null}
       {titleZh ? (
-        <p className={cx('type-lead tone-fg-2', title ? 'mt-5 md:mt-6' : '', 'max-w-[46ch]', align === 'center' && 'mx-auto')}>
-          {titleZh}
-        </p>
+        reveal ? (
+          <Reveal variant="rise" delay={150}>
+            <p className={cx('type-lead tone-fg-2', title ? 'mt-5 md:mt-6' : '', 'max-w-[46ch]', align === 'center' && 'mx-auto')}>
+              {titleZh}
+            </p>
+          </Reveal>
+        ) : (
+          <p className={cx('type-lead tone-fg-2', title ? 'mt-5 md:mt-6' : '', 'max-w-[46ch]', align === 'center' && 'mx-auto')}>
+            {titleZh}
+          </p>
+        )
       ) : null}
       {body ? (
-        <div className={cx('type-body tone-fg-2 mt-6 max-w-[62ch] md:mt-8', align === 'center' && 'mx-auto')}>
-          {body}
-        </div>
+        reveal ? (
+          <Reveal variant="rise" delay={180}>
+            <div className={cx('type-body tone-fg-2 mt-6 max-w-[62ch] md:mt-8', align === 'center' && 'mx-auto')}>
+              {body}
+            </div>
+          </Reveal>
+        ) : (
+          <div className={cx('type-body tone-fg-2 mt-6 max-w-[62ch] md:mt-8', align === 'center' && 'mx-auto')}>
+            {body}
+          </div>
+        )
       ) : null}
     </div>
   );

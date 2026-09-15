@@ -1,6 +1,6 @@
 'use client';
 
-import { Band, SectionIntro, TagList } from '@/components/primitives';
+import { Band, Rule, SectionIntro, TagList } from '@/components/primitives';
 import { Reveal } from '@/components/motion/Reveal';
 import { VcImage, MediaCaption } from '@/components/media/VcImage';
 import { Bi } from '@/components/i18n/Bi';
@@ -183,6 +183,7 @@ export function MoreWork() {
         titleZh="一条真实的三维图像条，接三项以排版和系统思考为主的能力证明。"
         size="xl"
         className="max-w-[66rem]"
+        reveal
       />
 
       {imageItem ? (
@@ -207,7 +208,10 @@ export function MoreWork() {
       ) : null}
 
       <div className="mt-[clamp(7rem,15vw,15rem)]">
-        <div className="hairline flex items-center justify-between gap-5 py-4">
+        <Reveal variant="rule">
+          <Rule />
+        </Reveal>
+        <div className="flex items-center justify-between gap-5 py-4">
           <p className="type-label tone-mute">文字与系统 / TEXT-LED</p>
           <p className="type-label-sm tone-mute">NO BORROWED IMAGERY</p>
         </div>

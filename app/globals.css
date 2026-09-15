@@ -256,6 +256,20 @@
     will-change: auto;
   }
 
+  /* --- rule: a hairline grows into place without moving its surroundings --- */
+  [data-js='on'] [data-reveal='rule'] > [data-reveal-rule] {
+    transform: scaleX(0);
+    transform-origin: var(--reveal-origin, left center);
+    transition: transform var(--reveal-duration, 0.85s) var(--ease-vc-out)
+      var(--reveal-delay, 0ms);
+    will-change: transform;
+  }
+
+  [data-js='on'] [data-reveal='rule'][data-revealed='true'] > [data-reveal-rule] {
+    transform: scaleX(1);
+    will-change: auto;
+  }
+
   /*
    * Fast-scroll override: while the page is being flung, reveals snap instead of
    * animating.
@@ -272,14 +286,16 @@
    * early. Deliberate reading-speed scrolling keeps the animation.
    */
   [data-js='on'][data-reveal-instant='true'] [data-reveal],
-  [data-js='on'][data-reveal-instant='true'] [data-reveal] > [data-reveal-mask] {
+  [data-js='on'][data-reveal-instant='true'] [data-reveal] > [data-reveal-mask],
+  [data-js='on'][data-reveal-instant='true'] [data-reveal] > [data-reveal-rule] {
     transition: none;
   }
 
   /* Reduced motion: content is simply present. */
   @media (prefers-reduced-motion: reduce) {
     [data-js='on'] [data-reveal],
-    [data-js='on'] [data-reveal] > [data-reveal-mask] {
+    [data-js='on'] [data-reveal] > [data-reveal-mask],
+    [data-js='on'] [data-reveal] > [data-reveal-rule] {
       opacity: 1 !important;
       transform: none !important;
       clip-path: none !important;
@@ -459,8 +475,8 @@
      from the light body into a dark closing act. Amplitude is expressed in svh
      so the curve keeps its proportion on tall phones instead of flattening. */
   .band-curve-top {
-    border-top-left-radius: 50% 14svh;
-    border-top-right-radius: 50% 14svh;
+    border-top-left-radius: 50% var(--band-curve-height, 14svh);
+    border-top-right-radius: 50% var(--band-curve-height, 14svh);
   }
 
   .band-curve-bottom {

@@ -133,7 +133,7 @@ function FeaturedMedia({
   );
 }
 
-function ProjectHeading({ project, motionDisabled }: { project: Project; motionDisabled: boolean }) {
+function ProjectHeading({ project, motionDisabled, delayOffset = 0 }: { project: Project; motionDisabled: boolean; delayOffset?: number }) {
   const titleLines = splitHeadline(project.titleZh);
   // `.type-column-fit` sizes the headline so this row fits the column, which is
   // what keeps a pre-split line from wrapping anyway.
@@ -166,7 +166,7 @@ function ProjectHeading({ project, motionDisabled }: { project: Project; motionD
             key={`${line}-${index}`}
             disabled={motionDisabled}
             variant="masked"
-            delay={index * 75}
+            delay={delayOffset + index * 75}
             duration={1.05}
           >
             <Link
@@ -237,6 +237,7 @@ function ProjectDetails({ project }: { project: Project }) {
 /** One editorially composed flagship block on the home page. */
 export function FeaturedProjectBlock({ project, index, priority, layout: requestedLayout }: FeaturedProjectBlockProps) {
   const layout = getLayout(index, requestedLayout);
+  const projectDelay = Math.min(index * 60, 180);
   const { ready, tier, isCompact, static: isStatic } = useDeviceProfile();
   const motionDisabled = !ready || isStatic || tier === 'low' || isCompact;
   const rootRef = useGsapScope<HTMLElement>(
@@ -269,7 +270,7 @@ export function FeaturedProjectBlock({ project, index, priority, layout: request
   if (layout === 'hero') {
     return (
       <article ref={rootRef} style={toneStyle} className="min-w-0 grid gap-8 md:gap-12">
-        <MotionReveal disabled={motionDisabled} variant="masked" duration={1.15}>
+        <MotionReveal disabled={motionDisabled} variant="masked" delay={projectDelay} duration={1.15}>
           <div data-featured-media className="bleed relative min-w-0">
             <FeaturedMedia
               project={project}
@@ -280,10 +281,10 @@ export function FeaturedProjectBlock({ project, index, priority, layout: request
           </div>
         </MotionReveal>
         <div className="grid min-w-0 gap-9 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
-          <MotionReveal className="md:col-span-7" disabled={motionDisabled} variant="rise" distance={1.25}>
-            <ProjectHeading project={project} motionDisabled={motionDisabled} />
+          <MotionReveal className="md:col-span-7" disabled={motionDisabled} variant="rise" delay={projectDelay} distance={1.25}>
+            <ProjectHeading project={project} motionDisabled={motionDisabled} delayOffset={projectDelay} />
           </MotionReveal>
-          <MotionReveal className="md:col-span-4 md:col-start-9 md:pt-5" disabled={motionDisabled} variant="rise" delay={100} distance={1}>
+          <MotionReveal className="md:col-span-4 md:col-start-9 md:pt-5" disabled={motionDisabled} variant="rise" delay={projectDelay + 100} distance={1}>
             <ProjectDetails project={project} />
           </MotionReveal>
         </div>
@@ -306,6 +307,7 @@ export function FeaturedProjectBlock({ project, index, priority, layout: request
       <MotionReveal
         disabled={motionDisabled}
         variant="masked"
+        delay={projectDelay}
         className={cx(
           'order-1 min-w-0',
           wide ? 'md:col-span-10 md:col-start-2' : 'md:col-span-7',
@@ -326,7 +328,7 @@ export function FeaturedProjectBlock({ project, index, priority, layout: request
       <MotionReveal
         disabled={motionDisabled}
         variant="rise"
-        delay={100}
+        delay={projectDelay + 100}
         distance={1}
         className={cx(
           'order-2 self-center',
@@ -334,7 +336,7 @@ export function FeaturedProjectBlock({ project, index, priority, layout: request
           imageFirst ? 'md:col-start-9 md:pt-16' : 'md:order-1 md:col-start-1 md:pt-3',
         )}
       >
-        <ProjectHeading project={project} motionDisabled={motionDisabled} />
+        <ProjectHeading project={project} motionDisabled={motionDisabled} delayOffset={projectDelay} />
         <div className="mt-9 lg:mt-12">
           <ProjectDetails project={project} />
         </div>

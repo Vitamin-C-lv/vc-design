@@ -26,6 +26,7 @@ export function Capabilities() {
           titleZh="从执行、判断到落地，把跨学科能力收束成可以交付的结果。"
           size="xl"
           className="max-w-[66rem]"
+          reveal
         />
 
         <div className="mt-[clamp(5rem,12vw,11rem)]">

@@ -55,6 +55,7 @@ export function Approach() {
           body={approachIntro.body}
           size="xl"
           className="max-w-[66rem]"
+          reveal
         />
 
         <div className="mt-[clamp(5rem,12vw,11rem)] grid min-w-0 gap-14 lg:grid-cols-[minmax(13rem,0.65fr)_minmax(0,1.35fr)] lg:gap-[clamp(3rem,10vw,12rem)]">

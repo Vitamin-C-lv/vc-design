@@ -1,7 +1,8 @@
 import { ArrowLink } from '@/components/primitives/ArrowLink';
-import { Band, Eyebrow, TagList } from '@/components/primitives';
+import { Band, Eyebrow, Rule, TagList } from '@/components/primitives';
 import { Bi, BiOnly } from '@/components/i18n/Bi';
 import { lab, secondaryNav } from '@/content/site';
+import { Reveal } from '@/components/motion/Reveal';
 
 /** The restrained technical halo that leads from the home page into VC LAB. */
 export function LabTeaser() {
@@ -12,21 +13,30 @@ export function LabTeaser() {
 
       <div className="relative grid min-w-0 gap-16 md:grid-cols-12 md:items-start md:gap-8">
         <div className="min-w-0 md:col-span-7">
-          <Eyebrow>{lab.eyebrow}</Eyebrow>
+          <Reveal variant="fade">
+            <Eyebrow>{lab.eyebrow}</Eyebrow>
+          </Reveal>
           {/* See BrandStatement: a `ch` measure on a wrapper resolves against the
               wrapper's own body font size, not the display font of its children. */}
-          <h2 className="mt-7">
-            <Bi
-              as={null}
-              zh={lab.titleZh}
-              en={lab.title}
-              primaryClassName="type-xl type-display tone-fg block"
-              secondaryClassName="type-label tone-mute mt-5 block"
-            />
-          </h2>
-          <p className="type-lead tone-fg-2 mt-7 max-w-[42ch]">{lab.body}</p>
+          <Reveal variant="masked" delay={75}>
+            <h2 className="mt-7">
+              <Bi
+                as={null}
+                zh={lab.titleZh}
+                en={lab.title}
+                primaryClassName="type-xl type-display tone-fg block"
+                secondaryClassName="type-label tone-mute mt-5 block"
+              />
+            </h2>
+          </Reveal>
+          <Reveal variant="rise" delay={150}>
+            <p className="type-lead tone-fg-2 mt-7 max-w-[42ch]">{lab.body}</p>
+          </Reveal>
 
-          <ul className="mt-12 grid min-w-0 gap-x-8 gap-y-0 border-t border-[var(--tone-line)] sm:grid-cols-2">
+          <Reveal variant="rule" className="mt-12">
+            <Rule />
+          </Reveal>
+          <ul className="grid min-w-0 gap-x-8 gap-y-0 sm:grid-cols-2">
             {lab.capabilities.map((capability, index) => (
               <li key={capability.en} className="min-w-0 border-b border-[var(--tone-line)] py-4">
                 <p className="type-label-sm tone-mute">{String(index + 1).padStart(2, '0')}</p>
@@ -43,20 +53,29 @@ export function LabTeaser() {
         </div>
 
         <div className="min-w-0 md:col-span-4 md:col-start-9 md:pt-16">
-          <p className="type-label tone-mute">{lab.flagship.name} / FLAGSHIP</p>
-          <h3 className="mt-4">
-            <Bi
-              as={null}
-              zh={lab.flagship.zh}
-              en={lab.flagship.tagline}
-              primaryClassName="type-md type-display tone-fg block"
-              secondaryClassName="type-label tone-mute mt-3 block"
-            />
-          </h3>
-          <p className="type-body tone-fg-2 mt-6">{lab.flagship.body}</p>
-          <TagList tags={lab.capabilities.slice(0, 3).map((capability) => capability.en.toUpperCase())} size="sm" className="mt-7" />
+          <Reveal variant="fade">
+            <p className="type-label tone-mute">{lab.flagship.name} / FLAGSHIP</p>
+          </Reveal>
+          <Reveal variant="masked" delay={75}>
+            <h3 className="mt-4">
+              <Bi
+                as={null}
+                zh={lab.flagship.zh}
+                en={lab.flagship.tagline}
+                primaryClassName="type-md type-display tone-fg block"
+                secondaryClassName="type-label tone-mute mt-3 block"
+              />
+            </h3>
+          </Reveal>
+          <Reveal variant="rise" delay={150}>
+            <p className="type-body tone-fg-2 mt-6">{lab.flagship.body}</p>
+            <TagList tags={lab.capabilities.slice(0, 3).map((capability) => capability.en.toUpperCase())} size="sm" className="mt-7" />
+          </Reveal>
 
-          <div className="mt-10 border-t border-[var(--tone-line)] pt-5">
+          <Reveal variant="rule" className="mt-10">
+            <Rule />
+          </Reveal>
+          <div className="pt-5">
             <p className="type-label-sm tone-mute">{lab.flagship.relationship.label}</p>
             <p className="type-body tone-fg mt-3">{lab.flagship.relationship.target}</p>
             <p className="type-body tone-fg-2 mt-3">{lab.flagship.relationship.note}</p>
@@ -68,7 +87,10 @@ export function LabTeaser() {
         </div>
       </div>
 
-      <p className="type-label-sm tone-mute relative mt-16 max-w-[70ch] border-t border-[var(--tone-line)] pt-5">{lab.disclosureNote}</p>
+      <Reveal variant="rule" className="relative mt-16">
+        <Rule />
+      </Reveal>
+      <p className="type-label-sm tone-mute relative max-w-[70ch] pt-5">{lab.disclosureNote}</p>
     </Band>
   );
 }
