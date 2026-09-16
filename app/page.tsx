@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Hero } from '@/components/home/Hero';
+import { OpeningIntro } from '@/components/home/OpeningIntro';
 import { BrandStatement } from '@/components/home/BrandStatement';
 import { FeaturedWorks } from '@/components/home/FeaturedWorks';
 import { MoreWork } from '@/components/home/MoreWork';
@@ -29,6 +30,9 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+      <div suppressHydrationWarning>
+        <OpeningIntro />
+      </div>
       <Hero />
       <BrandStatement />
       <FeaturedWorks />

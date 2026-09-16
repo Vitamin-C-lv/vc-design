@@ -610,6 +610,321 @@
     will-change: transform, opacity;
   }
 
+  /* ------------------------------------------------------------------------
+     Arrival / editorial hero
+     ------------------------------------------------------------------------ */
+  html[data-js='on'][data-intro='playing'] [data-arrival-hidden] {
+    visibility: hidden;
+  }
+
+  .opening-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--color-bone);
+    color: var(--color-ink);
+    pointer-events: none;
+  }
+
+  .opening-intro-counter,
+  .opening-intro-signature {
+    position: absolute;
+    color: var(--color-mute);
+  }
+
+  .opening-intro-counter {
+    top: 1.5rem;
+    left: 1.25rem;
+    width: 5rem;
+    white-space: nowrap;
+  }
+
+  .opening-intro-signature {
+    right: 1.25rem;
+    bottom: 1.5rem;
+  }
+
+  .opening-intro-word-stage {
+    position: relative;
+    display: grid;
+    width: min(90vw, 50rem);
+    min-height: 1.25em;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+  }
+
+  .opening-intro-word {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    visibility: hidden;
+  }
+
+  .opening-intro-word-mask {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.08em 0.14em;
+  }
+
+  .opening-intro-word-mask > span {
+    display: block;
+    will-change: transform;
+  }
+
+  .opening-intro-word [data-intro-final-dot] {
+    display: inline-block;
+  }
+
+  .hero-editorial-root {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .hero-editorial-shell {
+    position: relative;
+    min-height: 100svh;
+  }
+
+  .hero-corner {
+    position: absolute;
+    z-index: 2;
+  }
+
+  .hero-corner-top-left {
+    top: clamp(6.5rem, 11svh, 8rem);
+    left: var(--shell-pad);
+  }
+
+  .hero-corner-top-right {
+    top: clamp(6.5rem, 11svh, 8rem);
+    right: var(--shell-pad);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .hero-signal {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    white-space: nowrap;
+  }
+
+  .hero-signal-dot {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--color-signal);
+    animation: hero-signal-drift 7s var(--ease-vc-inout) infinite;
+  }
+
+  @keyframes hero-signal-drift {
+    0%,
+    100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(5px, -4px, 0); }
+  }
+
+  .hero-wordmark-stage {
+    position: absolute;
+    z-index: 1;
+    inset: 22% 0 auto;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .hero-wordmark {
+    position: relative;
+    font-size: clamp(12rem, 52vw, 48rem);
+    letter-spacing: var(--vc-track, -0.01em);
+    will-change: transform;
+  }
+
+  .hero-wordmark-letter {
+    display: inline-block;
+    line-height: 0.82;
+    will-change: transform;
+  }
+
+  .hero-wordmark-mask-v {
+    line-height: 0.82;
+  }
+
+  .hero-wordmark-letter-c {
+    margin-left: 0.02em;
+  }
+
+  .hero-corner-bottom-left {
+    bottom: clamp(2rem, 7svh, 5rem);
+    left: var(--shell-pad);
+  }
+
+  .hero-index-number {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+  }
+
+  .hero-scroll-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-scroll-line {
+    display: block;
+    width: 1px;
+    height: 2.75rem;
+    background: var(--tone-line);
+  }
+
+  .hero-definition {
+    position: absolute;
+    z-index: 2;
+    right: var(--shell-pad);
+    bottom: clamp(2rem, 7svh, 5rem);
+    width: min(42rem, 43cqw);
+    box-sizing: border-box;
+    padding: 0.35rem 0.6rem 0.75rem;
+    background: var(--tone-bg);
+  }
+
+  .hero-definition-line {
+    margin: 0;
+    font-size: clamp(1.15rem, 2.2cqw, 2.5rem);
+    line-height: 1.15;
+  }
+
+  .hero-definition-line:nth-child(2) {
+    font-size: clamp(1.55rem, 3.5cqw, 4rem);
+  }
+
+  .hero-definition-line [data-lang-en] {
+    font-family: var(--font-display);
+  }
+
+  .hero-slogan-line {
+    margin: 0;
+    font-size: clamp(1.2rem, 2.25cqw, 2.5rem);
+    line-height: 1.08;
+  }
+
+  @media (max-width: 767px) {
+    .opening-intro-counter { top: 1.25rem; left: 1rem; }
+    .opening-intro-signature { right: 1rem; bottom: 1.25rem; }
+
+    .hero-corner-top-left {
+      top: 5.75rem;
+      left: var(--shell-pad);
+    }
+
+    .hero-corner-top-right {
+      top: 5.75rem;
+      right: var(--shell-pad);
+      display: none;
+    }
+
+    .hero-wordmark-stage {
+      inset: 20% 0 auto;
+      height: 30svh;
+      display: block;
+    }
+
+    .hero-wordmark {
+      width: 100%;
+      height: 100%;
+      font-size: clamp(11rem, 52vw, 16rem);
+      letter-spacing: var(--vc-track, -0.01em);
+    }
+
+    .hero-wordmark-mask-v,
+    .hero-wordmark-letter-c {
+      position: absolute;
+    }
+
+    .hero-wordmark-mask-v {
+      top: 0;
+      left: 7%;
+    }
+
+    .hero-wordmark-letter-c {
+      top: 36%;
+      right: -5%;
+      margin-left: 0;
+      font-size: 1.18em;
+    }
+
+    .hero-corner-bottom-left {
+      bottom: 4rem;
+      left: var(--shell-pad);
+    }
+
+    .hero-index-number {
+      font-size: 2.25rem;
+    }
+
+    .hero-definition {
+      right: var(--shell-pad);
+      bottom: 8rem;
+      left: var(--shell-pad);
+      width: auto;
+      padding: 0;
+    }
+
+    .hero-definition-line,
+    .hero-definition-line:nth-child(2) {
+      font-size: clamp(1.2rem, 5.5vw, 1.75rem);
+      line-height: 1.28;
+    }
+
+    .hero-slogan {
+      margin-top: 1.25rem;
+    }
+
+    .hero-slogan-line {
+      font-size: clamp(1.1rem, 5vw, 1.5rem);
+      line-height: 1.2;
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      top: calc(100% - 0.25rem);
+      left: 0;
+      margin-top: 0;
+    }
+
+    .hero-scroll-line {
+      height: 1.8rem;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .hero-wordmark {
+      font-size: clamp(14rem, 50vw, 28rem);
+    }
+
+    .hero-definition {
+      width: min(38rem, 48cqw);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-signal-dot { animation: none; }
+  }
+
   /* The primary CTA. One solid circle, crossing a hairline. */
   .signal-circle {
     display: inline-flex;

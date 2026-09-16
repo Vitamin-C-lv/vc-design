@@ -19,7 +19,11 @@ export function HeroField() {
     const context = canvas.getContext('2d');
     if (!context) return;
 
-    const draw = () => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let frame = 0;
+    const startedAt = performance.now();
+
+    const draw = (now = performance.now()) => {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       if (!width || !height) return;
@@ -59,17 +63,25 @@ export function HeroField() {
         const column = index % heroField.gridColumns;
         const row = Math.floor(index / heroField.gridColumns);
         const offset = row % 2 === 0 ? columnWidth * 0.12 : columnWidth * 0.2;
-        const x = column * columnWidth + offset;
-        const y = row * rowHeight + rowHeight * 0.52;
+        const phase = index * 0.73;
+        const amplitude = 1 + (index % 3);
+        const period = 9000 + (index % 8) * 1000;
+        const drift = prefersReducedMotion
+          ? 0
+          : Math.sin(((now - startedAt) / period) * Math.PI * 2 + phase) * amplitude;
+        const x = column * columnWidth + offset + drift;
+        const y = row * rowHeight + rowHeight * 0.52 + drift * 0.65;
         context.fillText(word, x, y);
       });
+
+      if (!prefersReducedMotion) frame = requestAnimationFrame(draw);
     };
 
     draw();
-    const frame = requestAnimationFrame(draw);
-    const observer = new ResizeObserver(draw);
+    const redraw = () => draw();
+    const observer = new ResizeObserver(redraw);
     observer.observe(canvas);
-    void document.fonts?.ready.then(draw);
+    void document.fonts?.ready.then(redraw);
 
     return () => {
       cancelAnimationFrame(frame);

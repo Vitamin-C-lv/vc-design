@@ -65,11 +65,17 @@ export const viewport: Viewport = {
  * 3. Keeps `<html lang>` in step with that choice. `data-lang` only drives CSS;
  *    assistive technology and search engines read `lang`, so leaving it at
  *    `zh-CN` meant an English-mode page announced itself as Chinese.
+ * 4. Opens or closes the arrival gate (`<html data-intro>`, see
+ *    `lib/motion/introGate.ts`). This cannot wait for hydration: the hero is
+ *    hidden by CSS while the gate is open, so a late decision would paint the
+ *    hero and then yank it away. The 4.5s fuse is the safety net — a bundle
+ *    that never mounts may cost the visitor the opening sequence, but it must
+ *    never cost them the first screen.
  *
  * Deliberately inline, synchronous and tiny: any async or bundled version would
  * reintroduce the flash it exists to prevent.
  */
-const BOOT_SCRIPT = `(function(){try{var d=document.documentElement;d.dataset.js='on';var l=localStorage.getItem('vc-lang');if(l==='en'||l==='zh'){d.dataset.lang=l;d.lang=l==='en'?'en':'zh-CN';}}catch(e){document.documentElement.dataset.js='on';}})();`;
+const BOOT_SCRIPT = `(function(){try{var d=document.documentElement;d.dataset.js='on';var l=localStorage.getItem('vc-lang');if(l==='en'||l==='zh'){d.dataset.lang=l;d.lang=l==='en'?'en':'zh-CN';}var play=false;try{play=!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&sessionStorage.getItem('vc-intro-seen')!=='1'&&location.pathname==='/';}catch(e2){play=false;}d.dataset.intro=play?'playing':'done';setTimeout(function(){if(d.dataset.intro!=='done'){d.dataset.intro='done';document.dispatchEvent(new CustomEvent('vc:intro-done'));}},4500);}catch(e){var r=document.documentElement;r.dataset.js='on';r.dataset.intro='done';}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
