@@ -20,17 +20,27 @@ export function FeaturedWorks() {
       const curve = root.querySelector<HTMLElement>('.band-curve-top');
       if (!curve) return;
 
+      /*
+       * The arch grows as the light band gives way to the dark one.
+       *
+       * Two things matter here. The range is wide on purpose — 12svh to 28svh
+       * is a 2.3× change, enough to read as "the arch is growing" rather than
+       * as a slightly different curve. And the trigger ends at `top 55%`, so
+       * the growth finishes while the seam is still in the lower half of the
+       * viewport; ending it at `top 15%` (as it used to) meant the whole change
+       * played out above the fold and the arch simply looked static.
+       */
       gsap.fromTo(
         root,
-        { '--band-curve-height': '15svh' },
+        { '--band-curve-height': '12svh' },
         {
-          '--band-curve-height': '22svh',
+          '--band-curve-height': '28svh',
           ease: 'none',
           scrollTrigger: {
             trigger: curve,
             start: 'top bottom',
-            end: 'top 15%',
-            scrub: 1,
+            end: 'top 55%',
+            scrub: 0.5,
             invalidateOnRefresh: true,
           },
         },
@@ -40,7 +50,9 @@ export function FeaturedWorks() {
   );
 
   return (
-    <div ref={rootRef} style={{ '--band-curve-height': '18svh' } as CSSProperties}>
+    // 20svh sits mid-way through the 12→28svh scrub, so the resting state
+    // (no JS, reduced motion, weak devices) is the neutral arch.
+    <div ref={rootRef} style={{ '--band-curve-height': '20svh' } as CSSProperties}>
       <Band id="work" tone="ink" container={false} className="band-curve-top">
         <Container className="min-w-0">
           <div className="max-w-[68rem]">

@@ -493,6 +493,21 @@
     height: var(--band-curve-height, 18svh);
     color: var(--tone-bg);
     pointer-events: none;
+    /* The path fills right up to the SVG's own edge, and that edge lands on a
+       fractional pixel: the height is a live `svh` value GSAP scrubs, so it is
+       241.83, 275.60, 300.52… and never round. Clipping there antialiases the
+       last row into a translucent hairline, and since the SVG's own background
+       is transparent that hairline composites against the paper band behind
+       it — a pale seam that flickers as the height changes.
+       Pulling the dark content layer up by one pixel hides it for good. */
+    margin-bottom: -1px;
+  }
+
+  /* Bottom curves are mirrored: the SVG sits below its content layer, so the
+     seam to hide is the SVG's top edge instead. */
+  .band-curve-svg-bottom {
+    margin-top: -1px;
+    margin-bottom: 0;
   }
 
   .band-curve-content {
