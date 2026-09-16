@@ -45,9 +45,10 @@ npm run fonts        # 重新下载并本地化字体（需要网络）
 | 平滑滚动 | Lenis | 全站**唯一**平滑滚动实现，由 GSAP ticker 驱动 |
 | 滚动叙事 | GSAP + ScrollTrigger | 仅用于 pin / parallax / scrub |
 | 微交互 | Motion | 导航、移动菜单、hover、展开收起 |
+| 3D 渲染 | Three.js + WebGL | 仅用于青花造境的粒子器物；`ParticleVessel` 使用 `WebGLRenderer`、`ShaderMaterial` 与 `BufferGeometry` |
 | 字体 | `next/font/local`（自托管） | 运行时零第三方字体请求 |
 
-> 依赖是刻意收窄的：**不引入 Three.js**，不引入组件库，不引入 CSS-in-JS。视觉密度由排版与留白承担，不由特效承担。
+> 依赖是刻意收窄的：青花造境的粒子器物是明确的 3D 例外，使用 Three.js；除此之外不引入组件库，不引入 CSS-in-JS。视觉密度主要由排版与留白承担，不由无关特效承担。
 
 ---
 
@@ -85,12 +86,13 @@ vc-site/
 ├─ public/
 │  ├─ works/                  素材管线的产物（响应式图片、视频、点云）
 │  ├─ brand/                  图标、微信二维码等品牌资产
-│  └─ guanchao-live/          观潮的离线静态副本（707 文件 / 24MB，构建产物，需提交）
+│  └─ guanchao-live/          观潮的离线静态副本（706 个构建文件 / 24MB，另有 provenance 说明）
 ├─ docs/
 │  └─ ASSETS.md               资产映射：原始文件 → 输出 key → 网站位置
 ├─ scripts/
 │  ├─ fetch-fonts.mjs         字体本地化
 │  ├─ sync-manifest.mjs       素材清单同步进内容层
+│  ├─ assets/                 可复用素材管线（私有输入不入库）
 │  └─ qa/                     本地验收脚本（不参与构建，见 scripts/qa/README.md）
 ├─ CHANGELOG.md               开发日志：为什么改 + 怎么验证
 └─ proxy.ts
@@ -295,7 +297,7 @@ Hero 入场、作品图视差、pinned 段落、横向 reel。
 - `VcImage` 用固定宽高比占位 + 24px LQIP 背景，**CLS 结构性归零**。
 - 非首屏图片 `loading="lazy"`；LQIP 极小且是 CSS 背景，不占用请求优先级。
 - 视频：`preload="none"` + poster 先绘制；进入视口才播放，离开即暂停；`low` tier 设备**完全不下载**。
-- `images.unoptimized: true`：图片在构建期已经优化过，运行时不再走图片优化端点（这也是 EdgeOne Pages 可移植性的前提）。
+- `images.unoptimized: true`：图片在构建期已经优化过，运行时不再走图片优化端点（这也是 EdgeOne Makers 可移植性的前提）。
 
 ---
 
@@ -305,7 +307,7 @@ Hero 入场、作品图视差、pinned 段落、横向 reel。
 
 要点：
 
-- 原始素材与素材管线脚本（`build-images.mjs` / `build-qr.mjs` / `capture-*.mjs`）在**仓库外**的工作区目录 `_handoff/` 与 `_build/`，不参与构建、不入库。仓库里提交的是它们的**产物**，所以 clone 下来能直接构建、能直接部署，但不能从零重跑素材管线。
+- 原始素材仍在**仓库外**的私有工作区 `_handoff/`；可复用的素材管线脚本（`build-images.mjs` / `build-qr.mjs` / `capture-live.mjs`）已入库到 `scripts/assets/`，脚本本身不包含私有路径。准备好私有输入并按 [`scripts/assets/README.md`](../scripts/assets/README.md) 安装工具依赖后，clone 下来可以重跑对应管线；原图、截图临时文件与 `node_modules` 仍不入库。
 - `public/works/` 是管线产物，**需要提交**（部署时要用）。
 - `public/guanchao-live/` 是观潮的离线静态副本，同样是产物、同样需要提交，重建流程见 `CHANGELOG.md`。
 - 清单流：`public/works/_manifest.json` → `npm run sync-manifest` → `content/media.json` → `lib/media.ts` → `VcImage`。
@@ -315,7 +317,7 @@ Hero 入场、作品图视差、pinned 段落、横向 reel。
 
 ---
 
-## 部署（腾讯云 EdgeOne Pages）
+## 部署（腾讯云 EdgeOne Makers）
 
 代码**不依赖任何 Vercel 特有能力**：没有 `@vercel/*`、没有 Edge Middleware、没有平台存储，图片不走运行时优化端点。所有路由静态预渲染。
 
@@ -324,13 +326,16 @@ npm run build     # 产物在 .next/
 npm start         # 本地验证生产构建
 ```
 
-接入 EdgeOne Pages 时：
+站点部署在腾讯云 EdgeOne Makers 的海外（overseas）区。部署采用本地构建上传，EdgeOne 不读取 Git 仓库：
 
-1. 构建命令 `npm run build`，输出目录 `.next`（Node 运行时）。
-2. 绑定自定义域名；中国大陆节点需要 **ICP 备案**。
-3. 备案与开发可以并行 —— 开发阶段不必等待备案，先用 preview 域名验证。
+```bash
+npm run build
+edgeone makers deploy -n vc-site -a overseas
+```
 
-> 上线前请在 `next.config.ts` / `app/layout.tsx` 里补 `metadataBase` 为正式域名。
+如改用中国大陆节点，再按腾讯云要求处理 **ICP 备案**。
+
+GitHub Actions 的 `ci.yml` 只运行 typecheck、lint、build 与 SEO 冒烟检查，不接 EdgeOne 自动部署；`main ≠ production`，CI 只证明这个 commit 可以上线。
 
 ---
 
@@ -346,14 +351,14 @@ npm start         # 本地验证生产构建
 | 微信二维码 | `contact.qrImage` | `brand/wechat-qr`（从名片裁掉个人信息后生成，二维码本身可解码） |
 | 联系邮箱 | `contact.channels[1].value` | `lxy13738164923@outlook.com`（`href` 故意留 `null`，由 `ChannelValue` 拼 `mailto:`，地址只写一处） |
 | 古格 credits | `content/projects.ts` | 三条真实分工 |
+| 正式域名 | `content/site.ts` / `metadataBase` | `https://vc-design.online`，已设置 |
+| 部署 | 腾讯云 EdgeOne Makers overseas | 已上线；本地构建后执行 `edgeone makers deploy -n vc-site -a overseas` |
 
-还没给的（给到就能直接填）：
+仍需补充或可选：
 
 | 字段 | 位置 | 现状 |
 |---|---|---|
 | 需求表单端点 | `contact.formEndpoint` | `''` → 目前是「复制需求 + 加微信」流程，不是坏了 |
-| 正式域名 | `next.config.ts` / `metadataBase` | 未设置 |
-| 部署 | 腾讯云 EdgeOne Pages | 未做（构建命令 `npm run build`，输出 `.next`，大陆节点需 ICP 备案） |
 | VC Logo | `public/brand/icon.svg` 是几何构造的临时 favicon | 可选替换 |
 | `misc/smart_planter_concept` 素材 | 归属项目未确认 | 保持不接入 |
 
@@ -404,4 +409,3 @@ node scripts/qa/diag-load.mjs            # 只问"站点能不能打开"
 完整脚本清单、判据、环境变量见 **[`scripts/qa/README.md`](scripts/qa/README.md)**。
 
 > ⚠️ **验收脚本的输出是假设，不是判决。** 脚本报失败时先判断是不是脚本自己过期了（写死的旧端口、旧选择器、旧文案）；脚本报通过也不代表没缺陷 —— 曾经出现过「所有自动化指标全绿」与「每个汉字占一行、页面被撑高 4240px」同时存在的情况。**改完界面要用真实截图亲眼看一遍**（`node scripts/qa/shoot.mjs` 会把截图落到 `_qa-output/`）。
-

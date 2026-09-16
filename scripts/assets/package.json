@@ -1,0 +1,9 @@
+{
+  "name": "vc-site-asset-tools",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "playwright-core": "^1.63.0",
+    "sharp": "^0.35.4"
+  }
+}

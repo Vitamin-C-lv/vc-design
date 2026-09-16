@@ -16,7 +16,7 @@ _handoff/vc_site_assets/organized_assets/     ← 原始素材（只读，不参
 vc-site/public/works/<category>/<name>-<width>.{webp,avif}
 vc-site/public/works/_manifest.json            ← 清单：key → 所有衍生文件路径 + 原始尺寸 + 宽高比
         │
-        │  node scripts/sync-manifest.mjs
+        │  npm run sync-manifest
         ▼
 vc-site/content/media.json                     ← 被 lib/media.ts 静态 import，供 VcImage 使用
 ```
@@ -96,7 +96,7 @@ vc-site/content/media.json                     ← 被 lib/media.ts 静态 impor
 > 抓取只推进到第 03 工序：该步的「开始施釉」需要先调节釉层参数才能继续，无法无条件跳过，因此如实停止。
 > `desktop-view-01..03` 三张是同一工序的不同粒子动画帧，视觉上高度接近，**不要在版面上当作三张不同内容使用**。
 
-抓取脚本：`_build/capture-live.mjs`（通用站点）、`_build/capture-qinghua-steps.mjs`（分步推进），均为工作脚本，不参与构建。
+抓取脚本：`scripts/assets/capture-live.mjs`（通用站点）已入库；`capture-qinghua-steps.mjs` 依赖青花造境特定教程文案、按钮和坐标，仍是仓库外工作脚本，不参与构建。
 
 ### 未分配
 
@@ -108,23 +108,24 @@ vc-site/content/media.json                     ← 被 lib/media.ts 静态 impor
 
 ## 3. 重新生成资产
 
-前提：Node ≥ 20.9，系统已安装 `ffmpeg` / `ffprobe`。
+前提：Node ≥ 20.9；图像步骤需要 `scripts/assets/` 中声明的 `sharp`。
 
 ```bash
-# 1) 图像衍生图（需要 sharp，装在 _build/ 里，不污染 vc-site 依赖）
-cd _build && node build-images.mjs
+# 1) 安装素材工具依赖（不写入根 package-lock）
+npm install --prefix scripts/assets --no-package-lock --no-audit --no-fund
 
-# 2) 视频衍生图与循环视频
-cd _build && ./build-video.sh          # 或直接重跑视频管线脚本
+# 2) 图像衍生图（私有原图目录必须位于仓库外）
+node scripts/assets/build-images.mjs /path/to/private/organized_assets public/works
 
-# 3) 把清单同步进内容层
-cd vc-site && npm run sync-manifest
+# 3) 按需生成二维码或公开 Live 截图（命令见 scripts/assets/README.md）
+# node scripts/assets/build-qr.mjs /path/to/private/wechat-card.png public/works
+# node scripts/assets/capture-live.mjs https://example.com qinghua public/works
 
-# 4) 校验
-cd vc-site && npm run check && npm run build
+# 4) 把清单同步进内容层
+npm run sync-manifest
 ```
 
-`_build/` 已在 `.gitignore` 中，属于本地工作目录；`public/works/` 的产物**应当提交**，因为部署时需要它们。
+`_build/` 已在 `.gitignore` 中，属于本地工作目录；`public/works/` 的产物**应当提交**，因为部署时需要它们。当前仓库外未发现可安全通用化的视频构建脚本，因此不在这里写一个无法验证的 `build-video.sh` 命令。
 
 ---
 
@@ -143,11 +144,11 @@ cd vc-site && npm run check && npm run build
 | 项目 | 现状 | 上线前需要 |
 |---|---|---|
 | VC Logo | 用 `VC` 文字标识；`public/brand/icon.svg` 为几何构造的 favicon | 正式 Logo（可选） |
-| 微信二维码 | **已就位**：`public/brand/wechat-qr.png`，`contact.qrImage = 'brand/wechat-qr'` | — |
+| 微信二维码 | **已就位**：`public/works/brand/wechat-qr-*`，`contact.qrImage = 'brand/wechat-qr'` | — |
 | 微信号 | **已就位**：`contact.channels[0].value = 'Vc1242856346'`（点击即复制） | — |
 | 联系邮箱 | **已就位**：`contact.channels[1].value = 'lxy13738164923@outlook.com'`，`href` 保持 `null` 由 `ChannelValue` 拼 `mailto:` | 无 |
 | 表单接口 | `contact.formEndpoint = ''`，按钮因此是「复制需求」而不是「发送需求」 | 一个接收 POST 的接口地址 |
-| 正式域名 | 未提供 | 填入 `metadataBase` 与页脚 |
+| 正式域名 | 已设置：`https://vc-design.online` | — |
 | 客户评价 / Client Logo | **禁止编造**，因此网站目前完全没有这一层 | 真实评价出现后再加 |
 | 李花花产品 UI | MVP 阶段 | 精修 UI 出来后替换 `lihuahua/*` 三张图 |
 | 青花造境原始素材 | 无 | 设计源文件出来后替换 Live 截图 |

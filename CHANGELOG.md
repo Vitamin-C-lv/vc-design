@@ -24,6 +24,34 @@
 
 ## 未发布
 
+### 2026-09-16 · SEO、可访问性与 CI 工程化收口；性能边界只测量不拆分
+
+**为什么** — 这一轮同时收口了几类会误导搜索引擎、键盘用户和后续协作者的问题。SEO 的根因是 `app/layout.tsx` 的全局 `alternates.canonical: '/'`：App Router 逐层合并后，`/work`、`/lab`、`/work/<slug>` 全部把首页声明为 canonical。未修改的 `822910e` 基线构建上，`/work` 的 HTML 确实是 `<link rel="canonical" href="https://vc-design.online"/>`。另外，Next 的 `openGraph` 是**整体替换而非逐字段合并**：页面自己写 `openGraph` 后，父层的 `siteName/locale/images` 全部丢失；修 canonical 时实际踩出过一次回归，`/work`、`/lab`、四个案例页这六个路由的 `og:image` 全没了。
+
+可访问性方面，`app/layout.tsx` 已有 `<main id="main">`，而 `app/work/page.tsx`、`app/lab/page.tsx` 又各包了一层 `<main>`，实际 HTML 出现两个 main landmark。移动菜单的焦点和背景隔离也需要明确的键盘协议；过程中还发现一个自己引入的回归：面板内没有关闭按钮，而触发按钮被设成 `tabIndex=-1`，键盘用户只能靠 Esc。另有一处既有的页头缺陷：`[data-tone='paper']` 已正确把 `--tone-fg` 切到墨黑，但 `LangToggle` 两个按钮和移动菜单按钮没有 tone 颜色类，继承了 body 的骨白 `rgb(247,245,241)`，在浅色段落上变成白字白底。822910e 基线 A/B 测试得到相同结果，证明它不是本轮引入。
+
+性能方面，用户此前明确说：「其实我更希望这些作品在主页就渲染出来而不是点进去才有」。因此这轮只测量首页 client boundary 和移动端重内容的真实代价，没有因为担忧而擅自改造。
+
+**做了什么**
+
+- SEO：用 `app/metadata.ts` 提供共享 `openGraphDefaults` 兜底；七个路由各自声明正确 canonical；`/work`、`/lab` 使用共享分享图，四个旗舰各自使用 `public/og/<slug>.png`（1200×630）；补上 `app/sitemap.ts`（7 条 URL）与 `app/robots.ts`。无浏览器脚本 `scripts/check-seo.mjs` 读取 `BASE`，断言每个路由的 canonical 与 `og:image`、sitemap 7 条、robots 指向 sitemap，失败非 0 退出。
+- 可访问性：移除 `/work`、`/lab` 的嵌套 main；移动菜单打开后焦点进入面板，Tab/Shift+Tab 在「面板项 + 页头关闭按钮」之间循环，背景 `main`/`footer` 使用 `inert`，Escape 关闭后焦点回到触发按钮。`BriefForm` 的 intent 选择和 `ParticleShowcase` 的 7 阶段选择补齐 roving tabindex、方向键、Home/End 与选中态同步；tabpanel 通过 `aria-labelledby` 关联当前 tab，id 用 `useId` 生成，移除了写死的 `id="particle-stage-panel"`。
+- 页头对比度：两个控件补 `tone-fg` 以跟随页头 tone 翻转；非当前语言的 `opacity` 从 `0.45` 提到 `0.62`，因为 `0.45` 时实测只有 3.1:1，低于该字号的 4.5:1 门槛。新增 `scripts/qa/verify-header-contrast.mjs` 并登记进 `scripts/qa/README.md`。
+- CI 与工程化：新增 `.github/workflows/ci.yml`，push/main 与 PR 触发，Node 22，按 `npm ci` → `typecheck` → `lint` → `build` → 起 `next start` 跑 `scripts/check-seo.mjs` 的顺序执行；服务器启动、检查、回收在同一个 step 内完成，不依赖跨 step 的后台进程假设。明确不接 EdgeOne 自动部署：`main ≠ production`，CI 只证明这个 commit 可以上线；上线仍是本地 `npm run build` + `edgeone makers deploy -n vc-site -a overseas`。
+- 依赖与文档：`@types/three` 从 `dependencies` 移到 `devDependencies`；`docs/ENGINEERING.md` 改正了 Three.js 仅用于青花造境粒子器物、`https://vc-design.online` 已上线、EdgeOne Makers overseas 本地构建上传等事实。`build-images.mjs` / `build-qr.mjs` / `capture-live.mjs` 入库到 `scripts/assets/`，并新增 `build-og-cards.mjs`；私有原图仍不入库，用户绝对路径不写入脚本。`public/guanchao-live/` 增加 `SOURCE.json` 溯源，查不到的字段写 TODO。README 增加「授权 / Licensing」：仓库公开是为了作品集透明度，代码与视觉 / 媒体素材未经许可不可复用；没有创建 LICENSE 文件，代码是否单独采用 MIT 留给作者决定。
+- 性能只测量、未改造：没有做那次 client boundary 拆分，也没有改变移动端重内容策略。理由是可省约 26 KB raw（约占首页初始 JS 的 3%、压缩后更小），却要动首页/案例页 8 个以上文件与实时媒体判定逻辑，风险收益不匹配；框架底座才是大头，属于另一轮的事。
+
+**验证**
+
+- SEO：`BASE=http://localhost:3210 node scripts/check-seo.mjs` 通过（7 routes, sitemap, robots）。同一个脚本在 822910e 基线上失败并打印 `/work canonical 应为 https://vc-design.online/work，实际为 https://vc-design.online/`。`/work`、`/lab` 和四个案例页的分享图实测为 1200×630，字节数依次为 **341,305 / 76,656 / 97,219 / 149,509**。
+- 可访问性：实测每个路由 `<main>` 数量 = 1。Playwright（390×844）Tab 序列为 `作品→能力→方法→联系→实验室→全部作品→HEADER(关闭菜单)→作品…`，无一次逃出弹层；背景 `main`/`footer` 的 `inert` 均为 true；Escape 关闭后焦点标签回到「打开菜单」、`inert` 复原。`BriefForm` 与 `ParticleShowcase` 的键盘交互按 WAI-ARIA 模式验证，tabpanel 的 `aria-labelledby` 与当前 tab 同步。
+- 页头对比度：修复前真实渲染像素 / WCAG 对比度为 `中文 1.04:1`、`EN 1.14:1`、`菜单 1.04:1`；同页头 VC 字标为 10.25:1、导航为 8–10:1、CTA 为 18:1。修复后浅色段落为 `中文 17.8:1` / `EN 5.84:1`，深色段落为 `中文 17.12:1` / `EN 7.07:1`，手机与桌面、`/`、`/work`、`/lab` 全通过。`scripts/qa/verify-header-contrast.mjs` 在 822910e 基线上失败、当前构建上通过。
+- CI / 依赖 / 素材：`npx --yes yaml-lint .github/workflows/ci.yml` 报 `✔ YAML Lint successful.`；所有新增 `.mjs` 通过 `node --check`，`npx eslint scripts/check-seo.mjs` 与 `npx tsc --noEmit` 通过。`npm install --package-lock-only --no-audit --no-fund` 后，lockfile 结构化比对确认只有 `@types/three` 及其传递依赖被标记 `dev: true`，其余依赖版本 / resolved / integrity 全未变化。`public/guanchao-live/` 内容哈希与 `SOURCE.json` 记录一致。
+- 性能：822910e 隔离 worktree 构建首页 First Load JS **856,395 B raw / 273,355 B gzip / 237,038 B Brotli**，`/work/[slug]` 805,155 B；其中 **736,055 B raw / 233,541 B gzip** 是全站共用底座（连 `/_not-found` 相同）。React/Next 两个运行时 chunk 为 394,899 B（约 53.7%）；Motion 128,467 + GSAP/ScrollTrigger 113,860 + Lenis 40,460 = 282,787 B（约 38.4%）；其余约 58,369 B。`content/projects.ts` 确实进了首页 client chunk：`1lo-eeg0l6nns.js` 75,121 B，三条独特长字符串命中，四个项目可去除数据合计约 **26,352 B raw**。
+- 移动端性能：Playwright + 微信 UA + 390×844 + `hardwareConcurrency=4` 且不暴露 `deviceMemory` 时，首屏 12 个 JS 文件里**没有 three.js**；滚动到青花区块才懒加载独立的 `2ei2uus4t3tw8.js`（696,018 B）。四个旗舰的实时媒体**同时最多只有 1 个在跑**（平板 1024 出现过一次 2）；全页滚动 long task 7 次 / 合计 1,017 ms / 最长 331 ms。
+
+**遗留** — 性能决定明确不做那次 client boundary 拆分，移动端也不改重内容策略；这不是“没有发现性能成本”，而是测了之后认为风险收益不匹配。`SOURCE_REPO`、`SOURCE_COMMIT`、`CAPTURE_DATE` 在 `_build/guanchao-src/` 中查不到，`SOURCE.json` 保持 TODO。`capture-qinghua-steps.mjs` 依赖特定站点的教程文案、按钮和坐标，未安全通用化；仓库外也未发现可安全通用化的视频构建脚本，因此没有提交一个无法验证的替代命令。
+
 ### 2026-09-13 · 快速滚动时文字「一半加载出来」——甩动期间关掉揭示过渡
 
 **为什么** — 用户报告：「快速滚动时字是一半加载出来的」。揭示动画是 0.9s 透明度 / 1.044s 位移 / 1.1s 遮罩，加 0~180ms 错峰；实测单个元素从进入视口到完全不透明要 **983ms**。也就是说，任何比"慢慢看"快的滚动，看到的都是一片正在淡入的字——那不是动效，那是没加载完。

@@ -1,0 +1,7 @@
+{
+  "SOURCE_REPO": "TODO: _build/guanchao-src 未包含可查证的仓库地址",
+  "SOURCE_COMMIT": "TODO: _build/guanchao-src 不是 Git 工作树，未发现 commit 元数据",
+  "CAPTURE_DATE": "TODO: 来源目录没有可确认的捕获日期",
+  "BUILD_COMMAND": "pnpm build",
+  "CONTENT_HASH": "sha256:85867b3a70cd571b0e0de2ab89be361e7d58d0bbf551dc851ffc8eb7875086a2"
+}

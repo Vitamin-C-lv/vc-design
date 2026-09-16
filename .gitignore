@@ -35,9 +35,9 @@ yarn-error.log*
 # QA / visual-review output (scripts/qa writes here)
 /_qa-output
 /scripts/qa/node_modules
+/scripts/assets/node_modules
 
 # Tencent Cloud EdgeOne
 .env
 .edgeone/*
 .tef_dist/*
-  
