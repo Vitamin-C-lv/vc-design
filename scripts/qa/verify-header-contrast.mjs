@@ -133,6 +133,17 @@ try {
 
       try {
         await page.goto(`${BASE}${route}`, { waitUntil: 'load' });
+        // `/` opens with the greeting sequence and the header only enters once it
+        // hands over. Sampling at a fixed 1200ms caught the header mid-entrance
+        // and reported every control as 1:1 — uniform paper, because the control
+        // boxes were still empty. Wait for the gate instead of guessing.
+        await page
+          .waitForFunction(
+            () => document.documentElement.getAttribute('data-intro') !== 'playing',
+            null,
+            { timeout: 10000 },
+          )
+          .catch(() => {});
         await page.waitForTimeout(1200);
 
         await assertTone(page, 'paper', 'light-band');

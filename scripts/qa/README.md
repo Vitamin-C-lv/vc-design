@@ -43,6 +43,7 @@ BASE=http://127.0.0.1:3000 node scripts/qa/verify-header-contrast.mjs
 | `verify-reveal-instant.mjs` | 快滚门限 `data-reveal-instant` 不能两头失效：既不能误伤阅读速度下的揭示动画，也不能甩完不摘掉、导致全站从此没有揭示动画 | 静止时 `rise`/`fade` 过渡为 `0.9s, 1.044s`、`masked` 子元素为 `1.05s`；猛甩期间两者塌成 `0s` 且标记出现；停下后标记摘掉、过渡恢复；阅读速度（110px/280ms）全程标记**不出现**且能采到真实的动画中间态（opacity 或 clip-path）。时序敏感，单次失败先重跑一次再判定 |
 | `verify-share-card.mjs` | 首页社交分享卡与 canonical metadata | `og:title` / `og:description` / `og:url` / 绝对 `og:image`、1200×630 声明与真实 PNG 像素、Twitter card、绝对 canonical；线上 `BASE` 另验 `og:url` host 一致 |
 | `verify-header-contrast.mjs` | 页头控件在 tone 翻转时的真实像素对比度 | `phone-390` / `desktop-1600` × `/`、`/work`、`/lab` × 浅色顶部 / 深色段落；截图裁剪后逐个可见页头控件按 WCAG 计算，全部 `>= 4.5:1` |
+| `opening-sequence.mjs` | 首屏开片 A–E 关键帧、桌面/手机录像，以及 reduced-motion、无 JS、同 tab 二次访问和单一 signal-red 像素红线 | A/B 片头不存在时明确 `skipped: no-intro`；C/D/E 有真实截图；三条降级路径和像素红线失败时退出码非 0 并落失败截图 |
 
 `verify-header-contrast.mjs` 防止语言开关或移动菜单按钮丢失 `tone-fg`，再次继承 body 的骨白色并在浅色段落上变成白字白底。它必须连接已运行的站点，例如：
 
@@ -74,3 +75,21 @@ BASE=http://127.0.0.1:3000 node scripts/qa/verify-header-contrast.mjs
 2. **报通过也不代表没缺陷。** 曾经出现过"所有自动化指标全绿"与"每个汉字占一行、页面被撑高 4240px"同时存在。改完界面**要用真实截图亲眼看一遍**。
 3. **规避误报的豁免必须做反向测试。** `layout-audit.mjs` 的溢出检查会跳过"某个祖先能横向滚动"的元素（首页图像卷轴本来就比视口宽，是设计意图；不豁免的话恒报 4 条，会把真溢出埋掉）。加了这种豁免后，要拿一个**真的**溢出元素验一遍它还抓得到，否则等于把探测器关了。
 4. **改了环境变量支持，要拿一个错的地址反向验一遍。** 只验"默认值下能过"证明不了脚本真的读了 `BASE`。
+
+## 首屏开片取证
+
+```bash
+BASE=http://localhost:3220 node scripts/qa/opening-sequence.mjs
+```
+
+产物写入 `_qa-output/opening/`：桌面 `1600×1000`、手机 `390×844` 的 A–E 帧与录像，平板 `1024×1366` 至少 C/E 帧，以及 `opening-report.json`。A/B 只有检测到片头节点或片头文案时才截图；当前站点没有片头时会记录 `skipped: no-intro`，不会把缺少片头误判为失败。
+
+脚本使用 Playwright Clock API 定帧，不使用 `waitForTimeout`。实测 `page.clock.runFor(1000)` 能驱动连续 rAF 并同步推进 `performance.now()`；本站 GSAP ticker 走 rAF，因此它比墙上时间更适合把开片和首屏揭示定在同一时间线上。录像采用 CDP screencast 收帧，再调用 PATH 中的系统 `ffmpeg` 编成 WebM；Playwright `recordVideo` 在本机缺少它自己的缓存 ffmpeg，故没有把下载依赖带进验收流程。
+
+基线可单独归档到指定目录：
+
+```bash
+BASE=http://localhost:3220 OPENING_OUT=_qa-output/opening/baseline-2aa90d8 node scripts/qa/opening-sequence.mjs
+```
+
+四条硬断言是：reduced-motion 下首屏稳态可见且没有隐形 `data-intro="playing"`；禁用 JS 仍有可读首屏；同 tab 写入 `sessionStorage['vc-intro-seen']='1'` 后访问不再播完整片头且首屏稳态可见；C 帧真实 PNG 像素中的彩色像素占比不超过 2.5%、最多一个连通彩色区域且至少 80% 接近 `#E0402A`。任何失败都会退出非 0，并将可见页面或对应 C 帧复制到 `_qa-output/opening/failures/`。

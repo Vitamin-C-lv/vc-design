@@ -604,12 +604,6 @@
     align-items: flex-end;
   }
 
-  .hero-wordmark-char {
-    display: inline-block;
-    line-height: 0.94;
-    will-change: transform, opacity;
-  }
-
   /* ------------------------------------------------------------------------
      Arrival / editorial hero
      ------------------------------------------------------------------------ */
@@ -629,10 +623,15 @@
     pointer-events: none;
   }
 
+  /*
+   * Booked onto the paper tone, not the ink tone: these are 11px labels on the
+   * bone intro panel, and `--color-mute` measured 3.37:1 there. `--color-paper-mute`
+   * is the token that belongs to light surfaces and measures 4.92:1.
+   */
   .opening-intro-counter,
   .opening-intro-signature {
     position: absolute;
-    color: var(--color-mute);
+    color: var(--color-paper-mute);
   }
 
   .opening-intro-counter {
@@ -650,11 +649,20 @@
   .opening-intro-word-stage {
     position: relative;
     display: grid;
-    width: min(90vw, 50rem);
+    /*
+     * The greeting is the first thing the brand ever says, and at 7vw it read as
+     * a caption: 83px in a 1600×1000 frame. It is a statement — sized to be read
+     * across the room — and the mask reveal gives it the weight.
+     *
+     * 13vw is the ceiling, not a taste call: the longest greeting is
+     * `こんにちは。`, six full-width glyphs, so the type has to stay under
+     * 92vw ÷ 6 ≈ 15.3vw or the mask clips it on a narrow phone.
+     */
+    width: min(92vw, 64rem);
     min-height: 1.25em;
     place-items: center;
     font-family: var(--font-display);
-    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    font-size: clamp(2.75rem, 13vw, 11rem);
     font-weight: 500;
     line-height: 1.2;
     letter-spacing: -0.035em;
@@ -701,16 +709,21 @@
   }
 
   .hero-corner-top-left {
-    top: clamp(6.5rem, 11svh, 8rem);
+    top: clamp(5.25rem, 8.5svh, 6.5rem);
     left: var(--shell-pad);
   }
 
   .hero-corner-top-right {
-    top: clamp(6.5rem, 11svh, 8rem);
+    top: clamp(5.25rem, 8.5svh, 6.5rem);
     right: var(--shell-pad);
     display: flex;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .hero-disciplines-list {
+    max-width: 24rem;
+    text-align: right;
   }
 
   .hero-signal {
@@ -738,15 +751,23 @@
   .hero-wordmark-stage {
     position: absolute;
     z-index: 1;
-    inset: 22% 0 auto;
+    top: 10%;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
     pointer-events: none;
   }
 
+  /*
+   * `clamp()` is only the no-JS resting value here. Measuring the mark and
+   * solving for the font size happens in `Hero` — a clamp ceiling silently takes
+   * over on large viewports, which is exactly how the brand ended up at 64% of
+   * the viewport width while the stylesheet claimed 52vw.
+   */
   .hero-wordmark {
     position: relative;
-    font-size: clamp(12rem, 52vw, 48rem);
+    font-size: clamp(12rem, 66vw, 120rem);
     letter-spacing: var(--vc-track, -0.01em);
     will-change: transform;
   }
@@ -766,7 +787,7 @@
   }
 
   .hero-corner-bottom-left {
-    bottom: clamp(2rem, 7svh, 5rem);
+    bottom: 3rem;
     left: var(--shell-pad);
   }
 
@@ -782,6 +803,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    margin-top: 2rem;
   }
 
   .hero-scroll-line {
@@ -791,62 +813,172 @@
     background: var(--tone-line);
   }
 
+  /*
+   * The information plate.
+   *
+   * It deliberately starts at the C's left edge (published as `--hero-c-left` by
+   * the wordmark fit) and runs to the right edge of the viewport, bottom-aligned
+   * with the page. That leaves exactly two visible edges — a crisp horizontal cut
+   * and a vertical one that falls in the gap before the letterform — instead of
+   * the free-floating rectangle that used to bite a notch out of the C's bowl and
+   * read as a rendering accident.
+   *
+   * It also runs all the way to the bottom edge of the screen, and the type
+   * inside it is set compactly. Both matter: the brief wants a mark that is
+   * bigger than the viewport, so some of it *must* pass behind this band — at
+   * 434px tall the band swallowed 60% of the C and left an arch where a letter
+   * used to be. At this size it takes the bottom fifth, which reads as a letter
+   * sinking into a printed band.
+   */
   .hero-definition {
     position: absolute;
     z-index: 2;
-    right: var(--shell-pad);
-    bottom: clamp(2rem, 7svh, 5rem);
-    width: min(42rem, 43cqw);
+    left: calc(var(--hero-c-left, 50%) - 0.5rem);
+    right: 0;
+    bottom: 0;
     box-sizing: border-box;
-    padding: 0.35rem 0.6rem 0.75rem;
+    padding: 0.4rem var(--shell-pad) 2.25rem 1.5rem;
     background: var(--tone-bg);
+  }
+
+  /*
+   * The `Bi` slots have no class of their own, so they fall back to Tailwind's
+   * base rule `:lang(zh) { line-height: 1.75 }` — every Chinese line came out
+   * 1.75× its font size no matter what the paragraph declared, which is how this
+   * block grew to 357px and swallowed 60% of the C. The spans have to be told to
+   * inherit. Nothing else on the site notices because its paragraphs set a
+   * line-height that is *larger* than 1.75 anyway.
+   */
+  .hero-definition-line > span,
+  .hero-slogan-line > span,
+  .hero-definition-echo > span {
+    line-height: inherit;
   }
 
   .hero-definition-line {
     margin: 0;
-    font-size: clamp(1.15rem, 2.2cqw, 2.5rem);
-    line-height: 1.15;
+    font-size: clamp(0.9rem, 1.35cqw, 1.5rem);
+    line-height: 1.14;
   }
 
   .hero-definition-line:nth-child(2) {
-    font-size: clamp(1.55rem, 3.5cqw, 4rem);
+    font-size: clamp(1.2rem, 1.9cqw, 2.3rem);
   }
 
   .hero-definition-line [data-lang-en] {
     font-family: var(--font-display);
   }
 
+  .hero-definition-echo {
+    max-width: 34rem;
+    margin-top: 0.6rem;
+    font-size: 0.6875rem;
+    line-height: 1.3;
+  }
+
+  .hero-slogan {
+    margin-top: 0.8rem;
+  }
+
   .hero-slogan-line {
     margin: 0;
-    font-size: clamp(1.2rem, 2.25cqw, 2.5rem);
-    line-height: 1.08;
+    font-size: clamp(0.9rem, 1.35cqw, 1.5rem);
+    line-height: 1.14;
   }
 
   @media (max-width: 767px) {
     .opening-intro-counter { top: 1.25rem; left: 1rem; }
     .opening-intro-signature { right: 1rem; bottom: 1.25rem; }
 
-    .hero-corner-top-left {
-      top: 5.75rem;
-      left: var(--shell-pad);
+    /*
+     * The phone is its own composition, and it is a *grid* rather than five
+     * absolutely positioned boxes. Absolute positioning on a 640px-tall screen
+     * is what produced the original collision: the definition block landed on
+     * top of the index row, and on the shortest phone it also landed on the C —
+     * with no plate behind it, that puts paper-coloured text straight onto the
+     * letterform. Rows cannot overlap each other, so the whole class of bug goes
+     * away instead of being tuned around.
+     */
+    .hero-editorial-shell {
+      display: grid;
+      /*
+       * The two top corners get a column each instead of sharing one cell.
+       *
+       * Sharing the cell let them overlap freely, and in English the left
+       * eyebrow (`INDEPENDENT CREATIVE UNIT`, 26 characters against Chinese's
+       * four) ran straight through the discipline list. Separate tracks cannot
+       * intersect, so this is fixed by construction rather than by tuning
+       * widths against each other. `minmax(0, …)` on both keeps either side
+       * able to shrink and wrap instead of forcing the row to overflow.
+       */
+      grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr) auto auto;
+      grid-template-areas:
+        'topsL topsR'
+        'mark  mark'
+        'def   def'
+        'idx   idx';
+      gap: 1.25rem;
+      min-height: 100svh;
+      padding: 5.5rem var(--shell-pad) 1.5rem;
     }
 
+    .hero-corner {
+      position: static;
+    }
+
+    .hero-corner-top-left {
+      grid-area: topsL;
+      align-self: start;
+      justify-self: start;
+    }
+
+    /*
+     * The discipline list stays on the phone. It used to be `display: none`
+     * below 768px, which quietly deleted `PRODUCT / VISUAL / 3D / DIGITAL / AI`
+     * — and the signal dot with it — from the composition most visitors see.
+     */
     .hero-corner-top-right {
-      top: 5.75rem;
-      right: var(--shell-pad);
-      display: none;
+      grid-area: topsR;
+      align-self: start;
+      justify-self: end;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .hero-disciplines-list {
+      max-width: 9.5rem;
+      font-size: 0.625rem;
+      line-height: 1.55;
     }
 
     .hero-wordmark-stage {
-      inset: 20% 0 auto;
-      height: 30svh;
-      display: block;
+      grid-area: mark;
+      position: relative;
+      top: auto;
+      left: auto;
+      right: auto;
+      display: grid;
+      /* An implicit column is sized to the item's max-content, and the item's
+         only children are absolutely positioned — so without this the column
+         collapses to 0 and `width: 100%` on the wordmark resolves to 0. */
+      grid-template-columns: minmax(0, 1fr);
+      place-items: center;
     }
 
+    /*
+     * Sized against the shorter axis: width alone made the mark taller than the
+     * row it lives in on a 360×640 phone, which is how the letters ended up
+     * under the definition text. The height is stated in `em` so the staggered
+     * V/C pair always occupies exactly one em-box, whatever the font size is —
+     * that is what lets the grid centre the pair instead of anchoring it.
+     */
     .hero-wordmark {
+      position: relative;
       width: 100%;
-      height: 100%;
-      font-size: clamp(11rem, 52vw, 16rem);
+      height: 1.25em;
+      font-size: min(58vw, 25svh);
       letter-spacing: var(--vc-track, -0.01em);
     }
 
@@ -856,68 +988,104 @@
     }
 
     .hero-wordmark-mask-v {
-      top: 0;
-      left: 7%;
+      top: 2%;
+      left: 4%;
     }
 
     .hero-wordmark-letter-c {
-      top: 36%;
-      right: -5%;
+      top: 29%;
+      right: -4%;
       margin-left: 0;
-      font-size: 1.18em;
+      font-size: 1.06em;
     }
 
-    .hero-corner-bottom-left {
-      bottom: 4rem;
-      left: var(--shell-pad);
-    }
-
-    .hero-index-number {
-      font-size: 2.25rem;
-    }
-
+    /*
+     * Two separate bands now: the definition, then an index row.
+     */
     .hero-definition {
-      right: var(--shell-pad);
-      bottom: 8rem;
-      left: var(--shell-pad);
+      grid-area: def;
+      position: static;
+      left: auto;
+      right: auto;
+      bottom: auto;
       width: auto;
       padding: 0;
+      background: transparent;
     }
 
     .hero-definition-line,
     .hero-definition-line:nth-child(2) {
-      font-size: clamp(1.2rem, 5.5vw, 1.75rem);
-      line-height: 1.28;
+      font-size: clamp(1.05rem, 4.8vw, 1.6rem);
+      line-height: 1.3;
+    }
+
+    /* Pure decoration, and on a phone it costs a whole line of height. */
+    .hero-definition-echo {
+      display: none;
     }
 
     .hero-slogan {
-      margin-top: 1.25rem;
+      margin-top: 1rem;
     }
 
     .hero-slogan-line {
-      font-size: clamp(1.1rem, 5vw, 1.5rem);
+      font-size: clamp(1rem, 4.4vw, 1.4rem);
       line-height: 1.2;
     }
 
+    .hero-corner-bottom-left {
+      grid-area: idx;
+      align-self: end;
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .hero-index-number {
+      font-size: 1.75rem;
+    }
+
+    /* Repeats the top-left eyebrow; on a phone the line only costs height. */
+    [data-hero-index-eyebrow] {
+      display: none;
+    }
+
     .hero-scroll-hint {
-      position: absolute;
-      top: calc(100% - 0.25rem);
-      left: 0;
+      position: static;
       margin-top: 0;
+      padding-bottom: 0.15rem;
     }
 
     .hero-scroll-line {
-      height: 1.8rem;
+      height: 1.5rem;
+    }
+
+    /* 360px is where `01 · INDEPENDENT CREATIVE UNIT · 2026 · 向下探索` stops
+       fitting on one line. The label steps down a size instead of wrapping. */
+    @media (max-width: 26rem) {
+      .hero-corner-bottom-left {
+        gap: 0.65rem;
+      }
+
+      .hero-corner-bottom-left .type-label {
+        font-size: 0.625rem;
+      }
+
+      .hero-scroll-hint {
+        white-space: nowrap;
+      }
     }
   }
 
   @media (min-width: 768px) and (max-width: 1199px) {
+    /* No-JS resting value; the measured fit takes over once scripting is on. */
     .hero-wordmark {
-      font-size: clamp(14rem, 50vw, 28rem);
+      font-size: clamp(14rem, 66vw, 120rem);
     }
 
     .hero-definition {
-      width: min(38rem, 48cqw);
+      padding-left: 1.25rem;
     }
   }
 

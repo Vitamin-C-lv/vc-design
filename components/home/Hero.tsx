@@ -2,17 +2,35 @@
 
 import { useEffect, useState } from 'react';
 import { Band, Eyebrow } from '@/components/primitives';
-import { BiOnly } from '@/components/i18n/Bi';
+import { Bi, BiOnly } from '@/components/i18n/Bi';
 import { brand, slogan } from '@/content/site';
 import { useDeviceProfile } from '@/lib/motion/device';
 import { gsap } from '@/lib/motion/gsap';
 import { readIntroBox, whenIntroDone } from '@/lib/motion/introGate';
 import { playVcSignature } from '@/lib/motion/vcSignature';
-import { useGsapScope } from '@/lib/motion/useGsap';
+import { useGsapScope, useIsomorphicLayoutEffect } from '@/lib/motion/useGsap';
 import { HeroField } from './HeroField';
 
-const definitionLines = brand.definitionZh.split(/(?=产品、视觉)|(?=的独立)/);
-const definitionEnglishLines = ['An independent creative unit', 'working across product, visual, 3D and AI.'];
+/**
+ * The definition in the three lines the hero sets, zipped by hand rather than by
+ * index into two arrays of hopefully-equal length — the previous `?? fallback`
+ * is what let English mode print the sentence twice.
+ */
+const definitionPairs = [
+  { zh: brand.definitionLinesZh[0], en: brand.definitionLinesEn[0] },
+  { zh: brand.definitionLinesZh[1], en: brand.definitionLinesEn[1] },
+  { zh: brand.definitionLinesZh[2], en: brand.definitionLinesEn[2] },
+];
+
+/**
+ * Share of the viewport width the wordmark asks for. The height of the band
+ * between the top corners and the information plate is the other, harder limit —
+ * see the fit effect.
+ */
+const MARK_FILL = 1.0;
+
+/** Below this width the wordmark is composed absolutely instead of by measurement. */
+const MEASURED_LAYOUT_QUERY = '(min-width: 768px)';
 
 export function Hero() {
   const profile = useDeviceProfile();
@@ -20,6 +38,107 @@ export function Hero() {
   const disabled = !introDone || !profile.ready || profile.static || profile.tier === 'low';
 
   useEffect(() => whenIntroDone(() => setIntroDone(true)), []);
+
+  /**
+   * Size the wordmark by measurement.
+   *
+   * The mark used to be sized with `clamp(12rem, 52vw, 48rem)`, whose rem ceiling
+   * (768px) silently took over at 1600px — `52vw` never applied — and the brand
+   * rendered at 64% of the viewport width. The brief asks the opposite way: a
+   * wordmark as large as the frame allows, with the V and C reaching past both
+   * edges wherever the aspect ratio permits.
+   *
+   * Two limits decide the size, and neither is a magic number: the viewport
+   * width, and the vertical band left between the top corners and the information
+   * plate. On a 1600×1000 screen the band is the binding one — two letters that
+   * span the full width are ~830px tall, and the corners have to live somewhere.
+   *
+   * The band is measured against the *cap height* rather than the line box: the
+   * box carries about 15% of leading that would otherwise be spent on nothing.
+   * Layout metrics only (`offsetWidth`/`offsetHeight`/`offsetLeft`), so this is
+   * immune to whatever transform the entrance or the pointer parallax has set.
+   */
+  useIsomorphicLayoutEffect(() => {
+    const root = document.querySelector<HTMLElement>('[data-hero-root]');
+    if (!root) return;
+
+    const stage = root.querySelector<HTMLElement>('.hero-wordmark-stage');
+    const wordmark = root.querySelector<HTMLElement>('[data-hero-wordmark]');
+    const letterC = root.querySelector<HTMLElement>('[data-hero-wordmark-c]');
+    const definition = root.querySelector<HTMLElement>('.hero-definition');
+    const corners = [
+      root.querySelector<HTMLElement>('[data-hero-eyebrow]'),
+      root.querySelector<HTMLElement>('[data-hero-disciplines]'),
+    ];
+    if (!stage || !wordmark || !letterC || !definition) return;
+
+    /** Cap height as a fraction of the font size, straight from the font itself. */
+    const inkRatio = (() => {
+      const context = document.createElement('canvas').getContext('2d');
+      if (!context) return 0.72;
+      context.font = `500 200px ${getComputedStyle(wordmark).fontFamily}`;
+      const heights = ['V', 'C'].map((letter) => {
+        const metrics = context.measureText(letter);
+        return (metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent) / 200;
+      });
+      return Math.max(...heights);
+    })();
+
+    const fit = () => {
+      if (!window.matchMedia(MEASURED_LAYOUT_QUERY).matches) {
+        wordmark.style.removeProperty('font-size');
+        stage.style.removeProperty('top');
+        root.style.removeProperty('--hero-c-left');
+        return;
+      }
+
+      // Measure at a known size: width and box height are both linear in it.
+      wordmark.style.fontSize = '100px';
+      const widthRatio = wordmark.offsetWidth / 100;
+      const boxRatio = wordmark.offsetHeight / 100;
+      if (!widthRatio || !boxRatio) return;
+
+      const rootTop = root.getBoundingClientRect().top;
+      const cornersBottom = Math.max(
+        ...corners.map((corner) => (corner ? corner.getBoundingClientRect().bottom : 0)),
+      );
+      const bandTop = cornersBottom + 18 - rootTop;
+      const bandBottom = definition.getBoundingClientRect().top - 26 - rootTop;
+      const band = Math.max(140, bandBottom - bandTop);
+
+      const size = Math.min((root.clientWidth * MARK_FILL) / widthRatio, band / inkRatio);
+      wordmark.style.fontSize = `${size}px`;
+
+      // Centre the ink (not the line box) in the band. On a portrait tablet the
+      // width is the binding limit and the band is far taller than the mark, so
+      // without this the letters cling to the top and leave a hole above the
+      // information plate.
+      const leading = Math.max(0, boxRatio - inkRatio) * size;
+      const slack = Math.max(0, band - inkRatio * size);
+      stage.style.top = `${Math.round(bandTop + slack / 2 - leading / 2)}px`;
+
+      // Hand the C's left edge to CSS: the definition plate starts there, so the
+      // information block meets the letterform instead of biting into it.
+      const markLeft = (root.clientWidth - wordmark.offsetWidth) / 2;
+      root.style.setProperty('--hero-c-left', `${Math.round(markLeft + letterC.offsetLeft)}px`);
+    };
+
+    fit();
+
+    let frame = 0;
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(fit);
+    };
+    window.addEventListener('resize', schedule, { passive: true });
+    // The display face may load after first paint, which changes both ratios.
+    void document.fonts?.ready.then(schedule);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', schedule);
+    };
+  }, []);
 
   const rootRef = useGsapScope<HTMLDivElement>(
     ({ gsap, root }) => {
@@ -148,7 +267,7 @@ export function Hero() {
 
   return (
     <Band id="top" tone="paper" container={false} className="min-h-[100svh] overflow-hidden py-0">
-      <div ref={rootRef} data-arrival-hidden className="hero-editorial-root">
+      <div ref={rootRef} data-hero-root data-arrival-hidden className="hero-editorial-root">
         <HeroField />
         <div className="shell hero-editorial-shell">
           <div data-hero-eyebrow className="hero-corner hero-corner-top-left">
@@ -159,50 +278,52 @@ export function Hero() {
           </div>
 
           <div data-hero-disciplines className="hero-corner hero-corner-top-right">
-            <p className="type-label tone-mute max-w-[24rem] text-right">{brand.disciplineLine}</p>
+            <p className="type-label tone-mute hero-disciplines-list">{brand.disciplineLine}</p>
             <span className="hero-signal" aria-hidden>
               <span className="hero-signal-dot" />
-              <span className="type-label-sm tone-mute">ACTIVE</span>
+              <span className="type-label-sm tone-mute">{brand.statusLabel}</span>
             </span>
           </div>
 
-          <div className="hero-wordmark-stage" aria-hidden="true">
-            <h1 data-hero-wordmark className="type-hero hero-wordmark tone-fg" aria-label={brand.wordmark}>
+          {/*
+            The stage is decoration; the heading inside it is the page's only
+            <h1> and must stay exposed to assistive technology. The previous cut
+            put `aria-hidden` on this wrapper, which swallowed the heading.
+          */}
+          <div className="hero-wordmark-stage">
+            <h1 data-hero-wordmark aria-label={brand.wordmark} className="type-hero hero-wordmark tone-fg">
               <span className="hero-wordmark-mask hero-wordmark-mask-v">
-                <span data-hero-wordmark-v className="hero-wordmark-letter hero-wordmark-letter-v">V</span>
+                <span data-hero-wordmark-v aria-hidden className="hero-wordmark-letter hero-wordmark-letter-v">V</span>
               </span>
-              <span data-hero-wordmark-c className="hero-wordmark-letter hero-wordmark-letter-c">C</span>
+              <span data-hero-wordmark-c aria-hidden className="hero-wordmark-letter hero-wordmark-letter-c">C</span>
             </h1>
           </div>
 
           <div data-hero-index className="hero-corner hero-corner-bottom-left">
             <span className="hero-index-number">01</span>
-            <span className="type-label tone-mute mt-2 block">{brand.heroEyebrow}</span>
+            <span data-hero-index-eyebrow className="type-label tone-mute mt-2 block">{brand.heroEyebrow}</span>
             <span className="type-label tone-mute mt-1 block">2026</span>
-            <div data-hero-hint className="hero-scroll-hint mt-8">
+            <div data-hero-hint className="hero-scroll-hint">
               <span aria-hidden className="hero-scroll-line" />
               <span className="type-label tone-mute"><BiOnly zh={brand.scrollHintZh} en={brand.scrollHint} /></span>
             </div>
           </div>
 
           <div data-hero-statement className="hero-definition">
-            <div className="hero-definition-lines" aria-label={brand.definitionZh}>
-              {definitionLines.map((line, lineIndex) => (
-                <p key={line} data-hero-definition-line className="hero-definition-line type-display tone-fg">
-                  <span data-lang-zh>{line}</span>
-                  <span data-lang-en>{definitionEnglishLines[lineIndex] ?? brand.definitionEn}</span>
+            <div className="hero-definition-lines">
+              {definitionPairs.map((line) => (
+                <p key={line.zh} data-hero-definition-line className="hero-definition-line type-display tone-fg">
+                  <Bi as={null} zh={line.zh} en={line.en} hideSecondary />
                 </p>
               ))}
             </div>
-            <p data-hero-definition-echo className="type-label tone-mute mt-5 max-w-[34rem]">
-              <span data-lang-zh>{brand.definitionEn}</span>
-              <span data-lang-en>{brand.definitionZh}</span>
+            <p data-hero-definition-echo className="type-label tone-mute hero-definition-echo">
+              <Bi as={null} zh={brand.definitionEn} en={brand.definitionZh} hideSecondary />
             </p>
-            <div data-hero-slogan className="hero-slogan mt-7">
-              {slogan.zhLines.map((line, index) => (
+            <div data-hero-slogan className="hero-slogan">
+              {slogan.lines.map((line, index) => (
                 <p key={line} className="hero-slogan-line type-md type-display tone-fg">
-                  <span data-lang-zh>{line}</span>
-                  <span data-lang-en>{slogan.lines[index]}</span>
+                  <Bi as={null} zh={slogan.zhLines[index]} en={line} hideSecondary />
                 </p>
               ))}
             </div>

@@ -38,7 +38,24 @@ export const brand = {
   /** Fixed brand line — do not paraphrase in components. */
   definitionZh: '维C 是一个跨越产品、视觉、3D 与 AI 创意的独立设计单元。',
   definitionEn: 'An independent creative unit working across product, visual, 3D and AI.',
+  /**
+   * The definition pre-broken into the three lines the hero sets — middle line
+   * longest, which is what gives the block its shape.
+   *
+   * Spelled out instead of derived: splitting `definitionZh` on a lookahead
+   * regex yielded three Chinese lines but only two English ones, so English mode
+   * printed the whole sentence again as a third line. Explicit pairs make the
+   * two languages unable to drift.
+   */
+  definitionLinesZh: ['维C 是一个跨越', '产品、视觉、3D 与 AI 创意', '的独立设计单元。'],
+  definitionLinesEn: [
+    'An independent creative unit',
+    'working across product, visual,',
+    '3D and AI.',
+  ],
   disciplineLine: 'PRODUCT / VISUAL / 3D / DIGITAL / AI',
+  /** Status marker beside the hero's signal dot. */
+  statusLabel: 'ACTIVE',
   heroEyebrow: 'INDEPENDENT CREATIVE UNIT',
   heroEyebrowZh: '独立创意单元',
   heroSubline: 'WE MAKE IDEAS VISIBLE.',
@@ -51,6 +68,22 @@ export const slogan = {
   lines: ['YOU BRING THE BRIEF.', 'WE FIGURE OUT THE REST.'],
   zh: '把需求交给 VC，剩下的交给我们。',
   zhLines: ['把需求交给 VC，', '剩下的交给我们。'],
+} as const;
+
+/**
+ * The opening sequence.
+ *
+ * Six greetings is a ceiling, not a sample: enough languages to read as "the
+ * world says hello", few enough that it never becomes a language parade. The
+ * copy lives here like every other string on the site — the first cut inlined it
+ * in the component, which is the one thing this project's content model forbids.
+ */
+export const intro = {
+  words: ['你好。', 'HELLO.', 'BONJOUR.', 'こんにちは。', '안녕하세요.', 'HOLA.'],
+  /** The last beat — the wordmark itself, which then grows into the hero. */
+  finalWord: 'VC',
+  /** Corner mark. Decoration only, so it never appears in the counter. */
+  signature: 'VC DESIGN',
 } as const;
 
 /**
