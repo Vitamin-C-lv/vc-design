@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { openGraphDefaults } from '@/app/metadata';
 import { Diagram } from '@/components/diagrams/Diagram';
 import { Reveal } from '@/components/motion/Reveal';
 import { Bi, BiOnly } from '@/components/i18n/Bi';
@@ -9,11 +10,19 @@ import { lab, seo } from '@/content/site';
 export const metadata: Metadata = {
   title: `${lab.eyebrow} — ${seo.title}`,
   description: lab.body,
+  alternates: { canonical: '/lab' },
+  openGraph: {
+    ...openGraphDefaults,
+    title: `${lab.eyebrow} — ${seo.title}`,
+    description: lab.body,
+    type: 'website',
+    url: '/lab',
+  },
 };
 
 export default function LabPage() {
   return (
-    <main>
+    <>
       <Band tone="paper" className="grid-field" innerClassName="min-h-[72svh] flex flex-col justify-center">
         <div className="meta-row meta-row-start">
           <BiOnly zh="技术实验场" en={lab.eyebrow} className="type-label tone-mute" />
@@ -128,6 +137,6 @@ export default function LabPage() {
       <Band tone="ink" className="band-curve-top">
         <p className="type-label-sm tone-mute max-w-[72ch]">{lab.disclosureNote}</p>
       </Band>
-    </main>
+    </>
   );
 }

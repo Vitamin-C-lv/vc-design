@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { openGraphDefaults } from '@/app/metadata';
 import { VcImage } from '@/components/media/VcImage';
 import { MediaLinkBadge } from '@/components/primitives/MediaLinkBadge';
 import { Reveal } from '@/components/motion/Reveal';
@@ -15,6 +16,14 @@ import { pad2 } from '@/lib/utils';
 export const metadata: Metadata = {
   title: `${secondaryNav[1].label} — ${seo.title}`,
   description: brand.definitionZh,
+  alternates: { canonical: '/work' },
+  openGraph: {
+    ...openGraphDefaults,
+    title: `${secondaryNav[1].label} — ${seo.title}`,
+    description: brand.definitionZh,
+    type: 'website',
+    url: '/work',
+  },
 };
 
 const technicalTags = new Set(['AI', 'VR', 'RAG', '3D', 'WEB']);
@@ -148,7 +157,7 @@ function MoreWorkEntry({ item, index }: { item: (typeof moreWorkItems)[number]; 
 
 export default function WorkPage() {
   return (
-    <main>
+    <>
       <Band tone="paper" className="grid-field" innerClassName="min-h-[68svh] flex flex-col justify-center">
         <div className="meta-row meta-row-start">
           <BiOnly zh="全部作品" en="ALL WORK" className="type-label tone-mute" />
@@ -215,6 +224,6 @@ export default function WorkPage() {
           </ArrowLink>
         </div>
       </Band>
-    </main>
+    </>
   );
 }
