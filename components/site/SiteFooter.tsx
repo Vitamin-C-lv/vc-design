@@ -9,7 +9,7 @@ export function SiteFooter() {
       <Band
         tone="ink"
         as="div"
-        className="band-curve-top pb-8 pt-20 md:pb-10 md:pt-28"
+        className="band-curve-top band-curve-compact"
       >
         <div className="grid gap-16 lg:grid-cols-[minmax(0,1.25fr)_minmax(30rem,1fr)] lg:gap-24">
           <div>

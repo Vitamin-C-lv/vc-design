@@ -471,17 +471,51 @@
     border-top: 0;
   }
 
-  /* A soft elliptical hand-off between two bands, used where the page moves
-     from the light body into a dark closing act. Amplitude is expressed in svh
-     so the curve keeps its proportion on tall phones instead of flattening. */
-  .band-curve-top {
-    border-top-left-radius: 50% var(--band-curve-height, 14svh);
-    border-top-right-radius: 50% var(--band-curve-height, 14svh);
+  /*
+   * A parabolic hand-off between bands.
+   *
+   * The SVG overlay is emitted by Band when one of the legacy curve classes is
+   * present, so existing callers keep their API. Its control point is extended
+   * to -100 / 200 so the CSS height is the actual arch height (not half of it),
+   * while the normalized curve still gives 64% of the rise by x = 0.2W.
+   * `svh` keeps the shape proportional on tall phones, and the custom property
+   * remains GSAP's single scroll-driven input on the home page.
+   */
+  .band.band-curve-top,
+  .band.band-curve-bottom {
+    background-color: var(--curve-underlay-bg, var(--color-paper));
+    padding-block: 0;
   }
 
-  .band-curve-bottom {
-    border-bottom-left-radius: 50% 14svh;
-    border-bottom-right-radius: 50% 14svh;
+  .band-curve-svg {
+    display: block;
+    width: 100%;
+    height: var(--band-curve-height, 18svh);
+    color: var(--tone-bg);
+    pointer-events: none;
+  }
+
+  .band-curve-content {
+    position: relative;
+    z-index: 1;
+    background-color: var(--tone-bg);
+    padding-block: clamp(5rem, 11vw, 12rem);
+  }
+
+  .band-curve-compact > .band-curve-content {
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+  }
+
+  .band-curve-compact {
+    --curve-underlay-bg: var(--color-ink);
+  }
+
+  @media (min-width: 48rem) {
+    .band-curve-compact > .band-curve-content {
+      padding-top: 7rem;
+      padding-bottom: 2.5rem;
+    }
   }
 
   /* --- Reference devices ---------------------------------------------------

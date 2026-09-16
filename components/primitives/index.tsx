@@ -28,6 +28,26 @@ export function Container({
 
 export type Tone = 'ink' | 'paper';
 
+type BandCurve = 'top' | 'bottom';
+
+/** The curve is geometry, not content: it must remain visible without JS. */
+function BandCurveOverlay({ position }: { position: BandCurve }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={cx('band-curve-svg', position === 'top' ? 'band-curve-svg-top' : 'band-curve-svg-bottom')}
+      focusable="false"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+    >
+      <path
+        d={position === 'top' ? 'M0,100 Q50,-100 100,100 Z' : 'M0,0 Q50,200 100,0 Z'}
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 /**
  * A full-width band of the page.
  *
@@ -55,6 +75,12 @@ export function Band({
   /** Optional per-project accent injected as `--tone-accent`. */
   accent?: string;
 }) {
+  const curveToken = className
+    ?.split(/\s+/)
+    .find((token) => token === 'band-curve-top' || token === 'band-curve-bottom');
+  const curve: BandCurve | undefined =
+    curveToken === 'band-curve-top' ? 'top' : curveToken === 'band-curve-bottom' ? 'bottom' : undefined;
+
   return (
     <Tag
       id={id}
@@ -62,11 +88,14 @@ export function Band({
       className={cx('band', className)}
       style={accent ? ({ '--tone-accent': accent } as React.CSSProperties) : undefined}
     >
-      {container ? (
-        <Container className={innerClassName}>{children}</Container>
-      ) : (
-        <div className={innerClassName}>{children}</div>
-      )}
+      {curve ? <BandCurveOverlay position={curve} /> : null}
+      <div className={curve ? 'band-curve-content' : undefined}>
+        {container ? (
+          <Container className={innerClassName}>{children}</Container>
+        ) : (
+          <div className={innerClassName}>{children}</div>
+        )}
+      </div>
     </Tag>
   );
 }
