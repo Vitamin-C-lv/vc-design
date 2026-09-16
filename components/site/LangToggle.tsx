@@ -74,8 +74,14 @@ export function LangToggle({ className }: { className?: string }) {
             type="button"
             onClick={() => applyLang(code)}
             aria-pressed={active}
-            className="type-label-sm inline-flex min-h-9 items-center px-1.5 transition-opacity duration-300"
-            style={{ opacity: active ? 1 : 0.45 }}
+            className="type-label-sm tone-fg inline-flex min-h-9 items-center px-1.5 transition-opacity duration-300"
+            /**
+             * 0.62, not 0.45: the inactive language is still a live control, and at
+             * 0.45 it measured 3.1:1 against a paper band — under the 4.5:1 bar for
+             * text this size. The hierarchy is carried by the active item sitting at
+             * full opacity, not by making the other one hard to read.
+             */
+            style={{ opacity: active ? 1 : 0.62 }}
           >
             {code === 'zh' ? '中文' : 'EN'}
           </button>

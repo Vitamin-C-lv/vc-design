@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import type { ParticleSequence } from '@/content/types';
 import { ParticleVessel } from '@/components/qinghua/ParticleVessel';
 import { Bi, BiOnly } from '@/components/i18n/Bi';
@@ -29,7 +29,31 @@ export function ParticleShowcase({
   className?: string;
 }) {
   const [active, setActive] = useState(0);
+  const instanceId = useId().replace(/:/g, '');
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const stage = sequence.stages[active] ?? sequence.stages[0];
+  const panelId = `particle-stage-panel-${instanceId}`;
+  const activeTabId = `particle-stage-tab-${instanceId}-${active}`;
+
+  function handleStageKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
+    const lastIndex = sequence.stages.length - 1;
+    let nextIndex: number | null = null;
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+      nextIndex = index === lastIndex ? 0 : index + 1;
+    } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+      nextIndex = index === 0 ? lastIndex : index - 1;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = lastIndex;
+    }
+
+    if (nextIndex === null || nextIndex === index) return;
+    event.preventDefault();
+    setActive(nextIndex);
+    tabRefs.current[nextIndex]?.focus();
+  }
 
   // Prefer a mid-size WebP over the largest JPEG: the fallback is shown on weak
   // devices and on WebGL failure, which is exactly when a 300KB JPEG hurts.
@@ -82,13 +106,19 @@ export function ParticleShowcase({
             return (
               <button
                 key={s.id}
+                id={`particle-stage-tab-${instanceId}-${i}`}
                 type="button"
                 role="tab"
                 aria-selected={selected}
-                aria-controls="particle-stage-panel"
+                aria-controls={panelId}
+                tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(i)}
+                onKeyDown={(event) => handleStageKeyDown(event, i)}
+                ref={(element) => {
+                  tabRefs.current[i] = element;
+                }}
                 className={cx(
-                  'group/stage flex w-full min-h-14 items-center gap-4 border-b border-[var(--tone-line)] py-3 text-left transition-colors duration-400',
+                  'group/stage flex w-full min-h-14 items-center gap-4 border-b border-[var(--tone-line)] py-3 text-left transition-colors duration-400 focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--tone-accent)]',
                   selected ? 'tone-fg' : 'tone-mute hover:tone-fg',
                 )}
               >
@@ -139,10 +169,11 @@ export function ParticleShowcase({
 
       {/* ---- Live render ---- */}
       <div
-        id="particle-stage-panel"
+        id={panelId}
         role="tabpanel"
-        aria-label={`${stage.zh} ${stage.en}`}
-        className="min-w-0 lg:col-span-7"
+        aria-labelledby={activeTabId}
+        tabIndex={0}
+        className="min-w-0 lg:col-span-7 focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--tone-accent)]"
       >
         <Reveal variant="masked" duration={1.1}>
           <div className="relative">

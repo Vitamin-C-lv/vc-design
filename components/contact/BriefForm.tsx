@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ArrowLink } from '@/components/primitives/ArrowLink';
 import { Bi } from '@/components/i18n/Bi';
 import { VcImage } from '@/components/media/VcImage';
@@ -135,6 +135,7 @@ export function BriefForm() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [detail, setDetail] = useState('');
   const [status, setStatus] = useState<FormStatus>('idle');
+  const intentRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const selectedIntent = contact.intents.find((intent) => intent.id === selectedId);
 
   function selectIntent(id: string) {
@@ -143,6 +144,30 @@ export function BriefForm() {
     setSelectedId(intent.id);
     setDetail(intent.prefill);
     setStatus('idle');
+  }
+
+  function handleIntentKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
+    const lastIndex = contact.intents.length - 1;
+    let nextIndex: number | null = null;
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+      nextIndex = index === lastIndex ? 0 : index + 1;
+    } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+      nextIndex = index === 0 ? lastIndex : index - 1;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = lastIndex;
+    } else if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      selectIntent(contact.intents[index].id);
+      return;
+    }
+
+    if (nextIndex === null || nextIndex === index) return;
+    event.preventDefault();
+    selectIntent(contact.intents[nextIndex].id);
+    intentRefs.current[nextIndex]?.focus();
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -195,11 +220,16 @@ export function BriefForm() {
               <button
                 key={intent.id}
                 type="button"
+                ref={(element) => {
+                  intentRefs.current[index] = element;
+                }}
                 role="radio"
                 aria-checked={checked}
+                tabIndex={checked || (selectedId === null && index === 0) ? 0 : -1}
                 onClick={() => selectIntent(intent.id)}
+                onKeyDown={(event) => handleIntentKeyDown(event, index)}
                 className={cx(
-                  'flex min-h-11 w-full min-w-0 items-center justify-between gap-5 py-5 text-left transition-colors duration-500',
+                  'flex min-h-11 w-full min-w-0 items-center justify-between gap-5 py-5 text-left transition-colors duration-500 focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--tone-accent)]',
                   checked ? 'text-[var(--tone-accent)]' : 'text-[var(--tone-fg-2)] hover:text-[var(--tone-fg)]',
                 )}
               >

@@ -16,6 +16,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
   /**
    * The header floats over whatever band is beneath it, so it borrows that
    * band's tone. Without this, a page that opens on a light band renders a
@@ -109,12 +110,13 @@ export function SiteHeader() {
           <div className="flex items-center gap-3 lg:gap-5">
             <LangToggle />
             <button
+              ref={menuTriggerRef}
               type="button"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
               onClick={() => setMenuOpen((open) => !open)}
-              className="type-label link-underline inline-flex min-h-11 items-center lg:hidden"
+              className="type-label tone-fg link-underline inline-flex min-h-11 items-center lg:hidden"
             >
               {menuOpen ? '关闭' : '菜单'}
             </button>
@@ -123,7 +125,13 @@ export function SiteHeader() {
       </motion.header>
 
       <AnimatePresence>
-        {menuOpen ? <MobileMenu key="mobile-menu" onClose={() => setMenuOpen(false)} /> : null}
+        {menuOpen ? (
+          <MobileMenu
+            key="mobile-menu"
+            onClose={() => setMenuOpen(false)}
+            triggerRef={menuTriggerRef}
+          />
+        ) : null}
       </AnimatePresence>
     </>
   );

@@ -21,6 +21,7 @@ cd vc-site && npx next start -p 3000
 ```bash
 node scripts/qa/diag-load.mjs     # 只问一句"站点现在能不能打开"
 node scripts/qa/shoot.mjs         # 全站回归（最慢，几分钟）
+BASE=http://127.0.0.1:3000 node scripts/qa/verify-header-contrast.mjs
 ```
 
 ## 工具
@@ -41,6 +42,13 @@ node scripts/qa/shoot.mjs         # 全站回归（最慢，几分钟）
 | `verify-headline.mjs` | 标题逐行揭示的断行与首页列宽适配回归 | 案例页行拼回隐藏槽位里的完整 `titleZh`、切口不切拉丁单词、不以中文收尾标点开头且每行只占一视觉行；首页 390/768/1024/1280/1440/1728px 六档下四个旗舰标题每行只占一视觉行且不超 `container-type` 父列宽 |
 | `verify-reveal-instant.mjs` | 快滚门限 `data-reveal-instant` 不能两头失效：既不能误伤阅读速度下的揭示动画，也不能甩完不摘掉、导致全站从此没有揭示动画 | 静止时 `rise`/`fade` 过渡为 `0.9s, 1.044s`、`masked` 子元素为 `1.05s`；猛甩期间两者塌成 `0s` 且标记出现；停下后标记摘掉、过渡恢复；阅读速度（110px/280ms）全程标记**不出现**且能采到真实的动画中间态（opacity 或 clip-path）。时序敏感，单次失败先重跑一次再判定 |
 | `verify-share-card.mjs` | 首页社交分享卡与 canonical metadata | `og:title` / `og:description` / `og:url` / 绝对 `og:image`、1200×630 声明与真实 PNG 像素、Twitter card、绝对 canonical；线上 `BASE` 另验 `og:url` host 一致 |
+| `verify-header-contrast.mjs` | 页头控件在 tone 翻转时的真实像素对比度 | `phone-390` / `desktop-1600` × `/`、`/work`、`/lab` × 浅色顶部 / 深色段落；截图裁剪后逐个可见页头控件按 WCAG 计算，全部 `>= 4.5:1` |
+
+`verify-header-contrast.mjs` 防止语言开关或移动菜单按钮丢失 `tone-fg`，再次继承 body 的骨白色并在浅色段落上变成白字白底。它必须连接已运行的站点，例如：
+
+```bash
+BASE=http://127.0.0.1:3000 node scripts/qa/verify-header-contrast.mjs
+```
 
 ## 环境变量
 

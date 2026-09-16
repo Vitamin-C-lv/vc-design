@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useRef } from 'react';
+import type { RefObject } from 'react';
 import type { Route } from 'next';
 import { motion } from 'motion/react';
 import { BiOnly } from '@/components/i18n/Bi';
@@ -22,16 +24,133 @@ function MenuLink({ href, children, onClose }: { href: string; children: React.R
         }
         onClose();
       }}
-      className="group inline-flex min-h-11 items-center"
+      className="group inline-flex min-h-11 items-center focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--tone-accent)]"
     >
       {children}
     </Link>
   );
 }
 
-export function MobileMenu({ onClose }: { onClose: () => void }) {
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function useMenuFocus(
+  panelRef: RefObject<HTMLDivElement | null>,
+  triggerRef: RefObject<HTMLElement | null>,
+) {
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    const trigger = triggerRef.current;
+    const backgroundElements: HTMLElement[] = [];
+    const previousInert = new Map<HTMLElement, boolean>();
+    let current: HTMLElement = panel;
+
+    // Inert every branch outside the dialog without inerting its ancestors.
+    while (current.parentElement) {
+      const parent = current.parentElement;
+      Array.from(parent.children).forEach((sibling) => {
+        if (!(sibling instanceof HTMLElement) || sibling === current) return;
+
+        // Keep the existing header toggle clickable as the dialog's close control,
+        // while making the other header controls inert.
+        if (trigger && sibling.contains(trigger)) {
+          sibling.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR).forEach((element) => {
+            if (element !== trigger && !trigger.contains(element)) {
+              backgroundElements.push(element);
+            }
+          });
+          return;
+        }
+
+        backgroundElements.push(sibling);
+      });
+      current = parent;
+      if (parent === document.body) break;
+    }
+
+    backgroundElements.forEach((element) => {
+      previousInert.set(element, element.inert);
+      element.inert = true;
+    });
+
+    const panelFocusableElements = () => Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+    const focusableElements = () => {
+      const elements = panelFocusableElements();
+      if (trigger?.isConnected) elements.push(trigger);
+      return elements;
+    };
+    const focusFirst = () => {
+      const first = panelFocusableElements()[0];
+      if (first) first.focus();
+      else {
+        panel.tabIndex = -1;
+        panel.focus();
+      }
+    };
+
+    const trapFocus = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+
+      const focusable = focusableElements();
+      if (focusable.length === 0) {
+        event.preventDefault();
+        panel.focus();
+        return;
+      }
+
+      const currentIndex = focusable.indexOf(document.activeElement as HTMLElement);
+      const triggerIndex = trigger ? focusable.indexOf(trigger) : -1;
+      if (currentIndex === -1) {
+        event.preventDefault();
+        (event.shiftKey ? focusable[focusable.length - 1] : focusable[0]).focus();
+      } else if (trigger && triggerIndex >= 0 && currentIndex === triggerIndex) {
+        event.preventDefault();
+        if (event.shiftKey) {
+          (focusable[triggerIndex - 1] ?? panel).focus();
+        } else {
+          focusable[0].focus();
+        }
+      } else if (trigger && triggerIndex >= 0 && !event.shiftKey && currentIndex === triggerIndex - 1) {
+        event.preventDefault();
+        trigger.focus();
+      } else if (event.shiftKey && currentIndex === 0) {
+        event.preventDefault();
+        (triggerIndex >= 0 && trigger ? trigger : focusable[focusable.length - 1]).focus();
+      } else if (!event.shiftKey && currentIndex === focusable.length - 1) {
+        event.preventDefault();
+        focusable[0].focus();
+      }
+    };
+
+    const frame = window.requestAnimationFrame(focusFirst);
+    document.addEventListener('keydown', trapFocus);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      document.removeEventListener('keydown', trapFocus);
+      backgroundElements.forEach((element) => {
+        element.inert = previousInert.get(element) ?? false;
+      });
+      if (trigger?.isConnected) trigger.focus();
+    };
+  }, [panelRef, triggerRef]);
+}
+
+export function MobileMenu({
+  onClose,
+  triggerRef,
+}: {
+  onClose: () => void;
+  triggerRef: RefObject<HTMLElement | null>;
+}) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  useMenuFocus(panelRef, triggerRef);
+
   return (
     <motion.div
+      ref={panelRef}
       id="mobile-menu"
       role="dialog"
       aria-modal="true"
