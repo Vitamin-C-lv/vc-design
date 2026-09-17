@@ -244,8 +244,11 @@ async function runOpeningFrames(browser, viewport) {
     if (intro.hasIntro) {
       // Frame A must show a word that has arrived: step the deterministic clock
       // until the page reports one settled, rather than trusting a fixed delay.
+      // The budget is wide because the opening now holds a blank first beat —
+      // 你好。 does not settle until ~0.9s (1.0s on a phone), and a tighter loop
+      // silently captured an empty stage instead.
       let settled = await settledIntroWord(page);
-      for (let i = 0; i < 30 && !settled; i += 1) {
+      for (let i = 0; i < 150 && !settled; i += 1) {
         await advance(page, 20);
         settled = await settledIntroWord(page);
       }

@@ -38,6 +38,14 @@ const VIEWPORTS = [
 
 async function settle(page) {
   await page.waitForLoadState('networkidle').catch(() => {});
+  // Home plays an opening before the hero is allowed on screen, so a fixed wait
+  // shorter than the opening screenshots the intro panel instead of the page.
+  // Wait for the gate, then settle.
+  await page
+    .waitForFunction(() => document.documentElement.dataset.intro !== 'playing', null, {
+      timeout: 9000,
+    })
+    .catch(() => {});
   await page.waitForTimeout(1800);
   // Walk the page so lazy media enters the viewport and reveals fire.
   await page.evaluate(async () => {

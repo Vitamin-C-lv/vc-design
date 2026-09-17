@@ -12,29 +12,65 @@ import { gsap } from '@/lib/motion/gsap';
 import { intro } from '@/content/site';
 
 /**
- * Absolute start of every beat, in seconds, followed by the hand-over.
+ * The opening is directed in seconds, not in fractions of a beat.
  *
- * These are art direction rather than arithmetic — the ladder accelerates
- * (0.37s, 0.34s, 0.31s, 0.30s, 0.30s, 0.30s) so the sequence reads as the
- * world's greetings collapsing into one wordmark. The first entry is late on
- * purpose: the blank beat before 你好。 is what makes the arrival feel deliberate
- * instead of accidental.
+ * The previous cut was already moving at 0.18s: the page had not finished
+ * arriving and the first greeting was on its way out. The cure is not "make
+ * everything slower" — it is one first beat with room to land:
+ *
+ *   0.00 – 0.28   warm paper, nothing on it (the panel only settles brighter)
+ *   0.28          `01 / 06` and `VC DESIGN` fade in: something is coming
+ *   0.68          你好。          ← the first beat, held 0.36s
+ *   1.40          HELLO.          ← from here the ladder gathers speed
+ *   1.82          BONJOUR.
+ *   2.20          こんにちは。
+ *   2.56          안녕하세요.
+ *   2.90          HOLA.
+ *   3.24          VC.             ← unchanged, still tight into the hand-over
+ *   3.68          hand-over
+ *
+ * The blank beat is the whole point: the visitor gets to arrive first, and the
+ * sequence starts after that. The first entry carries much the longest hold
+ * (0.36s against 0.12–0.15s further down) because it is the beat where the rule
+ * of the sequence is learned — "it is greeting me" has to land before "and in
+ * every language" can.
  */
-const BEATS = [0.18, 0.55, 0.89, 1.2, 1.5, 1.8, 2.1] as const;
-const HANDOVER = 2.55;
+const BEATS = [0.68, 1.4, 1.82, 2.2, 2.56, 2.9, 3.24] as const;
+const HANDOVER = 3.68;
+
+/** A phone gets a longer first beat: the tap, the browser chrome collapsing and
+ *  the first paint all happen under the opening, so it needs a little more room
+ *  before the first greeting — not a longer animation. */
+const PHONE_LEAD = 0.1;
+
+/** When the counter and the signature arrive, ahead of the first greeting. */
+const LABELS_IN = 0.28;
+const LABELS_IN_DURATION = 0.5;
 
 /**
- * How one beat is spent: rise, rest, leave — expressed as fractions of the gap
- * to the next beat, so the three always add up and no beat can drift.
+ * Rise (mask reveal) and hold (motionless) per greeting, in seconds.
  *
- * The previous cut exited every word twice (once at the end of its own beat, and
- * again as the "previous" word of the next one), which burned the gap as dead
- * air. Here a word leaves over exactly the same interval in which the next one
- * arrives, so one word is in motion at a time and there is never an empty stage.
+ * The exit is whatever is left of the beat, so a word always clears the mask
+ * exactly as the next one arrives — one word in motion at a time, never an
+ * empty stage. Written as seconds rather than shares of the beat because the
+ * rhythm *is* the direction here: the hold shrinks 0.36 → 0.12 while the rise
+ * tightens 0.22 → 0.13, so the greetings visibly gather speed instead of all
+ * reading at one tempo.
  */
-const RISE = 0.42;
-const REST = 0.26;
-const LEAVE = 0.32;
+const RISE_S = [0.22, 0.16, 0.15, 0.14, 0.13, 0.13] as const;
+const HOLD_S = [0.36, 0.15, 0.13, 0.12, 0.12, 0.12] as const;
+
+/** How long the wordmark takes to land. The dot leaves the moment it does: the
+ *  outgoing mark becomes plain `VC`, which is what it is about to be. */
+const FINAL_RISE = 0.19;
+
+/** A hair darker than the panel's own tone — the opening's only "breath". */
+const dim = (rgb: string) => {
+  const [r, g, b] = (rgb.match(/[\d.]+/g) ?? []).map(Number);
+  if (r === undefined || g === undefined || b === undefined) return rgb;
+  const k = 0.972;
+  return `rgb(${Math.round(r * k)}, ${Math.round(g * k)}, ${Math.round(b * k)})`;
+};
 
 /** Two-digit mark for the corner counter. */
 const pad = (value: number) => String(value).padStart(2, '0');
@@ -69,7 +105,12 @@ function OpeningIntroSequence() {
     const wordNodes = Array.from(root.querySelectorAll<HTMLElement>('[data-intro-word]'));
     const textNodes = Array.from(root.querySelectorAll<HTMLElement>('[data-intro-word-text]'));
     const counter = root.querySelector<HTMLElement>('[data-intro-counter]');
+    const signature = root.querySelector<HTMLElement>('[data-intro-signature]');
     const finalDot = root.querySelector<HTMLElement>('[data-intro-final-dot]');
+
+    // The counter and the signature arrive together, and the signature is
+    // decoration: if it ever goes missing the opening still plays.
+    const labels = [counter, signature].filter((node): node is HTMLElement => node !== null);
 
     // Never strand the first screen. If the markup is not what this sequence
     // expects, hand over immediately and let the hero play its own reveal —
@@ -84,21 +125,55 @@ function OpeningIntroSequence() {
       return;
     }
 
+    /*
+     * Every absolute time shifts by the phone lead, so the rhythm is identical
+     * on both and only the blank first beat differs.
+     */
+    const lead = window.matchMedia('(max-width: 767px)').matches ? PHONE_LEAD : 0;
+    const schedule = BEATS.map((beat) => beat + lead);
+    const handover = HANDOVER + lead;
+
     const timeline = gsap.timeline();
     gsap.set(wordNodes, { autoAlpha: 0 });
     gsap.set(textNodes, { yPercent: 110 });
     gsap.set(finalDot, { opacity: 1 });
+    gsap.set(labels, { autoAlpha: 0 });
 
-    BEATS.forEach((beat, index) => {
-      const isFinal = index === BEATS.length - 1;
-      const gap = (isFinal ? HANDOVER : BEATS[index + 1]) - beat;
+    /*
+     * The blank first beat is not a dead frame. The panel settles from a hair
+     * darker into its own bone tone — about 3% of luminance, nothing moves — so
+     * the screen reads as coming up rather than as a slide starting.
+     */
+    const bone = getComputedStyle(root).backgroundColor;
+    timeline.fromTo(
+      root,
+      { backgroundColor: dim(bone) },
+      { backgroundColor: bone, duration: 0.9, ease: 'power2.out' },
+      lead,
+    );
+
+    // A hint that something is coming, ~0.4s before the first word.
+    timeline.to(
+      labels,
+      { autoAlpha: 1, duration: LABELS_IN_DURATION, ease: 'power2.out' },
+      lead + LABELS_IN,
+    );
+
+    schedule.forEach((beat, index) => {
+      const isFinal = index === schedule.length - 1;
+      const gap = (isFinal ? handover : schedule[index + 1]) - beat;
+      const rise = isFinal ? FINAL_RISE : RISE_S[index];
+      const hold = isFinal ? 0 : HOLD_S[index];
+      // Whatever is left of the beat is the exit. `max` is a guard against a
+      // future edit leaving no room for the exit, not a tuning knob.
+      const leave = Math.max(0.04, gap - rise - hold);
 
       timeline.set(wordNodes[index], { autoAlpha: 1 }, beat);
       timeline.to(
         textNodes[index],
         {
           yPercent: 0,
-          duration: gap * RISE,
+          duration: rise,
           ease: 'power3.out',
           onStart: () => {
             if (isFinal) return;
@@ -111,13 +186,13 @@ function OpeningIntroSequence() {
       if (!isFinal) {
         timeline.to(
           textNodes[index],
-          { yPercent: -110, duration: gap * LEAVE, ease: 'power2.in' },
-          beat + gap * (RISE + REST),
+          { yPercent: -110, duration: leave, ease: 'power2.in' },
+          beat + rise + hold,
         );
       }
     });
 
-    const finalBeat = BEATS[BEATS.length - 1];
+    const finalBeat = schedule[schedule.length - 1];
 
     /*
      * The counter belongs to the greetings, not to the wordmark, and it leaves
@@ -135,8 +210,8 @@ function OpeningIntroSequence() {
      * complete `VC.`. Finishing the counter before the mark lands is what makes
      * the last frame of the opening nothing but the wordmark.
      */
-    const lastGreeting = BEATS[BEATS.length - 2];
-    const greetingExit = lastGreeting + (finalBeat - lastGreeting) * (RISE + REST);
+    const lastGreeting = schedule[schedule.length - 2];
+    const greetingExit = lastGreeting + RISE_S[RISE_S.length - 1] + HOLD_S[HOLD_S.length - 1];
     timeline.to(counter, { opacity: 0, duration: 0.2, ease: 'power2.out' }, greetingExit);
 
     timeline.call(
@@ -159,12 +234,12 @@ function OpeningIntroSequence() {
     // The dot goes first: with it gone the outgoing mark is plain `VC`, which is
     // exactly what it is about to become. The layer then fades out *under* the
     // hero, so the wordmark is never absent — it only changes owner.
-    const dotOut = finalBeat + 0.19;
+    const dotOut = finalBeat + FINAL_RISE;
     const layerOut = dotOut + 0.12;
     timeline.to(finalDot, { opacity: 0, duration: 0.12, ease: 'power3.out' }, dotOut);
     timeline.to(
       root,
-      { opacity: 0, duration: HANDOVER - layerOut, ease: 'power2.out', onComplete: finishIntro },
+      { opacity: 0, duration: handover - layerOut, ease: 'power2.out', onComplete: finishIntro },
       layerOut,
     );
 
@@ -204,7 +279,9 @@ function OpeningIntroSequence() {
           );
         })}
       </div>
-      <div className="opening-intro-signature type-label-sm">{intro.signature}</div>
+      <div className="opening-intro-signature type-label-sm" data-intro-signature>
+        {intro.signature}
+      </div>
     </div>
   );
 }
