@@ -101,6 +101,7 @@ function OpeningIntroSequence() {
           duration: gap * RISE,
           ease: 'power3.out',
           onStart: () => {
+            if (isFinal) return;
             counter.textContent = `${pad(Math.min(index + 1, total))} / ${pad(total)}`;
           },
         },
@@ -117,6 +118,26 @@ function OpeningIntroSequence() {
     });
 
     const finalBeat = BEATS[BEATS.length - 1];
+
+    /*
+     * The counter belongs to the greetings, not to the wordmark, and it leaves
+     * with them.
+     *
+     * Six greetings count to `06 / 06`; the wordmark is not a seventh language,
+     * so leaving the counter up made it look like one more hello — and the
+     * alternative, `07 / 07`, would have been a lie about a list of six. It
+     * rides out with the last greeting's exit rather than the wordmark's
+     * arrival, because that is the moment the list it counts is over.
+     *
+     * The timing is the point: the final mark lands at `finalBeat + 0.19` and
+     * its dot leaves immediately after, so a fade started *at* the final beat
+     * was still on screen — faintly, but measurably — for the entire life of the
+     * complete `VC.`. Finishing the counter before the mark lands is what makes
+     * the last frame of the opening nothing but the wordmark.
+     */
+    const lastGreeting = BEATS[BEATS.length - 2];
+    const greetingExit = lastGreeting + (finalBeat - lastGreeting) * (RISE + REST);
+    timeline.to(counter, { opacity: 0, duration: 0.2, ease: 'power2.out' }, greetingExit);
 
     timeline.call(
       () => {

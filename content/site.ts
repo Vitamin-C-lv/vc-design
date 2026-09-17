@@ -71,6 +71,28 @@ export const slogan = {
 } as const;
 
 /**
+ * The kinetic bridge between the hero and the work.
+ *
+ * The hero already answers "who is VC" — it sets the whole definition — so this
+ * band must not answer it a second time. It answers the next question instead:
+ * what the unit actually does. Three verbs pass through, one at a time, and the
+ * locked slogan closes the band, so the black arch arrives on the end of a
+ * sentence rather than on a trailing edge.
+ *
+ * The verbs stay Latin because they are the art direction; the Chinese gloss
+ * carries the meaning, since Chinese is the language that has to be complete.
+ */
+export const bridge = {
+  eyebrow: 'HOW WE WORK',
+  eyebrowZh: '怎么做事',
+  words: [
+    { en: 'MAKE.', zh: '做出来' },
+    { en: 'SOLVE.', zh: '拆解清楚' },
+    { en: 'BUILD.', zh: '跑起来' },
+  ],
+} as const;
+
+/**
  * The opening sequence.
  *
  * Six greetings is a ceiling, not a sample: enough languages to read as "the

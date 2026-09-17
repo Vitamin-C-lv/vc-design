@@ -7,7 +7,6 @@ import { brand, slogan } from '@/content/site';
 import { useDeviceProfile } from '@/lib/motion/device';
 import { gsap } from '@/lib/motion/gsap';
 import { readIntroBox, whenIntroDone } from '@/lib/motion/introGate';
-import { playVcSignature } from '@/lib/motion/vcSignature';
 import { useGsapScope, useIsomorphicLayoutEffect } from '@/lib/motion/useGsap';
 import { HeroField } from './HeroField';
 
@@ -28,6 +27,24 @@ const definitionPairs = [
  * see the fit effect.
  */
 const MARK_FILL = 1.0;
+
+/**
+ * How far past its final size the wordmark travels on the way in, as a multiple
+ * of that final size — 1.13 = 113%.
+ *
+ * This is the one number behind "the opening's VC pushed the world open". It is
+ * an animation state only: the resting size is still whatever the fit measures,
+ * so the overshoot cannot move the composition. Below ~1.08 the inflation reads
+ * as a settle rather than as a push; above ~1.16 the V and the C are clipped by
+ * the viewport on a laptop and the wordmark stops reading as a wordmark.
+ */
+const MARK_OVERSHOOT = 1.13;
+
+/**
+ * The letter-spacing the opening sets its own words in. The hero starts here so
+ * the hand-over frame is identical in both layers.
+ */
+const INTRO_TRACK = '-0.035em';
 
 /** Below this width the wordmark is composed absolutely instead of by measurement. */
 const MEASURED_LAYOUT_QUERY = '(min-width: 768px)';
@@ -177,7 +194,16 @@ export function Hero() {
       gsap.set(statement, { opacity: 1, y: 0 });
       gsap.set(wordmark, { opacity: 1, x: 0, y: 0, scale: 1, transformOrigin: 'center center' });
       gsap.set([v, c], { xPercent: 0, yPercent: 0 });
-      gsap.set(wordmark, { '--vc-track': '-0.01em' });
+      /*
+       * The tracking starts at the value the *opening* was set in, not at the
+       * hero's own value. Handing over two words that are already spaced
+       * differently is a visible twitch at the exact frame the two layers swap,
+       * and that frame is the whole trick.
+       */
+      gsap.set(wordmark, { '--vc-track': INTRO_TRACK });
+      // The underprint is the last thing to arrive, not the first: the wordmark
+      // has to win one uninterrupted beat before the page has a texture.
+      gsap.set(field, { opacity: 0 });
 
       // Measure the final layout first, then apply the FLIP origin.
       const finalRect = wordmark.getBoundingClientRect();
@@ -189,25 +215,46 @@ export function Hero() {
       const startY = (introBox?.y ?? window.innerHeight / 2) - finalCenterY;
 
       gsap.set(wordmark, { x: startX, y: startY, scale: startScale });
-      const timeline = gsap.timeline();
-      timeline.to(wordmark, { x: 0, y: 0, scale: 1, duration: 1.35, ease: 'power3.out' }, 0);
-      timeline.to(eyebrow, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.16);
-      timeline.to(disciplines, { opacity: 1, y: 0, duration: 0.52, ease: 'power3.out' }, 0.28);
-      timeline.to(index, { opacity: 1, y: 0, duration: 0.52, ease: 'power3.out' }, 0.42);
 
-      timeline.call(() => {
-        playVcSignature({ v, c, track: wordmark });
-      }, [], 0.8);
+      /*
+       * The hand-over, in one object.
+       *
+       * It used to be a plain 1.35s `power3.out` from the opening's box to the
+       * final size, with the navigation, corners and grid fading up from 0.16s
+       * behind it. The result read as "the page appeared, then a logo grew":
+       * the visitor never got a frame in which the wordmark was the only thing
+       * happening.
+       *
+       * Now the mark inflates first, past its own final size, holds there for a
+       * beat, and is pulled back to the size the layout actually wants — and
+       * nothing else on the page moves until it has finished. The overshoot is
+       * entirely inside the animation: the resting state is the same 73.9% of
+       * the viewport it was before, measured by the same fit code.
+       */
+      const timeline = gsap.timeline();
+      timeline.to(
+        wordmark,
+        { x: 0, y: 0, scale: MARK_OVERSHOOT, duration: 0.27, ease: 'power2.out' },
+        0.15,
+      );
+      timeline.to(wordmark, { scale: 1, duration: 0.3, ease: 'power2.inOut' }, 0.65);
+      timeline.to(wordmark, { '--vc-track': '-0.01em', duration: 0.85, ease: 'power2.out' }, 0.15);
+
+      timeline.to(field, { opacity: 0.62, duration: 0.8, ease: 'power2.out' }, 0.3);
+      timeline.to(eyebrow, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.45);
+      timeline.to(disciplines, { opacity: 1, y: 0, duration: 0.52, ease: 'power3.out' }, 0.5);
+      timeline.to(index, { opacity: 1, y: 0, duration: 0.52, ease: 'power3.out' }, 0.55);
+
       definitionLines.forEach((line, lineIndex) => {
         timeline.to(
           line,
           { opacity: 1, y: 0, duration: 0.62, ease: 'power3.out' },
-          0.7 + lineIndex * 0.12,
+          0.6 + lineIndex * 0.12,
         );
       });
-      timeline.to(definitionEcho, { opacity: 1, y: 0, duration: 0.58, ease: 'power3.out' }, 1.06);
-      timeline.to(sloganBlock, { opacity: 1, y: 0, duration: 0.62, ease: 'power3.out' }, 1.31);
-      timeline.to(hint, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 1.44);
+      timeline.to(definitionEcho, { opacity: 1, y: 0, duration: 0.58, ease: 'power3.out' }, 1.0);
+      timeline.to(sloganBlock, { opacity: 1, y: 0, duration: 0.62, ease: 'power3.out' }, 1.25);
+      timeline.to(hint, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 1.38);
 
       const scrollTrigger = {
         trigger: root,
@@ -220,7 +267,21 @@ export function Hero() {
       gsap.to(v, { x: '-2.4vw', ease: 'none', scrollTrigger });
       gsap.to(c, { x: '2.4vw', ease: 'none', scrollTrigger });
       gsap.to(wordmark, { '--vc-track': '-0.08em', ease: 'none', scrollTrigger });
-      gsap.to(field, { scale: 1.04, opacity: 0.15, ease: 'none', scrollTrigger });
+      /*
+       * `fromTo` with `immediateRender: false`, not a plain `to`.
+       *
+       * A scrubbed `to` captures its start value when it is created — which is
+       * now before the entrance has brought the underprint up from 0, so the
+       * parallax fade would have been measured against an invisible element and
+       * the grid would never have returned. The explicit start value plus
+       * `immediateRender: false` leaves the entrance in charge until the
+       * visitor actually scrolls.
+       */
+      gsap.fromTo(
+        field,
+        { opacity: 0.62, scale: 1 },
+        { scale: 1.04, opacity: 0.15, ease: 'none', scrollTrigger, immediateRender: false },
+      );
     },
     {
       deps: [introDone, profile.ready, profile.static, profile.tier, profile.isCompact],
@@ -271,7 +332,7 @@ export function Hero() {
         <HeroField />
         <div className="shell hero-editorial-shell">
           <div data-hero-eyebrow className="hero-corner hero-corner-top-left">
-            <p className="type-label tone-fg">VC / 维C</p>
+            <p className="type-label tone-fg hero-corner-wordmark">VC / 维C</p>
             <Eyebrow marker={false} className="mt-2">
               <BiOnly zh={brand.heroEyebrowZh} en={brand.heroEyebrow} />
             </Eyebrow>

@@ -137,6 +137,11 @@ try {
         // hands over. Sampling at a fixed 1200ms caught the header mid-entrance
         // and reported every control as 1:1 — uniform paper, because the control
         // boxes were still empty. Wait for the gate instead of guessing.
+        //
+        // The wait is 2000ms, not 1200ms: the header now deliberately arrives
+        // 0.45s *after* the hand-over and takes 0.75s to get there, so a sample
+        // taken at 1200ms catches it at ~92% opacity and measures the tween
+        // instead of the resting state.
         await page
           .waitForFunction(
             () => document.documentElement.getAttribute('data-intro') !== 'playing',
@@ -144,7 +149,7 @@ try {
             { timeout: 10000 },
           )
           .catch(() => {});
-        await page.waitForTimeout(1200);
+        await page.waitForTimeout(2000);
 
         await assertTone(page, 'paper', 'light-band');
         const light = await measureHeader(page, viewport, 'light-band');

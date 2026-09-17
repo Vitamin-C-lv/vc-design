@@ -490,7 +490,10 @@
   .band-curve-svg {
     display: block;
     width: 100%;
-    height: var(--band-curve-height, 18svh);
+    /* `--band-curve-scale` is the phone-only correction: see the media query
+       below. It is 1 everywhere else, so the desktop arch is bit-for-bit what
+       it was. */
+    height: calc(var(--band-curve-height, 18svh) * var(--band-curve-scale, 1));
     color: var(--tone-bg);
     pointer-events: none;
     /* The path fills right up to the SVG's own edge, and that edge lands on a
@@ -508,6 +511,19 @@
   .band-curve-svg-bottom {
     margin-top: -1px;
     margin-bottom: 0;
+  }
+
+  /*
+   * The same arch height, drawn across a much narrower viewport, reads as a
+   * steep dome — on a phone the phone-60 frame looked like a black egg or a
+   * mountain rather than the near edge of a dark surface sliding in. Flattening
+   * it 17% on phones only is what restores "this is a plane, not a shape"; the
+   * desktop seam the user approved is deliberately left alone.
+   */
+  @media (max-width: 767px) {
+    .band-curve-svg {
+      --band-curve-scale: 0.83;
+    }
   }
 
   .band-curve-content {
@@ -609,6 +625,24 @@
      ------------------------------------------------------------------------ */
   html[data-js='on'][data-intro='playing'] [data-arrival-hidden] {
     visibility: hidden;
+  }
+
+  /*
+   * The fixed bar arrives last, and only after the opening has handed over.
+   *
+   * With scripting on it starts hidden and `[data-arrived]` reveals it: the
+   * arrival tween is what actually animates it in, and the attribute covers the
+   * two cases the tween does not — the SSR frame before the effect runs (which
+   * would otherwise flash a finished header over the opening) and devices where
+   * animation is switched off entirely, where the bar has to be simply
+   * *present*. The `noscript` rule inside the component handles no-JS.
+   */
+  html[data-js='on'] [data-site-header] {
+    opacity: 0;
+  }
+
+  html[data-js='on'] [data-site-header][data-arrived] {
+    opacity: 1;
   }
 
   .opening-intro {
@@ -886,6 +920,108 @@
     line-height: 1.14;
   }
 
+  /*
+   * The kinetic bridge (see BrandStatement).
+   *
+   * Static by default: three verbs in ordinary flow, which is what the server
+   * sends, what no-JS renders and what reduced motion keeps. Everything that
+   * turns it into a *stage* is gated behind `data-bridge-live`, an attribute
+   * only a device that can afford the scrub ever receives — so the fallback
+   * cannot become three display words stacked on top of each other, which is
+   * precisely what animating absolutely positioned children would produce if
+   * the script never ran.
+   *
+   * `.band.bridge-band` rather than `.bridge-band`: the two are equally
+   * specific, so the plain class would lose to `.band`'s own padding purely
+   * because `.band` is declared later in this file.
+   */
+  .band.bridge-band {
+    padding-block: 0;
+  }
+
+  .bridge-shell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(1.75rem, 3.5vw, 3rem);
+    min-height: 100svh;
+    padding-block: clamp(5rem, 9vw, 8rem);
+  }
+
+  .bridge-words {
+    display: flex;
+    flex-direction: column;
+    gap: 0.06em;
+    font-size: clamp(3rem, 13vw, 12rem);
+  }
+
+  .bridge-word {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5em;
+    margin: 0;
+    line-height: 1.06;
+  }
+
+  /*
+   * The same trap the hero's definition block fell into: Tailwind's base layer
+   * carries `:lang(zh) { line-height: 1.75 }`, and it reaches any span that has
+   * no class of its own. A 192px verb inherited a 336px line box — 130px taller
+   * than the mask it travels through — so its baseline sat below the window and
+   * the bottom was sliced off every word. The verb inherits its line box from
+   * the word it belongs to, and nothing else.
+   */
+  .bridge-word-verb {
+    line-height: inherit;
+  }
+
+  .bridge-close {
+    max-width: 34rem;
+  }
+
+  .bridge-close-line {
+    margin: 0;
+    font-size: clamp(1.05rem, 2.1vw, 1.85rem);
+    line-height: 1.16;
+  }
+
+  /*
+   * Live stage: tall enough to hold the pin plus the travel, with the verbs
+   * sharing one mask exactly one line box high so a verb can only ever be seen
+   * on its way through the window.
+   *
+   * `[data-bridge-live]` is the `.bridge` element itself, not an ancestor of it
+   * — writing this as `[data-bridge-live] .bridge` selected nothing, the band
+   * stayed one screen tall, and the sticky stage never had room to pin, which
+   * left the whole scrub compressed into a range shorter than the screen.
+   */
+  [data-bridge-live] {
+    height: 215svh;
+  }
+
+  [data-bridge-live] .bridge-stage {
+    position: sticky;
+    top: 0;
+  }
+
+  [data-bridge-live] .bridge-words {
+    position: relative;
+    display: block;
+    height: 1.06em;
+    overflow: hidden;
+  }
+
+  [data-bridge-live] .bridge-word {
+    position: absolute;
+    inset: 0;
+    flex-wrap: nowrap;
+  }
+
+  [data-bridge-live] .bridge-close {
+    opacity: 0;
+  }
+
   @media (max-width: 767px) {
     .opening-intro-counter { top: 1.25rem; left: 1rem; }
     .opening-intro-signature { right: 1rem; bottom: 1.25rem; }
@@ -931,6 +1067,18 @@
       grid-area: topsL;
       align-self: start;
       justify-self: start;
+    }
+
+    /*
+     * On the phone the hero printed its own `VC / 维C` directly under the
+     * header's `VC` — two wordmarks in the top strip, which reads as an
+     * information panel rather than as editorial metadata. The global header
+     * owns that mark; the hero keeps only the line that says something the
+     * header does not, `独立创意单元 / INDEPENDENT CREATIVE UNIT`. Desktop has
+     * the width to carry both, and keeps them.
+     */
+    .hero-corner-wordmark {
+      display: none;
     }
 
     /*
