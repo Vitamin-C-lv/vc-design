@@ -1128,22 +1128,33 @@
       height: 1.25em;
       font-size: min(58vw, 25svh);
       letter-spacing: var(--vc-track, -0.01em);
+      justify-content: center;
     }
 
-    .hero-wordmark-mask-v,
-    .hero-wordmark-letter-c {
-      position: absolute;
-    }
-
+    /*
+     * The pair is laid out in flow, exactly like the desktop mark: the letters
+     * sit next to each other in one line and the pair is what the row centres.
+     *
+     * They used to be pinned to opposite edges (`left: 4%` / `right: -4%`), which
+     * on a 390px screen opened a 57px hole between the two letters — 42% of a
+     * letter's own width, against 3% on the desktop. The "89.7% of the viewport"
+     * that measurement reported was the span *including* that hole, so the number
+     * read fuller than the mark did; what the phone actually showed was two
+     * decorative letters, which is the reading the 73.9% decision rules out
+     * (「静态 Hero 里 VC 必须首先被读成一个整体字标」「不要为了满宽把 V、C 强行
+     * 拆到左右两边」). In flow the pair fills ~74% — the same proportion the
+     * desktop settled on.
+     *
+     * The diagonal stays as the mobile signature, expressed as a margin rather
+     * than a transform: the entrance animates the letters' own transform, and
+     * the mask has to keep clipping the V.
+     */
     .hero-wordmark-mask-v {
-      top: 2%;
-      left: 4%;
+      margin-bottom: 0.34em;
     }
 
     .hero-wordmark-letter-c {
-      top: 29%;
-      right: -4%;
-      margin-left: 0;
+      margin-left: 0.02em;
       font-size: 1.06em;
     }
 
