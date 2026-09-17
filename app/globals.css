@@ -487,6 +487,26 @@
     padding-block: 0;
   }
 
+  /*
+   * The arch has to arrive *over* the poster, and its shape has to survive.
+   *
+   * `.band-curve-top` paints `--curve-underlay-bg` (paper) behind its dome, and
+   * that underlay is load-bearing: it is what makes the shoulders of the arch
+   * continuous with the paper band above, so all the visitor sees is a black dome
+   * rising out of the page. Making it transparent looks like the fix — the poster
+   * would show through — but then the shoulders fall through to the body's ink,
+   * the dome's curve disappears and the whole arrival collapses into a flat black
+   * wall. Paper stays.
+   *
+   * The stacking context is the part that *is* needed. The poster's verbs are
+   * positioned and transformed; the dome is a plain SVG. Without a level of its
+   * own the arch would paint *behind* them.
+   */
+  .curve-over-poster {
+    position: relative;
+    z-index: 2;
+  }
+
   .band-curve-svg {
     display: block;
     width: 100%;
@@ -523,6 +543,16 @@
   @media (max-width: 767px) {
     .band-curve-svg {
       --band-curve-scale: 0.83;
+    }
+
+    /*
+     * …and the poster's own arch 15% flatter again (0.83 → 0.71). On a phone the
+     * 0.83 correction still read as a black *peak* rather than the near edge of a
+     * surface rising: 「手机会觉得太像一座黑色山峰」. Scoped to this band so the
+     * footer and the case-page curves keep the height they were tuned to.
+     */
+    .curve-over-poster .band-curve-svg {
+      --band-curve-scale: 0.71;
     }
   }
 
@@ -921,110 +951,248 @@
   }
 
   /*
-   * The kinetic bridge (see BrandStatement).
+   * The brand poster (see BrandStatement).
    *
-   * Static by default: three verbs in ordinary flow, which is what the server
-   * sends, what no-JS renders and what reduced motion keeps. Everything that
-   * turns it into a *stage* is gated behind `data-bridge-live`, an attribute
-   * only a device that can afford the scrub ever receives — so the fallback
-   * cannot become three display words stacked on top of each other, which is
-   * precisely what animating absolutely positioned children would produce if
-   * the script never ran.
+   * Static by default: three verbs in ordinary flow with their Chinese glosses,
+   * which is what the server sends, what no-JS renders and what reduced motion
+   * keeps. Everything that turns it into a *poster* — positioned verbs and the
+   * mask each verb rises through — is gated behind `data-poster-live`, an
+   * attribute only a device that can afford the reveals ever receives; a
+   * fallback that never ran the script therefore cannot become three display
+   * words piled on top of one another.
    *
-   * `.band.bridge-band` rather than `.bridge-band`: the two are equally
+   * `.band.poster-band` rather than `.poster-band`: the two are equally
    * specific, so the plain class would lose to `.band`'s own padding purely
    * because `.band` is declared later in this file.
    */
-  .band.bridge-band {
+  .band.poster-band {
     padding-block: 0;
   }
 
-  .bridge-shell {
+  .poster-stage {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: clamp(1.75rem, 3.5vw, 3rem);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
     min-height: 100svh;
     padding-block: clamp(5rem, 9vw, 8rem);
   }
 
-  .bridge-words {
+  .poster-words {
     display: flex;
     flex-direction: column;
-    gap: 0.06em;
-    font-size: clamp(3rem, 13vw, 12rem);
+    gap: clamp(1.25rem, 2.5vw, 2.25rem);
   }
 
-  .bridge-word {
+  .poster-word {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5em;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.12em;
     margin: 0;
-    line-height: 1.06;
+    line-height: 1.02;
+  }
+
+  .poster-verb-mask {
+    display: block;
+    overflow: hidden;
+    /* Tall enough for the glyph, and the verb is driven past its *whole* height
+       when it arrives — a mask that clipped with padding instead would let a
+       sliver of the next verb show through the padding while it waits. */
+    line-height: 1.24;
   }
 
   /*
-   * The same trap the hero's definition block fell into: Tailwind's base layer
-   * carries `:lang(zh) { line-height: 1.75 }`, and it reaches any span that has
-   * no class of its own. A 192px verb inherited a 336px line box — 130px taller
-   * than the mask it travels through — so its baseline sat below the window and
-   * the bottom was sliced off every word. The verb inherits its line box from
-   * the word it belongs to, and nothing else.
+   * The trap the hero's definition block and the old bridge each fell into:
+   * Tailwind's base layer carries `:lang(zh) { line-height: 1.75 }`, and it
+   * reaches any span with no class of its own. A 208px verb inherited a 364px
+   * line box — taller than the mask it travels through — so its baseline sat
+   * below the window and the bottom of the word was sliced off. The verb takes
+   * its line box from the word it belongs to, and from nothing else.
    */
-  .bridge-word-verb {
+  .poster-verb {
+    display: block;
     line-height: inherit;
   }
 
-  .bridge-close {
-    max-width: 34rem;
+  /* The gloss is type, not a caption: big enough to hold its own corner of the
+     poster, small enough that the verb is still the loudest thing in the frame. */
+  .poster-gloss {
+    font-size: clamp(0.75rem, 1.15vw, 1.3rem);
+    line-height: 1.3;
   }
 
-  .bridge-close-line {
+  /* Editorial sizes: three different weights, none of them a list row.
+     `MAKE.` 13vw, `SOLVE.` 10vw, `BUILD.` 15vw — and `BUILD.` is the heaviest,
+     because it is the last thing that lands on the poster. */
+  .poster-word-1 { font-size: clamp(3rem, 13vw, 16rem); }
+  .poster-word-2 { font-size: clamp(2.4rem, 10vw, 13rem); }
+  .poster-word-3 { font-size: clamp(3.4rem, 15vw, 17rem); }
+
+  .poster-close {
+    max-width: 42rem;
+  }
+
+  .poster-close-rule {
+    display: block;
+    width: min(100%, 28rem);
+    height: 1px;
+    margin-bottom: clamp(1.1rem, 2.2vw, 1.9rem);
+    background: var(--tone-line);
+  }
+
+  .poster-close-line {
     margin: 0;
     font-size: clamp(1.05rem, 2.1vw, 1.85rem);
     line-height: 1.16;
   }
 
-  /*
-   * Live stage: tall enough to hold the pin plus the travel, with the verbs
-   * sharing one mask exactly one line box high so a verb can only ever be seen
-   * on its way through the window.
-   *
-   * `[data-bridge-live]` is the `.bridge` element itself, not an ancestor of it
-   * — writing this as `[data-bridge-live] .bridge` selected nothing, the band
-   * stayed one screen tall, and the sticky stage never had room to pin, which
-   * left the whole scrub compressed into a range shorter than the screen.
-   */
-  [data-bridge-live] {
-    height: 215svh;
+  /* `Bi`'s slots carry no class of their own, so `:lang(zh) { line-height: 1.75 }`
+     reaches them and a 30px slogan gets a 52px line box. */
+  .poster-close-line > span {
+    line-height: inherit;
   }
 
-  [data-bridge-live] .bridge-stage {
-    position: sticky;
-    top: 0;
-  }
-
-  [data-bridge-live] .bridge-words {
-    position: relative;
+  /* The Chinese sentence under the locked lines: legible, clearly subordinate,
+     and gone entirely in English mode (`en={null}` leaves the slot empty). */
+  .poster-close-note {
     display: block;
-    height: 1.06em;
-    overflow: hidden;
+    margin-top: clamp(0.7rem, 1.3vw, 1.1rem);
+    font-size: clamp(0.85rem, 1.15vw, 1.05rem);
+    color: var(--tone-mute, currentColor);
   }
 
-  [data-bridge-live] .bridge-word {
+  .poster-close-note:empty {
+    display: none;
+  }
+
+  /*
+   * Live layer: the stage becomes a poster canvas and the verbs are composed on
+   * it. Nothing here is pinned — the page keeps its normal document flow and
+   * only the reveals are choreographed, precisely because the pinned cut made
+   * the page feel stuck on a phone (「手已经滑了，但 MAKE 还固定在原地」).
+   */
+  [data-poster-live] .poster-stage {
+    display: block;
+    height: 94svh;
+    min-height: 0;
+    padding-block: 0;
+  }
+
+  [data-poster-live] .poster-eyebrow {
     position: absolute;
-    inset: 0;
-    flex-wrap: nowrap;
+    top: 0;
+    left: 0;
   }
 
-  [data-bridge-live] .bridge-close {
-    opacity: 0;
+  [data-poster-live] .poster-words {
+    display: contents;
+  }
+
+  [data-poster-live] .poster-word {
+    position: absolute;
+  }
+
+  [data-poster-live] .poster-word-1 {
+    top: 8%;
+    left: 0;
+    transform-origin: left center;
+  }
+
+  [data-poster-live] .poster-word-2 {
+    top: 36%;
+    right: 0;
+    align-items: flex-end;
+    text-align: right;
+    transform-origin: right center;
+  }
+
+  [data-poster-live] .poster-word-3 {
+    top: 58%;
+    left: 0;
+    transform-origin: left center;
+  }
+
+  /*
+   * The gloss is a second voice placed in the space beside its verb, never a
+   * subtitle glued under it: `MAKE.` then air, then 做出来 below and to the
+   * right.
+   */
+  [data-poster-live] .poster-word-1 .poster-gloss { margin-left: 24%; }
+  [data-poster-live] .poster-word-2 .poster-gloss { margin-right: 14%; }
+  /*
+   * 64%, not 30%: the closing block is now the *English* pair (the Chinese sentence
+   * only rides under it), and `WE FIGURE OUT THE REST.` is roughly three times as
+   * wide as the Chinese line it replaced — at 30% the gloss sat right in its path
+   * and was buried under it. This keeps `跑起来` inside BUILD's own half of the
+   * poster, in the open space the locked lines leave free.
+   */
+  [data-poster-live] .poster-word-3 .poster-gloss { margin-left: 64%; }
+
+  [data-poster-live] .poster-close {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
   @media (max-width: 767px) {
     .opening-intro-counter { top: 1.25rem; left: 1rem; }
     .opening-intro-signature { right: 1rem; bottom: 1.25rem; }
+
+    /*
+     * The phone gets its own poster rather than a shrunk desktop one: the verbs
+     * alternate left / right down the column, each gloss sits under its own verb
+     * a little to the right, and the slogan closes the frame with the rule above
+     * it. Sizes are in vw so the composition is the same poster at 390 as at 1600
+     * — only the placement changes.
+     */
+    .poster-word-1 { font-size: clamp(2.6rem, 22vw, 6rem); }
+    .poster-word-2 { font-size: clamp(2.1rem, 17vw, 4.8rem); }
+    .poster-word-3 { font-size: clamp(2.9rem, 24vw, 6.6rem); }
+    .poster-word { gap: 0.1em; }
+
+    [data-poster-live] .poster-stage {
+      height: 88svh;
+    }
+
+    [data-poster-live] .poster-word-1 { top: 6%; left: 0; }
+
+    [data-poster-live] .poster-word-2 {
+      top: 33%;
+      right: auto;
+      left: 22%;
+      align-items: flex-start;
+      text-align: left;
+      transform-origin: left center;
+    }
+
+    [data-poster-live] .poster-word-3 { top: 52%; left: 0; }
+
+    [data-poster-live] .poster-word-1 .poster-gloss { margin-left: 18%; }
+    [data-poster-live] .poster-word-2 .poster-gloss { margin-left: 0; margin-right: 0; }
+    [data-poster-live] .poster-word-3 .poster-gloss { margin-left: 22%; }
+
+    /*
+     * The slogan is display type on the phone, not a caption: at ~29px the two
+     * locked lines break the way the poster wants them to (`YOU BRING / THE
+     * BRIEF.` then `WE FIGURE OUT / THE REST.`), which is also what makes it the
+     * last block of the composition instead of a footnote under it.
+     */
+    /* A measure narrow enough that both locked lines break once (YOU BRING /
+       THE BRIEF. … WE FIGURE OUT / THE REST.), the way the phone sketch has
+       them — while still holding the Chinese note under them. */
+    .poster-close {
+      max-width: 17.5rem;
+    }
+
+    /* Big enough that `text-wrap: balance` breaks the two locked lines the way
+       the poster wants them (YOU BRING / THE BRIEF. …), so the slogan reads as
+       display type closing the composition, not as a caption under it. */
+    .poster-close-line {
+      font-size: clamp(1.5rem, 8.4vw, 2.3rem);
+    }
 
     /*
      * The phone is its own composition, and it is a *grid* rather than five

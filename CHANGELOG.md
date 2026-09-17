@@ -24,6 +24,30 @@
 
 ## 未发布
 
+### 2026-09-17 · MAKE/SOLVE/BUILD 从「替换式动画」改成「累积式品牌海报」
+
+**为什么** — 用户本轮 brief 拍板：「改成累积式构图，而不是替换式构图」，并把它定为不再回头的方向。原实现是三个动词轮番穿过同一个遮罩（一个进来、上一个出去），并且整段 `215svh` 硬 pin；用户的原话是「手已经滑了，但 MAKE 还固定在原地」。他要的是：`MAKE.` 先出现并**永久保留**，`SOLVE.` 加入（MAKE 不退场），`BUILD.` 再加入，三个词都在，然后 slogan 才进入；结尾不是逐词淡出，而是「黑色拱形从下方升起并真正覆盖海报」，黑色下一章节把上一章节真正覆盖掉。桌面构图：MAKE 13–15vw 靠左、SOLVE 10–12vw 推右、BUILD 14–17vw 回到左侧且最重；中文 做出来/拆清楚/跑起来 是空间里的辅助排版元素，不做紧贴英文的翻译标签。手机要重新排版，「每一次触摸上滑都有真实 viewport 位移」「不允许再出现卡在 MAKE 页滑不动的体验」，且黑色拱形要在 slogan 之后很快进入。
+
+**做了什么** —
+- `components/home/BrandStatement.tsx` 重写为海报：每个动词的揭示由**视口线触发的一次性 tween**（`top 92/90/86%` + 内部 latch）驱动，**没有 pin、没有 scrub**，页面全程正常文档流。后到的词加入时，已在场的词只做 `opacity 1 → 0.72 / scale → 0.99`，永不退场；`BUILD.` 落地 1.1s 后三个词一起回到满权重并做一次 ±3px 的轻锁定（无弹跳），slogan 这时才进入。
+- 关键缺陷（本轮自己踩到并修掉的）：`fromTo` 的起始值只在触发那一刻生效，所以最初版本三个词和 slogan 在 live 层里**根本没有等待态** —— 海报一进视口就是完整可读的，触发反而把词「弹下去再升回来」。现在等待态在 effect 首帧就设好（`yPercent: 118` / `autoAlpha: 0`），且只在 live 层存在：服务端 markup、无 JS、reduced motion 拿到的仍是整张可读的海报。
+- 手机不是桌面缩小版：`@media (max-width: 767px)` 里是独立构图（MAKE 左 / SOLVE 右缩进 / BUILD 左，中文随各自动词偏移），字号 22 / 17 / 24vw，slogan 用 `max-width: 17.5rem` 收窄到跟他草图一致的断行。
+- `app/globals.css`：整块 `.bridge-*` 换成 `.poster-*`，静态（flow）与 live（海报画布）两层仍然由一个属性 `data-poster-live` 切换，回退态不可能变成三个 display 词叠在一起。
+- `FeaturedWorks` 的拱形加了 `.curve-over-poster`（`position: relative; z-index: 2`）。**被否掉的选项**：把 `--curve-underlay-bg` 改成 transparent，让海报从拱肩透出来 —— 结果拱肩落到 body 的墨色上，拱形曲线消失，整段到达变成一堵平直黑墙（截图 `5-arch-50` 前后对比可见）。纸色底衬是承重结构：它让拱肩与上一条纸带无缝，观众只看见一个黑色拱顶从纸面升起。z-index 那层才是必需的 —— 海报的动词是定位+变形的，拱顶只是普通 SVG，不给层级就会画到它们后面。
+- 中文文案：SOLVE 的释义按 brief 写成「拆清楚」（原为「拆解清楚」）。
+
+**验证** — 一次性取证脚本（仓库外 `/tmp/vc-poster/poster-pass.mjs`，真实 `mouse.wheel` 驱动，CDP screencast + 系统 ffmpeg 录制）：三个视口各 13 条断言全过（39 PASS / 0 FAIL），包括「MAKE. 先到且独自在场」「MAKE. 到场后永不退场」「SOLVE./BUILD. 加入时前面的词仍在且只变暗（最低 0.72）」「slogan 在 BUILD. 落地前不可见（max 0.00）」「拱形覆盖海报 25%+ 时三个词仍是满权重（无淡出）」「海报在建的过程中持续上移（无 pin，16–25 个在场采样）」「每一步滚轮都产生位移（最小 57px / 手机 28px，无 3 步停滞）」。构图实测：桌面 13.0 / 10.0 / 15.0vw，海报占视口 94%；手机 22 / 17 / 24vw，占 88%；iPad 13 / 10 / 15vw。reduced motion 与无 JS 下三个动词 + slogan 全部可读（`/tmp/vc-poster/audiences.mjs`）。
+仓库门禁：`npm run check`（typecheck + lint）干净；`BASE=http://127.0.0.1:3210 node scripts/qa/shoot.mjs` 全绿（无横溢、无未揭示、无待载资源、微信 UA 干净）；`check-seo.mjs` 7 路由通过；`verify-header-contrast.mjs` 通过；`opening-sequence.mjs` 4 passed / 0 failed；`verify-fastscroll.mjs` 全过（真实滚轮猛甩下视口内 0 个卡住的揭示元素）。
+
+**封板前的三处微调（用户审完视觉后点名，2026-09-17 晚）** —
+① **中文模式也保留英文品牌句**：用户原话「YOU BRING THE BRIEF. / WE FIGURE OUT THE REST. 已经不是普通英文翻译了，而是 VC 的品牌句」「英文作为主要 Display Type，中文变成下面较小的辅助说明」。做法：英文两句不再是 `Bi` 的「读哪国语言」槽（`zh={line} en={line}`，和中文释义同一套"语言无关内容"写法），中文句走一个只在中文模式存在的槽（`en={null}` + `hideSecondary` + `.poster-close-note:empty` 收起），英文模式下结尾只剩两句锁定英文。
+⚠️ 这处改动**带出一个真缺陷并已修**：英文行宽是原来中文行的约 3 倍，`WE FIGURE OUT THE REST.` 正好从 `跑起来` 身上压过去（BUILD 释义原本在 `margin-left: 30%`）。把第三条释义移到 64%（即 BUILD 自己那一半的空档）才解决——这是本轮唯一一处动了已冻结构图的地方。
+② **手机拱形再压平 15%**：用户原话「手机会觉得太像一座黑色山峰」；只改 mobile breakpoint，用 `.curve-over-poster .band-curve-svg { --band-curve-scale: 0.71 }`（原 0.83）**只作用于海报那一段**，页脚与案例页的弧线仍保持 0.83，曲线实现与桌面完全没动。
+③ **旧词暗度 0.72 → 0.80**：用户原话「0.72 稍微太像 disabled 状态」「累积式构图的重点是：它还在那里，只是现在焦点转移了」；`scale: 0.99` 保留，BUILD 落地后三词仍一起回到 opacity 1。
+用户同时拍板：**不修那两条偶发 QA 红灯**（signal-red 0.78/0.8、2560 视口偶发抽样）、**不做工程优化、不加新效果**。
+
+**遗留** — `opening-sequence.mjs` 的 `signal-red-single-anchor-pixels` 是**临界抖动**：判据要求 signal-red 占比 ≥ 0.8，hero 那颗红点带 7s 漂移动画，两次运行分别量到 0.78（FAIL）与通过。与本次改动无关（检查的是 frame C，Hero 区），但这条门禁会偶发红。本轮按 brief 只审视觉，**未部署 EdgeOne**。
+
 ### 2026-09-17 · 手机上 VC 被拆成左右两个字母，改回紧排字标
 
 **为什么** — 用户发来手机截图：「手机上看起来好像不对」。量下来：手机端把 V 钉在 `left: 4%`、C 钉在 `right: -4%`，390px 屏上两个字母之间留了 **57px** 的缝 —— 是单个字母宽的 **42%**，而桌面只有 3%（V 209→763 / C 780→1391）。此前记录的"手机占屏 89.7%"是**含这条缝的总跨度**，所以数字看着满、画面却是两个装饰字母，正好违背他自己拍板的那条：「静态 Hero 里 VC 必须首先被读成一个整体字标」「不要为了满宽把 V、C 强行拆到左右两边」。

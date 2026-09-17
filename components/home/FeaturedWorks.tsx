@@ -52,7 +52,14 @@ export function FeaturedWorks() {
   return (
     // 20svh sits mid-way through the 12→28svh scrub, so the resting state
     // (no JS, reduced motion, weak devices) is the neutral arch.
-    <div ref={rootRef} style={{ '--band-curve-height': '20svh' } as CSSProperties}>
+    // `curve-over-poster` lifts this band above the poster's positioned verbs and
+    // drops its paper underlay, so the arch *covers* the finished poster instead
+    // of the box's flat top edge slicing across it (see globals.css).
+    <div
+      ref={rootRef}
+      className="curve-over-poster"
+      style={{ '--band-curve-height': '20svh' } as CSSProperties}
+    >
       <Band id="work" tone="ink" container={false} className="band-curve-top">
         <Container className="min-w-0">
           <div className="max-w-[68rem]">
