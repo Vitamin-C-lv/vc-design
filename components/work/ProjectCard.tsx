@@ -73,6 +73,7 @@ export function ProjectCard({
             sizes={sizes}
             priority={priority}
             aspect={aspect}
+            fit={project.coverFit}
             wrapperClassName={cx(
               'transition-transform duration-700 ease-[var(--ease-vc-out)] group-hover/media:scale-[1.012]',
               mediaClassName,

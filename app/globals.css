@@ -304,6 +304,70 @@
 }
 
 /* ============================================================================
+   Guge flagship — staged reveals
+   ----------------------------------------------------------------------------
+   Two chapters assemble themselves rather than simply fading in:
+
+   - `data-guge-layers` (FROM SITE TO STORY) wipes its world map upward, because
+     the artwork is an exploded stack whose bottom layer is the ground. The three
+     level labels follow it in order via transition-delay, so the words arrive as
+     the corresponding slice of the drawing does.
+   - `data-guge-map` is the wipe target itself.
+
+   Same contract as every other reveal on the site: the hidden state is applied
+   by CSS, gated on `[data-js='on']`, so a visitor without scripting — or one who
+   asked for reduced motion — sees the finished diagram immediately. Nothing is
+   ever hidden behind an animation that cannot run.
+   ========================================================================= */
+
+@layer base {
+  [data-js='on'] [data-guge-layers] [data-guge-map] {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.9s var(--ease-vc-out);
+    will-change: clip-path;
+  }
+
+  [data-js='on'] [data-guge-layers][data-stage='ready'] [data-guge-map] {
+    clip-path: inset(0 0 0 0);
+    will-change: auto;
+  }
+
+  [data-js='on'] [data-guge-layers] [data-guge-level] {
+    opacity: 0.22;
+    transform: translate3d(0, 0.85rem, 0);
+    transition:
+      opacity 0.75s var(--ease-vc-out),
+      transform 0.75s var(--ease-vc-out);
+  }
+
+  /* Level 3 is the ground: it lands first, because the drawing starts there. */
+  [data-js='on'] [data-guge-layers] [data-guge-level='3'] {
+    transition-delay: 0.75s;
+  }
+  [data-js='on'] [data-guge-layers] [data-guge-level='2'] {
+    transition-delay: 1.25s;
+  }
+  [data-js='on'] [data-guge-layers] [data-guge-level='1'] {
+    transition-delay: 1.75s;
+  }
+
+  [data-js='on'] [data-guge-layers][data-stage='ready'] [data-guge-level] {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-js='on'] [data-guge-layers] [data-guge-map],
+    [data-js='on'] [data-guge-layers] [data-guge-level] {
+      clip-path: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* ============================================================================
    Media fade-in
    ----------------------------------------------------------------------------
    Images fade in over their LQIP once the real bitmap decodes, so a slow
@@ -427,13 +491,33 @@
     font-size: clamp(1.0625rem, 1.35vw, 1.5rem);
     line-height: 1.6;
     letter-spacing: -0.005em;
-    text-wrap: pretty;
+    /*
+     * `balance`, not `pretty`, for the Latin-scale leads.
+     *
+     * `pretty` only pushes a lone word off the last line; it could not fix the
+     * Chinese widows measured on 2026-09-19 (six of them, last line as narrow as
+     * 7% of the paragraph). Chinese has no spaces, so the browser has more room
+     * to re-break: `balance` evens the lines out and the stump disappears without
+     * touching the copy. Leads are two or three lines — well inside Chromium's
+     * six-line cap. Body copy stays on `pretty`.
+     */
+    text-wrap: balance;
   }
 
   .type-body {
     font-size: clamp(0.9375rem, 1vw, 1.0625rem);
     line-height: 1.75;
-    text-wrap: pretty;
+    /*
+     * `balance` here too, not `pretty`.
+     *
+     * The 2026-09-19 sweep found the widows were mostly in body copy, not in the
+     * leads: `/work/guge` alone had captions ending on a 3%-wide line — a single
+     * orphaned character. `pretty` cannot fix that on Chinese text (there are no
+     * spaces to shuffle); `balance` re-breaks the whole paragraph instead.
+     * Chromium caps balancing at six lines and falls back to normal wrapping
+     * beyond that, so long-form copy is unaffected.
+     */
+    text-wrap: balance;
   }
 
   /* --- CJK tuning ----------------------------------------------------------
@@ -1471,6 +1555,17 @@
     line-height: 1.35;
     letter-spacing: 0.18em;
     text-transform: uppercase;
+    /*
+     * Captions live here too — `MediaCaption` is `type-label-sm`, and the
+     * 2026-09-20 sweep found seven of its Chinese lines ending on a stump: the
+     * figure captions on /work/guge ran to a last line 3–10% of the width, and
+     * 「人物关系长卷…」 finished on a single character.
+     *
+     * The earlier pass only balanced `type-lead`/`type-body`, which is why these
+     * survived it. Single-line labels (chapter numbers, tags) are unaffected —
+     * balancing does nothing below two lines.
+     */
+    text-wrap: balance;
   }
 
   /* Wide uppercase tracking is a Latin display convention. On Han text it just
@@ -1539,6 +1634,31 @@
    * the shell's own gutter instead produces a true edge-to-edge element whose
    * width is defined by the layout rather than by a viewport unit.
    */
+  /*
+   * `mediaRow`：列宽 = 每张图自身的比例（组件内联下发 `--media-row-cols`），
+   * 于是同一排每张图的高度完全相同 —— 既不裁图，也不会在矮的那张下面留死白。
+   * 断点行为与原来的 sm:grid-cols-2 / lg:grid-cols-N 完全一致：
+   * 单列 → 2 列 → N 列，只有"全部挤在一排"的那一档用比例列。
+   */
+  [data-media-row] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 640px) {
+    [data-media-row='2'] {
+      grid-template-columns: var(--media-row-cols, repeat(2, minmax(0, 1fr)));
+    }
+    [data-media-row='3'],
+    [data-media-row='4'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    [data-media-row='3'],
+    [data-media-row='4'] {
+      grid-template-columns: var(--media-row-cols, repeat(3, minmax(0, 1fr)));
+    }
+  }
+
   .bleed {
     width: auto;
     margin-inline: calc(var(--shell-pad, 0px) * -1);

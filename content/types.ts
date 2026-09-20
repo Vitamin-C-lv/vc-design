@@ -75,7 +75,132 @@ export interface CaseSection {
   embed?: EmbeddedProductRef;
   /** Optional footnote in a muted voice. */
   note?: string;
+  /* --- Flagship chapter kit (all optional; see CaseBlock above) ----------- */
+  /**
+   * Pin this chapter to a surface instead of letting it alternate.
+   *
+   * The Guge rebuild is directed rather than alternated: two light chapters
+   * (the technical plate and the evidence wall) have to land at specific points
+   * to give the long dark acts somewhere to breathe. Absent = alternate, i.e.
+   * exactly the previous behaviour.
+   */
+  tone?: 'ink' | 'paper';
+  /** Short Chinese gloss printed directly under the English headline. */
+  gloss?: string;
+  /**
+   * Richer composition. When present, the chapter renders through the block
+   * renderer instead of `layout`.
+   */
+  blocks?: CaseBlock[];
+  /** Purpose-built set piece rendered above the blocks. */
+  piece?: CasePiece;
 }
+
+/**
+ * Flagship chapters — the richer composition kit.
+ *
+ * The four flagships were originally all told with the same seven layouts, which
+ * made every case study read like the same page with different pictures. The Guge
+ * rebuild needs each chapter to carry its own rhythm (a cinematic opening, a
+ * layered diagram, a horizontal scroll, a technical plate, a video mosaic, an
+ * evidence wall), so a chapter may now declare a **block sequence** instead.
+ *
+ * Everything below is optional. A section without `blocks` renders exactly as it
+ * did before, which is what keeps the other three flagships untouched.
+ */
+
+/** How much of the chapter grid a block occupies. */
+export type BlockSpan = 'full' | 'wide' | 'half' | 'third' | 'plate';
+
+/** One column of a two-panel comparison (e.g. ARCHIVE / NOW). */
+export interface ComparePanel {
+  /** Mono eyebrow, e.g. `ARCHIVE`. */
+  label: string;
+  /** Chinese line under the label. */
+  zh: string;
+  media: MediaRef;
+}
+
+/** One capability pillar: a mono label, a Chinese gloss, optional evidence. */
+export interface PillarItem {
+  label: string;
+  zh: string;
+  media?: MediaRef;
+}
+
+/**
+ * A composition unit inside a chapter.
+ *
+ * Deliberately few and generic — a chapter's character comes from the *order and
+ * span* it chooses, not from a bespoke block type per chapter.
+ */
+export type CaseBlock =
+  /** A single image at a chosen width. */
+  | { kind: 'media'; media: MediaRef; span?: BlockSpan }
+  /** Several images sharing one row. `scroll` bleeds and snaps on phones. */
+  | { kind: 'mediaRow'; items: MediaRef[]; columns?: 2 | 3 | 4; mobile?: 'grid' | 'scroll' }
+  /** A muted looping video. */
+  | { kind: 'video'; video: VideoRef; span?: 'full' | 'wide' }
+  /**
+   * A pull-quote in display type, attributed to a real source.
+   *
+   * `size` defaults to the full display step. A chapter that has already spent
+   * its visual budget can drop to `lg` — a three-line pull-quote at display size
+   * costs about half a screen on its own.
+   */
+  | { kind: 'quote'; zh: string; en?: string; attribution?: string; size?: 'lg' | 'xl' }
+  /** Two labelled panels side by side (ARCHIVE / NOW, before / after). */
+  | { kind: 'compare'; left: ComparePanel; right: ComparePanel }
+  /** A horizontal pipeline drawn in code — stages of a real process. */
+  | { kind: 'flow'; steps: string[]; label?: string; note?: string }
+  /** A row of capability pillars. */
+  | { kind: 'pillars'; items: PillarItem[]; columns?: 2 | 4 }
+  /** A muted footnote. */
+  | { kind: 'note'; zh: string }
+  /** An image that opens the full-size artefact in a new tab. */
+  | { kind: 'mediaLink'; media: MediaRef; href: string; label: string; note?: string }
+  /**
+   * A row of artefacts that each open full size. Four portrait exhibition boards
+   * stacked vertically would be a wall of scrolling with no way to compare them;
+   * side by side they read as the set they actually are.
+   */
+  | {
+      kind: 'mediaLinkRow';
+      items: MediaLinkItem[];
+      columns?: 2 | 4;
+      /**
+       * Arrange the artefacts as a staggered "portfolio wall" rather than a
+       * strict grid. Four portrait exhibition boards lined up edge to edge read
+       * as a table; nudging each one up or down reads as a wall someone hung.
+       */
+      layered?: boolean;
+      label?: string;
+    }
+  /**
+   * A short deck section: a mono sub-head, one line of copy, and the strongest
+   * pages from the presentation set. Deliberately *not* a page-through of the
+   * whole deck — the point is that it was art-directed, not that it was long.
+   */
+  | { kind: 'deckMosaic'; label: string; zh: string; items: MediaRef[] };
+
+/** One artefact in a `mediaLinkRow`. */
+export interface MediaLinkItem {
+  media: MediaRef;
+  href: string;
+  label: string;
+  note?: string;
+}
+
+/**
+ * Named set pieces. A chapter that declares one gets a purpose-built renderer
+ * instead of the generic block flow.
+ *
+ * - `hero`      cinematic opening band
+ * - `layers`    a layered diagram revealed bottom-up, in stages
+ * - `panorama`  a wide scroll that drifts horizontally as the page advances
+ * - `mosaic`    a three-stage reveal: details → mosaic → the full artefacts
+ */
+export type CasePiece = 'hero' | 'layers' | 'panorama' | 'mosaic';
 
 /**
  * A deployed product shown inside a case study as a working copy.
@@ -138,6 +263,25 @@ export interface LiveLink {
   note?: string;
 }
 
+/**
+ * One capability slice of a flagship's home-page mini case.
+ *
+ * The home page must not replay a case study. For a project broad enough that a
+ * single cover image misrepresents it, the home page shows a few *proof slices*
+ * — enough to establish that the work is complex — and leaves the depth to the
+ * case page. The anchor is what makes that promise concrete: each slice links
+ * straight to the chapter that substantiates it.
+ */
+export interface HomeSlice {
+  /** Mono capability label, e.g. `WORLD BUILDING`. */
+  label: string;
+  /** One Chinese line saying what was actually made. */
+  zh: string;
+  media: MediaRef;
+  /** Case-study anchor id this slice points at. */
+  anchor: string;
+}
+
 export interface Project {
   slug: string;
   /** Sort/priority. 1 is the first flagship. */
@@ -159,6 +303,24 @@ export interface Project {
   accent: string;
   /** Index card media. Falls back to the first section image. */
   cover: MediaRef;
+  /**
+   * How the cover fills a media box that was not shaped for it. Defaults to
+   * `cover`.
+   *
+   * Lihuahua's covers are portrait phone screenshots (0.45). Cropped into the
+   * shared landscape tile they lost 66–71% of the interface — navigation, input
+   * and controls — which is the app itself. `contain` shows the whole screen on
+   * the paper surface the shot was taken on.
+   */
+  coverFit?: 'cover' | 'contain';
+  /**
+   * A cover shaped for the shared landscape tile (`/work`, 1.55:1).
+   *
+   * Some covers only exist in a shape the tile would butcher — Guge's is a
+   * 3.19:1 banner, and `cover` kept 48% of it. Rather than bend the grid, the
+   * project ships a second crop composed for that box; fall back to `cover`.
+   */
+  coverTile?: MediaRef;
   /** Short proof badge on the card, e.g. `NATIONAL AWARDS ×3`. */
   badge?: string;
   /** Live/working product links. */
@@ -176,6 +338,11 @@ export interface Project {
   credits?: string[];
   /** Rendered on the home page as the "under the hood" relationship note. */
   relatedNote?: string;
+  /**
+   * When present, the home page renders this project as a mini case with these
+   * capability slices instead of the generic flagship block.
+   */
+  homeSlices?: HomeSlice[];
   /** Working-prototype footage. Muted, lazy, poster-first. */
   video?: VideoRef;
   /**

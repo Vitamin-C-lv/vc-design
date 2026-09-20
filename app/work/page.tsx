@@ -84,9 +84,10 @@ function IndexProjectRow({ project, index }: { project: (typeof featuredProjects
           >
             <div className="relative min-w-0">
               <VcImage
-                media={project.cover}
+                media={project.coverTile ?? project.cover}
                 sizes={MEDIA_SIZES.inset}
                 aspect={1.55}
+                fit={project.coverTile ? 'cover' : project.coverFit}
                 wrapperClassName="transition-transform duration-700 ease-[var(--ease-vc-out)] group-hover/media:scale-[1.012]"
               />
               {/* Same rule as the featured covers: the hint is present at rest. */}

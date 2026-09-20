@@ -1,8 +1,13 @@
 import { chromium } from 'playwright-core';
 const BASE = process.env.BASE || 'http://127.0.0.1:3000';
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM || '/usr/bin/chromium', args: ['--no-sandbox','--disable-dev-shm-usage'] });
-const ROUTES = ['/', '/work', '/lab', '/work/guge', '/work/luahua', '/work/lihuahua', '/work/guanchao', '/work/qinghua-zaojing'];
-const VPS = [{n:'1600',w:1600,h:1000},{n:'390',w:390,h:844}];
+// Env-driven so the same audit can cover the tablet band (768–1023), which the
+// rest of the QA suite never tested. `/work/luahua` was a 404 typo here.
+const ROUTES = (process.env.ROUTES ?? '/,/work,/lab,/work/guge,/work/lihuahua,/work/guanchao,/work/qinghua-zaojing').split(',');
+const VPS = (process.env.VIEWPORTS ?? '1600x1000,390x844').split(',').map((v) => {
+  const [w, h] = v.split('x').map(Number);
+  return { n: String(w), w, h };
+});
 
 
 for (const vp of VPS) {
@@ -20,11 +25,17 @@ for (const vp of VPS) {
         const header = document.querySelector('header');
         const headerH = header ? header.getBoundingClientRect().height : 0;
 
-        // 元素自己「溢出」不算问题——如果它某个祖先能横向滚动，那它就是在卷轴里，
-        // 属于设计意图。只认「没有被任何祖先接住」的溢出。
-        const hasHScrollAncestor = (el) => {
+        // 元素自己「溢出」不算问题——如果它某个祖先把它接住了，那它就是设计意图：
+        //   · 祖先 `overflow-x: auto|scroll` 且真的能滚 → 横向卷轴里的幻灯片；
+        //   · 祖先 `overflow-x: hidden|clip` → 被裁掉的超宽轨道。古格人物长卷就是
+        //     这一类：轨道（picture/DIV.w-max）比视口宽，但位移由 GSAP 驱动，
+        //     外层 `overflow-hidden` 兜住，页面级 scrollWidth 仍等于视口宽。
+        // 只认「没有被任何祖先接住」的溢出。注意：**宽的祖先自己仍会被单独检查**，
+        // 所以这不会把真正的页面级溢出藏起来。
+        const containedOverflow = (el) => {
           for (let p = el.parentElement; p; p = p.parentElement) {
             const pcs = getComputedStyle(p);
+            if (/hidden|clip/.test(pcs.overflowX)) return true;
             if (/auto|scroll/.test(pcs.overflowX) && p.scrollWidth > p.clientWidth + 2) return true;
           }
           return false;
@@ -49,7 +60,7 @@ for (const vp of VPS) {
           // 会把它滚出来，页面级 scrollWidth 仍然等于视口宽，用户看到的是正常的
           // 可横滑卡片。不排除的话这里会**永久**误报 4 条，把真正的溢出埋掉。
           if (r.width > vw + 2 && cs.overflowX === 'visible' && el.tagName !== 'HTML' && el.tagName !== 'BODY'
-              && !hasHScrollAncestor(el)) {
+              && !containedOverflow(el)) {
             out.push({ k: 'OVERFLOW', d: `${el.tagName}.${String(el.className).slice(0,40)} w=${Math.round(r.width)} > vw=${vw}` });
           }
           // 3. content sitting under the fixed header (only near page top)

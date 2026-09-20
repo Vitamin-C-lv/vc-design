@@ -5,6 +5,7 @@ import { Bi, BiOnly } from '@/components/i18n/Bi';
 import { Band, Container, Eyebrow } from '@/components/primitives';
 import { featuredProjects } from '@/content/projects';
 import { FeaturedProjectBlock, type FeaturedProjectLayout } from '@/components/work/FeaturedProjectBlock';
+import { GugeFeature } from './GugeFeature';
 import { Reveal } from '@/components/motion/Reveal';
 import { useDeviceProfile } from '@/lib/motion/device';
 import { useGsapScope } from '@/lib/motion/useGsap';
@@ -89,15 +90,24 @@ export function FeaturedWorks() {
           </div>
 
           <div className="mt-[clamp(5rem,13vw,13rem)] grid gap-[clamp(9rem,19vw,22rem)]">
-            {featuredProjects.map((project, index) => (
-              <FeaturedProjectBlock
-                key={project.slug}
-                project={project}
-                index={index}
-                priority={index === 0}
-                layout={layouts[index]}
-              />
-            ))}
+            {featuredProjects.map((project, index) =>
+              /*
+               * A project that declares `homeSlices` gets the mini case: a hero
+               * plate plus a few capability slices, each linking into the chapter
+               * that proves it. Everything else keeps the generic flagship block.
+               */
+              project.homeSlices?.length ? (
+                <GugeFeature key={project.slug} project={project} priority={index === 0} />
+              ) : (
+                <FeaturedProjectBlock
+                  key={project.slug}
+                  project={project}
+                  index={index}
+                  priority={index === 0}
+                  layout={layouts[index]}
+                />
+              ),
+            )}
           </div>
         </Container>
       </Band>

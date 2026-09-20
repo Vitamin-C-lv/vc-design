@@ -609,28 +609,31 @@
   "guanchao/live/desktop-view-01": {
     "src": "guanchao/live/desktop-view-01",
     "original": {
-      "width": 1600,
-      "height": 1000,
-      "bytes": 279822
+      "width": 3200,
+      "height": 2000,
+      "bytes": 589698
     },
     "aspect": 1.6,
     "widths": [
       480,
       768,
       1200,
-      1600
+      1600,
+      2048
     ],
     "webp": [
       "guanchao/live/desktop-view-01-480.webp",
       "guanchao/live/desktop-view-01-768.webp",
       "guanchao/live/desktop-view-01-1200.webp",
-      "guanchao/live/desktop-view-01-1600.webp"
+      "guanchao/live/desktop-view-01-1600.webp",
+      "guanchao/live/desktop-view-01-2048.webp"
     ],
     "avif": [
       "guanchao/live/desktop-view-01-480.avif",
       "guanchao/live/desktop-view-01-768.avif",
       "guanchao/live/desktop-view-01-1200.avif",
-      "guanchao/live/desktop-view-01-1600.avif"
+      "guanchao/live/desktop-view-01-1600.avif",
+      "guanchao/live/desktop-view-01-2048.avif"
     ],
     "lqip": "guanchao/live/desktop-view-01-lqip.webp",
     "fallback": "guanchao/live/desktop-view-01-2048.jpg"
@@ -638,28 +641,31 @@
   "guanchao/live/desktop-view-02": {
     "src": "guanchao/live/desktop-view-02",
     "original": {
-      "width": 1600,
-      "height": 1000,
-      "bytes": 289728
+      "width": 3200,
+      "height": 2000,
+      "bytes": 465365
     },
     "aspect": 1.6,
     "widths": [
       480,
       768,
       1200,
-      1600
+      1600,
+      2048
     ],
     "webp": [
       "guanchao/live/desktop-view-02-480.webp",
       "guanchao/live/desktop-view-02-768.webp",
       "guanchao/live/desktop-view-02-1200.webp",
-      "guanchao/live/desktop-view-02-1600.webp"
+      "guanchao/live/desktop-view-02-1600.webp",
+      "guanchao/live/desktop-view-02-2048.webp"
     ],
     "avif": [
       "guanchao/live/desktop-view-02-480.avif",
       "guanchao/live/desktop-view-02-768.avif",
       "guanchao/live/desktop-view-02-1200.avif",
-      "guanchao/live/desktop-view-02-1600.avif"
+      "guanchao/live/desktop-view-02-1600.avif",
+      "guanchao/live/desktop-view-02-2048.avif"
     ],
     "lqip": "guanchao/live/desktop-view-02-lqip.webp",
     "fallback": "guanchao/live/desktop-view-02-2048.jpg"
@@ -667,28 +673,31 @@
   "guanchao/live/desktop-view-03": {
     "src": "guanchao/live/desktop-view-03",
     "original": {
-      "width": 1600,
-      "height": 1000,
-      "bytes": 221887
+      "width": 3200,
+      "height": 2000,
+      "bytes": 396603
     },
     "aspect": 1.6,
     "widths": [
       480,
       768,
       1200,
-      1600
+      1600,
+      2048
     ],
     "webp": [
       "guanchao/live/desktop-view-03-480.webp",
       "guanchao/live/desktop-view-03-768.webp",
       "guanchao/live/desktop-view-03-1200.webp",
-      "guanchao/live/desktop-view-03-1600.webp"
+      "guanchao/live/desktop-view-03-1600.webp",
+      "guanchao/live/desktop-view-03-2048.webp"
     ],
     "avif": [
       "guanchao/live/desktop-view-03-480.avif",
       "guanchao/live/desktop-view-03-768.avif",
       "guanchao/live/desktop-view-03-1200.avif",
-      "guanchao/live/desktop-view-03-1600.avif"
+      "guanchao/live/desktop-view-03-1600.avif",
+      "guanchao/live/desktop-view-03-2048.avif"
     ],
     "lqip": "guanchao/live/desktop-view-03-lqip.webp",
     "fallback": "guanchao/live/desktop-view-03-2048.jpg"
@@ -819,5 +828,2047 @@
     ],
     "lqip": "brand/wechat-qr-lqip.webp",
     "fallback": "brand/wechat-qr-669.jpg"
+  },
+  "guge/deck/board_01": {
+    "src": "guge/deck/board_01",
+    "original": {
+      "width": 2400,
+      "height": 3395,
+      "bytes": 2010876
+    },
+    "aspect": 0.7069,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/deck/board_01-480.webp",
+      "guge/deck/board_01-768.webp",
+      "guge/deck/board_01-1200.webp",
+      "guge/deck/board_01-1600.webp",
+      "guge/deck/board_01-2048.webp"
+    ],
+    "avif": [
+      "guge/deck/board_01-480.avif",
+      "guge/deck/board_01-768.avif",
+      "guge/deck/board_01-1200.avif",
+      "guge/deck/board_01-1600.avif",
+      "guge/deck/board_01-2048.avif"
+    ],
+    "lqip": "guge/deck/board_01-lqip.webp",
+    "fallback": "guge/deck/board_01-2048.jpg"
+  },
+  "guge/deck/board_02": {
+    "src": "guge/deck/board_02",
+    "original": {
+      "width": 2400,
+      "height": 3394,
+      "bytes": 2108769
+    },
+    "aspect": 0.7071,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/deck/board_02-480.webp",
+      "guge/deck/board_02-768.webp",
+      "guge/deck/board_02-1200.webp",
+      "guge/deck/board_02-1600.webp",
+      "guge/deck/board_02-2048.webp"
+    ],
+    "avif": [
+      "guge/deck/board_02-480.avif",
+      "guge/deck/board_02-768.avif",
+      "guge/deck/board_02-1200.avif",
+      "guge/deck/board_02-1600.avif",
+      "guge/deck/board_02-2048.avif"
+    ],
+    "lqip": "guge/deck/board_02-lqip.webp",
+    "fallback": "guge/deck/board_02-2048.jpg"
+  },
+  "guge/deck/board_03": {
+    "src": "guge/deck/board_03",
+    "original": {
+      "width": 2400,
+      "height": 3394,
+      "bytes": 1522752
+    },
+    "aspect": 0.7071,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/deck/board_03-480.webp",
+      "guge/deck/board_03-768.webp",
+      "guge/deck/board_03-1200.webp",
+      "guge/deck/board_03-1600.webp",
+      "guge/deck/board_03-2048.webp"
+    ],
+    "avif": [
+      "guge/deck/board_03-480.avif",
+      "guge/deck/board_03-768.avif",
+      "guge/deck/board_03-1200.avif",
+      "guge/deck/board_03-1600.avif",
+      "guge/deck/board_03-2048.avif"
+    ],
+    "lqip": "guge/deck/board_03-lqip.webp",
+    "fallback": "guge/deck/board_03-2048.jpg"
+  },
+  "guge/deck/board_04": {
+    "src": "guge/deck/board_04",
+    "original": {
+      "width": 2400,
+      "height": 3394,
+      "bytes": 1676343
+    },
+    "aspect": 0.7071,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/deck/board_04-480.webp",
+      "guge/deck/board_04-768.webp",
+      "guge/deck/board_04-1200.webp",
+      "guge/deck/board_04-1600.webp",
+      "guge/deck/board_04-2048.webp"
+    ],
+    "avif": [
+      "guge/deck/board_04-480.avif",
+      "guge/deck/board_04-768.avif",
+      "guge/deck/board_04-1200.avif",
+      "guge/deck/board_04-1600.avif",
+      "guge/deck/board_04-2048.avif"
+    ],
+    "lqip": "guge/deck/board_04-lqip.webp",
+    "fallback": "guge/deck/board_04-2048.jpg"
+  },
+  "guge/field/cave_arch": {
+    "src": "guge/field/cave_arch",
+    "original": {
+      "width": 1125,
+      "height": 2000,
+      "bytes": 405537
+    },
+    "aspect": 0.5625,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/field/cave_arch-480.webp",
+      "guge/field/cave_arch-768.webp"
+    ],
+    "avif": [
+      "guge/field/cave_arch-480.avif",
+      "guge/field/cave_arch-768.avif"
+    ],
+    "lqip": "guge/field/cave_arch-lqip.webp",
+    "fallback": "guge/field/cave_arch-768.jpg"
+  },
+  "guge/field/site_aerial_01": {
+    "src": "guge/field/site_aerial_01",
+    "original": {
+      "width": 2800,
+      "height": 1575,
+      "bytes": 789084
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/field/site_aerial_01-480.webp",
+      "guge/field/site_aerial_01-768.webp",
+      "guge/field/site_aerial_01-1200.webp",
+      "guge/field/site_aerial_01-1600.webp",
+      "guge/field/site_aerial_01-2048.webp"
+    ],
+    "avif": [
+      "guge/field/site_aerial_01-480.avif",
+      "guge/field/site_aerial_01-768.avif",
+      "guge/field/site_aerial_01-1200.avif",
+      "guge/field/site_aerial_01-1600.avif",
+      "guge/field/site_aerial_01-2048.avif"
+    ],
+    "lqip": "guge/field/site_aerial_01-lqip.webp",
+    "fallback": "guge/field/site_aerial_01-2048.jpg"
+  },
+  "guge/field/site_aerial_02": {
+    "src": "guge/field/site_aerial_02",
+    "original": {
+      "width": 2800,
+      "height": 1575,
+      "bytes": 787897
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/field/site_aerial_02-480.webp",
+      "guge/field/site_aerial_02-768.webp",
+      "guge/field/site_aerial_02-1200.webp",
+      "guge/field/site_aerial_02-1600.webp",
+      "guge/field/site_aerial_02-2048.webp"
+    ],
+    "avif": [
+      "guge/field/site_aerial_02-480.avif",
+      "guge/field/site_aerial_02-768.avif",
+      "guge/field/site_aerial_02-1200.avif",
+      "guge/field/site_aerial_02-1600.avif",
+      "guge/field/site_aerial_02-2048.avif"
+    ],
+    "lqip": "guge/field/site_aerial_02-lqip.webp",
+    "fallback": "guge/field/site_aerial_02-2048.jpg"
+  },
+  "guge/field/site_hero_01": {
+    "src": "guge/field/site_hero_01",
+    "original": {
+      "width": 3000,
+      "height": 1688,
+      "bytes": 831492
+    },
+    "aspect": 1.7773,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/field/site_hero_01-480.webp",
+      "guge/field/site_hero_01-768.webp",
+      "guge/field/site_hero_01-1200.webp",
+      "guge/field/site_hero_01-1600.webp",
+      "guge/field/site_hero_01-2048.webp"
+    ],
+    "avif": [
+      "guge/field/site_hero_01-480.avif",
+      "guge/field/site_hero_01-768.avif",
+      "guge/field/site_hero_01-1200.avif",
+      "guge/field/site_hero_01-1600.avif",
+      "guge/field/site_hero_01-2048.avif"
+    ],
+    "lqip": "guge/field/site_hero_01-lqip.webp",
+    "fallback": "guge/field/site_hero_01-2048.jpg"
+  },
+  "guge/field/site_plain": {
+    "src": "guge/field/site_plain",
+    "original": {
+      "width": 2800,
+      "height": 1575,
+      "bytes": 635462
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/field/site_plain-480.webp",
+      "guge/field/site_plain-768.webp",
+      "guge/field/site_plain-1200.webp",
+      "guge/field/site_plain-1600.webp",
+      "guge/field/site_plain-2048.webp"
+    ],
+    "avif": [
+      "guge/field/site_plain-480.avif",
+      "guge/field/site_plain-768.avif",
+      "guge/field/site_plain-1200.avif",
+      "guge/field/site_plain-1600.avif",
+      "guge/field/site_plain-2048.avif"
+    ],
+    "lqip": "guge/field/site_plain-lqip.webp",
+    "fallback": "guge/field/site_plain-2048.jpg"
+  },
+  "guge/field/site_valley": {
+    "src": "guge/field/site_valley",
+    "original": {
+      "width": 2800,
+      "height": 1575,
+      "bytes": 689458
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/field/site_valley-480.webp",
+      "guge/field/site_valley-768.webp",
+      "guge/field/site_valley-1200.webp",
+      "guge/field/site_valley-1600.webp",
+      "guge/field/site_valley-2048.webp"
+    ],
+    "avif": [
+      "guge/field/site_valley-480.avif",
+      "guge/field/site_valley-768.avif",
+      "guge/field/site_valley-1200.avif",
+      "guge/field/site_valley-1600.avif",
+      "guge/field/site_valley-2048.avif"
+    ],
+    "lqip": "guge/field/site_valley-lqip.webp",
+    "fallback": "guge/field/site_valley-2048.jpg"
+  },
+  "guge/guide/meido_portrait": {
+    "src": "guge/guide/meido_portrait",
+    "original": {
+      "width": 1150,
+      "height": 1050,
+      "bytes": 64768
+    },
+    "aspect": 1.0952,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/guide/meido_portrait-480.webp",
+      "guge/guide/meido_portrait-768.webp"
+    ],
+    "avif": [
+      "guge/guide/meido_portrait-480.avif",
+      "guge/guide/meido_portrait-768.avif"
+    ],
+    "lqip": "guge/guide/meido_portrait-lqip.webp",
+    "fallback": "guge/guide/meido_portrait-768.jpg"
+  },
+  "guge/guide/rag_pipeline": {
+    "src": "guge/guide/rag_pipeline",
+    "original": {
+      "width": 2048,
+      "height": 836,
+      "bytes": 156729
+    },
+    "aspect": 2.4498,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/guide/rag_pipeline-480.webp",
+      "guge/guide/rag_pipeline-768.webp",
+      "guge/guide/rag_pipeline-1200.webp",
+      "guge/guide/rag_pipeline-1600.webp",
+      "guge/guide/rag_pipeline-2048.webp"
+    ],
+    "avif": [
+      "guge/guide/rag_pipeline-480.avif",
+      "guge/guide/rag_pipeline-768.avif",
+      "guge/guide/rag_pipeline-1200.avif",
+      "guge/guide/rag_pipeline-1600.avif",
+      "guge/guide/rag_pipeline-2048.avif"
+    ],
+    "lqip": "guge/guide/rag_pipeline-lqip.webp",
+    "fallback": "guge/guide/rag_pipeline-2048.jpg"
+  },
+  "guge/hero/board_banner": {
+    "src": "guge/hero/board_banner",
+    "original": {
+      "width": 2560,
+      "height": 601,
+      "bytes": 227185
+    },
+    "aspect": 4.2596,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/hero/board_banner-480.webp",
+      "guge/hero/board_banner-768.webp",
+      "guge/hero/board_banner-1200.webp",
+      "guge/hero/board_banner-1600.webp",
+      "guge/hero/board_banner-2048.webp"
+    ],
+    "avif": [
+      "guge/hero/board_banner-480.avif",
+      "guge/hero/board_banner-768.avif",
+      "guge/hero/board_banner-1200.avif",
+      "guge/hero/board_banner-1600.avif",
+      "guge/hero/board_banner-2048.avif"
+    ],
+    "lqip": "guge/hero/board_banner-lqip.webp",
+    "fallback": "guge/hero/board_banner-2048.jpg"
+  },
+  "guge/hero/site_and_meido": {
+    "src": "guge/hero/site_and_meido",
+    "original": {
+      "width": 3200,
+      "height": 1002,
+      "bytes": 338361
+    },
+    "aspect": 3.1936,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/hero/site_and_meido-480.webp",
+      "guge/hero/site_and_meido-768.webp",
+      "guge/hero/site_and_meido-1200.webp",
+      "guge/hero/site_and_meido-1600.webp",
+      "guge/hero/site_and_meido-2048.webp"
+    ],
+    "avif": [
+      "guge/hero/site_and_meido-480.avif",
+      "guge/hero/site_and_meido-768.avif",
+      "guge/hero/site_and_meido-1200.avif",
+      "guge/hero/site_and_meido-1600.avif",
+      "guge/hero/site_and_meido-2048.avif"
+    ],
+    "lqip": "guge/hero/site_and_meido-lqip.webp",
+    "fallback": "guge/hero/site_and_meido-2048.jpg"
+  },
+  "guge/people/character_scroll": {
+    "src": "guge/people/character_scroll",
+    "original": {
+      "width": 2048,
+      "height": 483,
+      "bytes": 176999
+    },
+    "aspect": 4.2402,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/people/character_scroll-480.webp",
+      "guge/people/character_scroll-768.webp",
+      "guge/people/character_scroll-1200.webp",
+      "guge/people/character_scroll-1600.webp",
+      "guge/people/character_scroll-2048.webp"
+    ],
+    "avif": [
+      "guge/people/character_scroll-480.avif",
+      "guge/people/character_scroll-768.avif",
+      "guge/people/character_scroll-1200.avif",
+      "guge/people/character_scroll-1600.avif",
+      "guge/people/character_scroll-2048.avif"
+    ],
+    "lqip": "guge/people/character_scroll-lqip.webp",
+    "fallback": "guge/people/character_scroll-2048.jpg"
+  },
+  "guge/people/scroll_seg_01": {
+    "src": "guge/people/scroll_seg_01",
+    "original": {
+      "width": 1400,
+      "height": 1302,
+      "bytes": 264836
+    },
+    "aspect": 1.0753,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/people/scroll_seg_01-480.webp",
+      "guge/people/scroll_seg_01-768.webp",
+      "guge/people/scroll_seg_01-1200.webp"
+    ],
+    "avif": [
+      "guge/people/scroll_seg_01-480.avif",
+      "guge/people/scroll_seg_01-768.avif",
+      "guge/people/scroll_seg_01-1200.avif"
+    ],
+    "lqip": "guge/people/scroll_seg_01-lqip.webp",
+    "fallback": "guge/people/scroll_seg_01-1200.jpg"
+  },
+  "guge/people/scroll_seg_02": {
+    "src": "guge/people/scroll_seg_02",
+    "original": {
+      "width": 1400,
+      "height": 1395,
+      "bytes": 318995
+    },
+    "aspect": 1.0036,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/people/scroll_seg_02-480.webp",
+      "guge/people/scroll_seg_02-768.webp",
+      "guge/people/scroll_seg_02-1200.webp"
+    ],
+    "avif": [
+      "guge/people/scroll_seg_02-480.avif",
+      "guge/people/scroll_seg_02-768.avif",
+      "guge/people/scroll_seg_02-1200.avif"
+    ],
+    "lqip": "guge/people/scroll_seg_02-lqip.webp",
+    "fallback": "guge/people/scroll_seg_02-1200.jpg"
+  },
+  "guge/people/scroll_seg_03": {
+    "src": "guge/people/scroll_seg_03",
+    "original": {
+      "width": 1400,
+      "height": 1149,
+      "bytes": 222256
+    },
+    "aspect": 1.2185,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/people/scroll_seg_03-480.webp",
+      "guge/people/scroll_seg_03-768.webp",
+      "guge/people/scroll_seg_03-1200.webp"
+    ],
+    "avif": [
+      "guge/people/scroll_seg_03-480.avif",
+      "guge/people/scroll_seg_03-768.avif",
+      "guge/people/scroll_seg_03-1200.avif"
+    ],
+    "lqip": "guge/people/scroll_seg_03-lqip.webp",
+    "fallback": "guge/people/scroll_seg_03-1200.jpg"
+  },
+  "guge/people/scroll_seg_04": {
+    "src": "guge/people/scroll_seg_04",
+    "original": {
+      "width": 1400,
+      "height": 1103,
+      "bytes": 181148
+    },
+    "aspect": 1.2693,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/people/scroll_seg_04-480.webp",
+      "guge/people/scroll_seg_04-768.webp",
+      "guge/people/scroll_seg_04-1200.webp"
+    ],
+    "avif": [
+      "guge/people/scroll_seg_04-480.avif",
+      "guge/people/scroll_seg_04-768.avif",
+      "guge/people/scroll_seg_04-1200.avif"
+    ],
+    "lqip": "guge/people/scroll_seg_04-lqip.webp",
+    "fallback": "guge/people/scroll_seg_04-1200.jpg"
+  },
+  "guge/reel/render_01": {
+    "src": "guge/reel/render_01",
+    "original": {
+      "width": 956,
+      "height": 645,
+      "bytes": 63691
+    },
+    "aspect": 1.4822,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/reel/render_01-480.webp",
+      "guge/reel/render_01-768.webp"
+    ],
+    "avif": [
+      "guge/reel/render_01-480.avif",
+      "guge/reel/render_01-768.avif"
+    ],
+    "lqip": "guge/reel/render_01-lqip.webp",
+    "fallback": "guge/reel/render_01-768.jpg"
+  },
+  "guge/reel/render_02": {
+    "src": "guge/reel/render_02",
+    "original": {
+      "width": 956,
+      "height": 645,
+      "bytes": 80045
+    },
+    "aspect": 1.4822,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/reel/render_02-480.webp",
+      "guge/reel/render_02-768.webp"
+    ],
+    "avif": [
+      "guge/reel/render_02-480.avif",
+      "guge/reel/render_02-768.avif"
+    ],
+    "lqip": "guge/reel/render_02-lqip.webp",
+    "fallback": "guge/reel/render_02-768.jpg"
+  },
+  "guge/reel/render_03": {
+    "src": "guge/reel/render_03",
+    "original": {
+      "width": 956,
+      "height": 645,
+      "bytes": 53085
+    },
+    "aspect": 1.4822,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/reel/render_03-480.webp",
+      "guge/reel/render_03-768.webp"
+    ],
+    "avif": [
+      "guge/reel/render_03-480.avif",
+      "guge/reel/render_03-768.avif"
+    ],
+    "lqip": "guge/reel/render_03-lqip.webp",
+    "fallback": "guge/reel/render_03-768.jpg"
+  },
+  "guge/reel/render_04": {
+    "src": "guge/reel/render_04",
+    "original": {
+      "width": 956,
+      "height": 645,
+      "bytes": 125661
+    },
+    "aspect": 1.4822,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/reel/render_04-480.webp",
+      "guge/reel/render_04-768.webp"
+    ],
+    "avif": [
+      "guge/reel/render_04-480.avif",
+      "guge/reel/render_04-768.avif"
+    ],
+    "lqip": "guge/reel/render_04-lqip.webp",
+    "fallback": "guge/reel/render_04-768.jpg"
+  },
+  "guge/reel/render_05": {
+    "src": "guge/reel/render_05",
+    "original": {
+      "width": 956,
+      "height": 645,
+      "bytes": 73738
+    },
+    "aspect": 1.4822,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/reel/render_05-480.webp",
+      "guge/reel/render_05-768.webp"
+    ],
+    "avif": [
+      "guge/reel/render_05-480.avif",
+      "guge/reel/render_05-768.avif"
+    ],
+    "lqip": "guge/reel/render_05-lqip.webp",
+    "fallback": "guge/reel/render_05-768.jpg"
+  },
+  "guge/reel/render_06": {
+    "src": "guge/reel/render_06",
+    "original": {
+      "width": 956,
+      "height": 645,
+      "bytes": 124791
+    },
+    "aspect": 1.4822,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/reel/render_06-480.webp",
+      "guge/reel/render_06-768.webp"
+    ],
+    "avif": [
+      "guge/reel/render_06-480.avif",
+      "guge/reel/render_06-768.avif"
+    ],
+    "lqip": "guge/reel/render_06-lqip.webp",
+    "fallback": "guge/reel/render_06-768.jpg"
+  },
+  "guge/world/guge_world_map": {
+    "src": "guge/world/guge_world_map",
+    "original": {
+      "width": 2048,
+      "height": 2556,
+      "bytes": 863743
+    },
+    "aspect": 0.8013,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/world/guge_world_map-480.webp",
+      "guge/world/guge_world_map-768.webp",
+      "guge/world/guge_world_map-1200.webp",
+      "guge/world/guge_world_map-1600.webp",
+      "guge/world/guge_world_map-2048.webp"
+    ],
+    "avif": [
+      "guge/world/guge_world_map-480.avif",
+      "guge/world/guge_world_map-768.avif",
+      "guge/world/guge_world_map-1200.avif",
+      "guge/world/guge_world_map-1600.avif",
+      "guge/world/guge_world_map-2048.avif"
+    ],
+    "lqip": "guge/world/guge_world_map-lqip.webp",
+    "fallback": "guge/world/guge_world_map-2048.jpg"
+  },
+  "guge/deck/detail_02": {
+    "src": "guge/deck/detail_02",
+    "original": {
+      "width": 1800,
+      "height": 1200,
+      "bytes": 466481
+    },
+    "aspect": 1.5,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/detail_02-480.webp",
+      "guge/deck/detail_02-768.webp",
+      "guge/deck/detail_02-1200.webp",
+      "guge/deck/detail_02-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/detail_02-480.avif",
+      "guge/deck/detail_02-768.avif",
+      "guge/deck/detail_02-1200.avif",
+      "guge/deck/detail_02-1600.avif"
+    ],
+    "lqip": "guge/deck/detail_02-lqip.webp",
+    "fallback": "guge/deck/detail_02-1600.jpg"
+  },
+  "guge/deck/detail_03": {
+    "src": "guge/deck/detail_03",
+    "original": {
+      "width": 1800,
+      "height": 1200,
+      "bytes": 682581
+    },
+    "aspect": 1.5,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/detail_03-480.webp",
+      "guge/deck/detail_03-768.webp",
+      "guge/deck/detail_03-1200.webp",
+      "guge/deck/detail_03-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/detail_03-480.avif",
+      "guge/deck/detail_03-768.avif",
+      "guge/deck/detail_03-1200.avif",
+      "guge/deck/detail_03-1600.avif"
+    ],
+    "lqip": "guge/deck/detail_03-lqip.webp",
+    "fallback": "guge/deck/detail_03-1600.jpg"
+  },
+  "guge/deck/detail_04": {
+    "src": "guge/deck/detail_04",
+    "original": {
+      "width": 1800,
+      "height": 1200,
+      "bytes": 285364
+    },
+    "aspect": 1.5,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/detail_04-480.webp",
+      "guge/deck/detail_04-768.webp",
+      "guge/deck/detail_04-1200.webp",
+      "guge/deck/detail_04-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/detail_04-480.avif",
+      "guge/deck/detail_04-768.avif",
+      "guge/deck/detail_04-1200.avif",
+      "guge/deck/detail_04-1600.avif"
+    ],
+    "lqip": "guge/deck/detail_04-lqip.webp",
+    "fallback": "guge/deck/detail_04-1600.jpg"
+  },
+  "guge/field/cave_guardian": {
+    "src": "guge/field/cave_guardian",
+    "original": {
+      "width": 1600,
+      "height": 900,
+      "bytes": 51175
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/field/cave_guardian-480.webp",
+      "guge/field/cave_guardian-768.webp",
+      "guge/field/cave_guardian-1200.webp",
+      "guge/field/cave_guardian-1600.webp"
+    ],
+    "avif": [
+      "guge/field/cave_guardian-480.avif",
+      "guge/field/cave_guardian-768.avif",
+      "guge/field/cave_guardian-1200.avif",
+      "guge/field/cave_guardian-1600.avif"
+    ],
+    "lqip": "guge/field/cave_guardian-lqip.webp",
+    "fallback": "guge/field/cave_guardian-1600.jpg"
+  },
+  "guge/field/mural_after": {
+    "src": "guge/field/mural_after",
+    "original": {
+      "width": 1400,
+      "height": 2107,
+      "bytes": 623613
+    },
+    "aspect": 0.6645,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/field/mural_after-480.webp",
+      "guge/field/mural_after-768.webp",
+      "guge/field/mural_after-1200.webp"
+    ],
+    "avif": [
+      "guge/field/mural_after-480.avif",
+      "guge/field/mural_after-768.avif",
+      "guge/field/mural_after-1200.avif"
+    ],
+    "lqip": "guge/field/mural_after-lqip.webp",
+    "fallback": "guge/field/mural_after-1200.jpg"
+  },
+  "guge/field/mural_before": {
+    "src": "guge/field/mural_before",
+    "original": {
+      "width": 1600,
+      "height": 2452,
+      "bytes": 1448203
+    },
+    "aspect": 0.6525,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/field/mural_before-480.webp",
+      "guge/field/mural_before-768.webp",
+      "guge/field/mural_before-1200.webp",
+      "guge/field/mural_before-1600.webp"
+    ],
+    "avif": [
+      "guge/field/mural_before-480.avif",
+      "guge/field/mural_before-768.avif",
+      "guge/field/mural_before-1200.avif",
+      "guge/field/mural_before-1600.avif"
+    ],
+    "lqip": "guge/field/mural_before-lqip.webp",
+    "fallback": "guge/field/mural_before-1600.jpg"
+  },
+  "guge/field/survey_01": {
+    "src": "guge/field/survey_01",
+    "original": {
+      "width": 1500,
+      "height": 2000,
+      "bytes": 411491
+    },
+    "aspect": 0.75,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/field/survey_01-480.webp",
+      "guge/field/survey_01-768.webp",
+      "guge/field/survey_01-1200.webp"
+    ],
+    "avif": [
+      "guge/field/survey_01-480.avif",
+      "guge/field/survey_01-768.avif",
+      "guge/field/survey_01-1200.avif"
+    ],
+    "lqip": "guge/field/survey_01-lqip.webp",
+    "fallback": "guge/field/survey_01-1200.jpg"
+  },
+  "guge/field/survey_02": {
+    "src": "guge/field/survey_02",
+    "original": {
+      "width": 1500,
+      "height": 2666,
+      "bytes": 822781
+    },
+    "aspect": 0.5626,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/field/survey_02-480.webp",
+      "guge/field/survey_02-768.webp",
+      "guge/field/survey_02-1200.webp"
+    ],
+    "avif": [
+      "guge/field/survey_02-480.avif",
+      "guge/field/survey_02-768.avif",
+      "guge/field/survey_02-1200.avif"
+    ],
+    "lqip": "guge/field/survey_02-lqip.webp",
+    "fallback": "guge/field/survey_02-1200.jpg"
+  },
+  "guge/finale/plateau": {
+    "src": "guge/finale/plateau",
+    "original": {
+      "width": 2400,
+      "height": 1350,
+      "bytes": 260397
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/finale/plateau-480.webp",
+      "guge/finale/plateau-768.webp",
+      "guge/finale/plateau-1200.webp",
+      "guge/finale/plateau-1600.webp",
+      "guge/finale/plateau-2048.webp"
+    ],
+    "avif": [
+      "guge/finale/plateau-480.avif",
+      "guge/finale/plateau-768.avif",
+      "guge/finale/plateau-1200.avif",
+      "guge/finale/plateau-1600.avif",
+      "guge/finale/plateau-2048.avif"
+    ],
+    "lqip": "guge/finale/plateau-lqip.webp",
+    "fallback": "guge/finale/plateau-2048.jpg"
+  },
+  "guge/guide/ui_dialogue": {
+    "src": "guge/guide/ui_dialogue",
+    "original": {
+      "width": 2048,
+      "height": 1152,
+      "bytes": 445398
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/guide/ui_dialogue-480.webp",
+      "guge/guide/ui_dialogue-768.webp",
+      "guge/guide/ui_dialogue-1200.webp",
+      "guge/guide/ui_dialogue-1600.webp",
+      "guge/guide/ui_dialogue-2048.webp"
+    ],
+    "avif": [
+      "guge/guide/ui_dialogue-480.avif",
+      "guge/guide/ui_dialogue-768.avif",
+      "guge/guide/ui_dialogue-1200.avif",
+      "guge/guide/ui_dialogue-1600.avif",
+      "guge/guide/ui_dialogue-2048.avif"
+    ],
+    "lqip": "guge/guide/ui_dialogue-lqip.webp",
+    "fallback": "guge/guide/ui_dialogue-2048.jpg"
+  },
+  "guge/guide/ui_voice": {
+    "src": "guge/guide/ui_voice",
+    "original": {
+      "width": 2048,
+      "height": 1152,
+      "bytes": 460349
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/guide/ui_voice-480.webp",
+      "guge/guide/ui_voice-768.webp",
+      "guge/guide/ui_voice-1200.webp",
+      "guge/guide/ui_voice-1600.webp",
+      "guge/guide/ui_voice-2048.webp"
+    ],
+    "avif": [
+      "guge/guide/ui_voice-480.avif",
+      "guge/guide/ui_voice-768.avif",
+      "guge/guide/ui_voice-1200.avif",
+      "guge/guide/ui_voice-1600.avif",
+      "guge/guide/ui_voice-2048.avif"
+    ],
+    "lqip": "guge/guide/ui_voice-lqip.webp",
+    "fallback": "guge/guide/ui_voice-2048.jpg"
+  },
+  "guge/play/experience_main": {
+    "src": "guge/play/experience_main",
+    "original": {
+      "width": 1600,
+      "height": 868,
+      "bytes": 157128
+    },
+    "aspect": 1.8433,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/play/experience_main-480.webp",
+      "guge/play/experience_main-768.webp",
+      "guge/play/experience_main-1200.webp",
+      "guge/play/experience_main-1600.webp"
+    ],
+    "avif": [
+      "guge/play/experience_main-480.avif",
+      "guge/play/experience_main-768.avif",
+      "guge/play/experience_main-1200.avif",
+      "guge/play/experience_main-1600.avif"
+    ],
+    "lqip": "guge/play/experience_main-lqip.webp",
+    "fallback": "guge/play/experience_main-1600.jpg"
+  },
+  "guge/play/gameplay_mural": {
+    "src": "guge/play/gameplay_mural",
+    "original": {
+      "width": 1600,
+      "height": 868,
+      "bytes": 181247
+    },
+    "aspect": 1.8433,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/play/gameplay_mural-480.webp",
+      "guge/play/gameplay_mural-768.webp",
+      "guge/play/gameplay_mural-1200.webp",
+      "guge/play/gameplay_mural-1600.webp"
+    ],
+    "avif": [
+      "guge/play/gameplay_mural-480.avif",
+      "guge/play/gameplay_mural-768.avif",
+      "guge/play/gameplay_mural-1200.avif",
+      "guge/play/gameplay_mural-1600.avif"
+    ],
+    "lqip": "guge/play/gameplay_mural-lqip.webp",
+    "fallback": "guge/play/gameplay_mural-1600.jpg"
+  },
+  "guge/play/node_guowoqin": {
+    "src": "guge/play/node_guowoqin",
+    "original": {
+      "width": 2048,
+      "height": 1276,
+      "bytes": 197527
+    },
+    "aspect": 1.605,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/play/node_guowoqin-480.webp",
+      "guge/play/node_guowoqin-768.webp",
+      "guge/play/node_guowoqin-1200.webp",
+      "guge/play/node_guowoqin-1600.webp",
+      "guge/play/node_guowoqin-2048.webp"
+    ],
+    "avif": [
+      "guge/play/node_guowoqin-480.avif",
+      "guge/play/node_guowoqin-768.avif",
+      "guge/play/node_guowoqin-1200.avif",
+      "guge/play/node_guowoqin-1600.avif",
+      "guge/play/node_guowoqin-2048.avif"
+    ],
+    "lqip": "guge/play/node_guowoqin-lqip.webp",
+    "fallback": "guge/play/node_guowoqin-2048.jpg"
+  },
+  "guge/play/node_inventory": {
+    "src": "guge/play/node_inventory",
+    "original": {
+      "width": 2200,
+      "height": 1214,
+      "bytes": 319572
+    },
+    "aspect": 1.8122,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/play/node_inventory-480.webp",
+      "guge/play/node_inventory-768.webp",
+      "guge/play/node_inventory-1200.webp",
+      "guge/play/node_inventory-1600.webp",
+      "guge/play/node_inventory-2048.webp"
+    ],
+    "avif": [
+      "guge/play/node_inventory-480.avif",
+      "guge/play/node_inventory-768.avif",
+      "guge/play/node_inventory-1200.avif",
+      "guge/play/node_inventory-1600.avif",
+      "guge/play/node_inventory-2048.avif"
+    ],
+    "lqip": "guge/play/node_inventory-lqip.webp",
+    "fallback": "guge/play/node_inventory-2048.jpg"
+  },
+  "guge/play/node_mural": {
+    "src": "guge/play/node_mural",
+    "original": {
+      "width": 2048,
+      "height": 1417,
+      "bytes": 208120
+    },
+    "aspect": 1.4453,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/play/node_mural-480.webp",
+      "guge/play/node_mural-768.webp",
+      "guge/play/node_mural-1200.webp",
+      "guge/play/node_mural-1600.webp",
+      "guge/play/node_mural-2048.webp"
+    ],
+    "avif": [
+      "guge/play/node_mural-480.avif",
+      "guge/play/node_mural-768.avif",
+      "guge/play/node_mural-1200.avif",
+      "guge/play/node_mural-1600.avif",
+      "guge/play/node_mural-2048.avif"
+    ],
+    "lqip": "guge/play/node_mural-lqip.webp",
+    "fallback": "guge/play/node_mural-2048.jpg"
+  },
+  "guge/play/node_npc": {
+    "src": "guge/play/node_npc",
+    "original": {
+      "width": 2048,
+      "height": 1155,
+      "bytes": 173217
+    },
+    "aspect": 1.7732,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/play/node_npc-480.webp",
+      "guge/play/node_npc-768.webp",
+      "guge/play/node_npc-1200.webp",
+      "guge/play/node_npc-1600.webp",
+      "guge/play/node_npc-2048.webp"
+    ],
+    "avif": [
+      "guge/play/node_npc-480.avif",
+      "guge/play/node_npc-768.avif",
+      "guge/play/node_npc-1200.avif",
+      "guge/play/node_npc-1600.avif",
+      "guge/play/node_npc-2048.avif"
+    ],
+    "lqip": "guge/play/node_npc-lqip.webp",
+    "fallback": "guge/play/node_npc-2048.jpg"
+  },
+  "guge/rebuild/lod_segmentation": {
+    "src": "guge/rebuild/lod_segmentation",
+    "original": {
+      "width": 2000,
+      "height": 1128,
+      "bytes": 640076
+    },
+    "aspect": 1.773,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/rebuild/lod_segmentation-480.webp",
+      "guge/rebuild/lod_segmentation-768.webp",
+      "guge/rebuild/lod_segmentation-1200.webp",
+      "guge/rebuild/lod_segmentation-1600.webp"
+    ],
+    "avif": [
+      "guge/rebuild/lod_segmentation-480.avif",
+      "guge/rebuild/lod_segmentation-768.avif",
+      "guge/rebuild/lod_segmentation-1200.avif",
+      "guge/rebuild/lod_segmentation-1600.avif"
+    ],
+    "lqip": "guge/rebuild/lod_segmentation-lqip.webp",
+    "fallback": "guge/rebuild/lod_segmentation-1600.jpg"
+  },
+  "guge/rebuild/point_cloud": {
+    "src": "guge/rebuild/point_cloud",
+    "original": {
+      "width": 2000,
+      "height": 1128,
+      "bytes": 902715
+    },
+    "aspect": 1.773,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/rebuild/point_cloud-480.webp",
+      "guge/rebuild/point_cloud-768.webp",
+      "guge/rebuild/point_cloud-1200.webp",
+      "guge/rebuild/point_cloud-1600.webp"
+    ],
+    "avif": [
+      "guge/rebuild/point_cloud-480.avif",
+      "guge/rebuild/point_cloud-768.avif",
+      "guge/rebuild/point_cloud-1200.avif",
+      "guge/rebuild/point_cloud-1600.avif"
+    ],
+    "lqip": "guge/rebuild/point_cloud-lqip.webp",
+    "fallback": "guge/rebuild/point_cloud-1600.jpg"
+  },
+  "guge/rebuild/red_temple_drawings": {
+    "src": "guge/rebuild/red_temple_drawings",
+    "original": {
+      "width": 2200,
+      "height": 616,
+      "bytes": 195982
+    },
+    "aspect": 3.5714,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/rebuild/red_temple_drawings-480.webp",
+      "guge/rebuild/red_temple_drawings-768.webp",
+      "guge/rebuild/red_temple_drawings-1200.webp",
+      "guge/rebuild/red_temple_drawings-1600.webp",
+      "guge/rebuild/red_temple_drawings-2048.webp"
+    ],
+    "avif": [
+      "guge/rebuild/red_temple_drawings-480.avif",
+      "guge/rebuild/red_temple_drawings-768.avif",
+      "guge/rebuild/red_temple_drawings-1200.avif",
+      "guge/rebuild/red_temple_drawings-1600.avif",
+      "guge/rebuild/red_temple_drawings-2048.avif"
+    ],
+    "lqip": "guge/rebuild/red_temple_drawings-lqip.webp",
+    "fallback": "guge/rebuild/red_temple_drawings-2048.jpg"
+  },
+  "guge/rebuild/red_temple_layers": {
+    "src": "guge/rebuild/red_temple_layers",
+    "original": {
+      "width": 2012,
+      "height": 2697,
+      "bytes": 6368429
+    },
+    "aspect": 0.746,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/rebuild/red_temple_layers-480.webp",
+      "guge/rebuild/red_temple_layers-768.webp",
+      "guge/rebuild/red_temple_layers-1200.webp",
+      "guge/rebuild/red_temple_layers-1600.webp"
+    ],
+    "avif": [
+      "guge/rebuild/red_temple_layers-480.avif",
+      "guge/rebuild/red_temple_layers-768.avif",
+      "guge/rebuild/red_temple_layers-1200.avif",
+      "guge/rebuild/red_temple_layers-1600.avif"
+    ],
+    "lqip": "guge/rebuild/red_temple_layers-lqip.webp",
+    "fallback": "guge/rebuild/red_temple_layers-1600.jpg"
+  },
+  "guge/rebuild/wireframe": {
+    "src": "guge/rebuild/wireframe",
+    "original": {
+      "width": 2048,
+      "height": 1518,
+      "bytes": 95226
+    },
+    "aspect": 1.3491,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/rebuild/wireframe-480.webp",
+      "guge/rebuild/wireframe-768.webp",
+      "guge/rebuild/wireframe-1200.webp",
+      "guge/rebuild/wireframe-1600.webp",
+      "guge/rebuild/wireframe-2048.webp"
+    ],
+    "avif": [
+      "guge/rebuild/wireframe-480.avif",
+      "guge/rebuild/wireframe-768.avif",
+      "guge/rebuild/wireframe-1200.avif",
+      "guge/rebuild/wireframe-1600.avif",
+      "guge/rebuild/wireframe-2048.avif"
+    ],
+    "lqip": "guge/rebuild/wireframe-lqip.webp",
+    "fallback": "guge/rebuild/wireframe-2048.jpg"
+  },
+  "guge/sources/archaeology_report": {
+    "src": "guge/sources/archaeology_report",
+    "original": {
+      "width": 776,
+      "height": 1232,
+      "bytes": 86652
+    },
+    "aspect": 0.6299,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/sources/archaeology_report-480.webp",
+      "guge/sources/archaeology_report-768.webp"
+    ],
+    "avif": [
+      "guge/sources/archaeology_report-480.avif",
+      "guge/sources/archaeology_report-768.avif"
+    ],
+    "lqip": "guge/sources/archaeology_report-lqip.webp",
+    "fallback": "guge/sources/archaeology_report-768.jpg"
+  },
+  "guge/sources/artifact_evidence": {
+    "src": "guge/sources/artifact_evidence",
+    "original": {
+      "width": 2048,
+      "height": 810,
+      "bytes": 153482
+    },
+    "aspect": 2.5284,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/sources/artifact_evidence-480.webp",
+      "guge/sources/artifact_evidence-768.webp",
+      "guge/sources/artifact_evidence-1200.webp",
+      "guge/sources/artifact_evidence-1600.webp",
+      "guge/sources/artifact_evidence-2048.webp"
+    ],
+    "avif": [
+      "guge/sources/artifact_evidence-480.avif",
+      "guge/sources/artifact_evidence-768.avif",
+      "guge/sources/artifact_evidence-1200.avif",
+      "guge/sources/artifact_evidence-1600.avif",
+      "guge/sources/artifact_evidence-2048.avif"
+    ],
+    "lqip": "guge/sources/artifact_evidence-lqip.webp",
+    "fallback": "guge/sources/artifact_evidence-2048.jpg"
+  },
+  "guge/sources/mural_ref_01": {
+    "src": "guge/sources/mural_ref_01",
+    "original": {
+      "width": 1600,
+      "height": 1062,
+      "bytes": 420990
+    },
+    "aspect": 1.5066,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/sources/mural_ref_01-480.webp",
+      "guge/sources/mural_ref_01-768.webp",
+      "guge/sources/mural_ref_01-1200.webp",
+      "guge/sources/mural_ref_01-1600.webp"
+    ],
+    "avif": [
+      "guge/sources/mural_ref_01-480.avif",
+      "guge/sources/mural_ref_01-768.avif",
+      "guge/sources/mural_ref_01-1200.avif",
+      "guge/sources/mural_ref_01-1600.avif"
+    ],
+    "lqip": "guge/sources/mural_ref_01-lqip.webp",
+    "fallback": "guge/sources/mural_ref_01-1600.jpg"
+  },
+  "guge/sources/mural_ref_02": {
+    "src": "guge/sources/mural_ref_02",
+    "original": {
+      "width": 1600,
+      "height": 1067,
+      "bytes": 264126
+    },
+    "aspect": 1.4995,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/sources/mural_ref_02-480.webp",
+      "guge/sources/mural_ref_02-768.webp",
+      "guge/sources/mural_ref_02-1200.webp",
+      "guge/sources/mural_ref_02-1600.webp"
+    ],
+    "avif": [
+      "guge/sources/mural_ref_02-480.avif",
+      "guge/sources/mural_ref_02-768.avif",
+      "guge/sources/mural_ref_02-1200.avif",
+      "guge/sources/mural_ref_02-1600.avif"
+    ],
+    "lqip": "guge/sources/mural_ref_02-lqip.webp",
+    "fallback": "guge/sources/mural_ref_02-1600.jpg"
+  },
+  "guge/sources/museum_01": {
+    "src": "guge/sources/museum_01",
+    "original": {
+      "width": 2275,
+      "height": 1279,
+      "bytes": 463897
+    },
+    "aspect": 1.7787,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/sources/museum_01-480.webp",
+      "guge/sources/museum_01-768.webp",
+      "guge/sources/museum_01-1200.webp",
+      "guge/sources/museum_01-1600.webp",
+      "guge/sources/museum_01-2048.webp"
+    ],
+    "avif": [
+      "guge/sources/museum_01-480.avif",
+      "guge/sources/museum_01-768.avif",
+      "guge/sources/museum_01-1200.avif",
+      "guge/sources/museum_01-1600.avif",
+      "guge/sources/museum_01-2048.avif"
+    ],
+    "lqip": "guge/sources/museum_01-lqip.webp",
+    "fallback": "guge/sources/museum_01-2048.jpg"
+  },
+  "guge/sources/museum_02": {
+    "src": "guge/sources/museum_02",
+    "original": {
+      "width": 2275,
+      "height": 1279,
+      "bytes": 586670
+    },
+    "aspect": 1.7787,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/sources/museum_02-480.webp",
+      "guge/sources/museum_02-768.webp",
+      "guge/sources/museum_02-1200.webp",
+      "guge/sources/museum_02-1600.webp",
+      "guge/sources/museum_02-2048.webp"
+    ],
+    "avif": [
+      "guge/sources/museum_02-480.avif",
+      "guge/sources/museum_02-768.avif",
+      "guge/sources/museum_02-1200.avif",
+      "guge/sources/museum_02-1600.avif",
+      "guge/sources/museum_02-2048.avif"
+    ],
+    "lqip": "guge/sources/museum_02-lqip.webp",
+    "fallback": "guge/sources/museum_02-2048.jpg"
+  },
+  "guge/sources/museum_03": {
+    "src": "guge/sources/museum_03",
+    "original": {
+      "width": 2275,
+      "height": 1279,
+      "bytes": 608368
+    },
+    "aspect": 1.7787,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/sources/museum_03-480.webp",
+      "guge/sources/museum_03-768.webp",
+      "guge/sources/museum_03-1200.webp",
+      "guge/sources/museum_03-1600.webp",
+      "guge/sources/museum_03-2048.webp"
+    ],
+    "avif": [
+      "guge/sources/museum_03-480.avif",
+      "guge/sources/museum_03-768.avif",
+      "guge/sources/museum_03-1200.avif",
+      "guge/sources/museum_03-1600.avif",
+      "guge/sources/museum_03-2048.avif"
+    ],
+    "lqip": "guge/sources/museum_03-lqip.webp",
+    "fallback": "guge/sources/museum_03-2048.jpg"
+  },
+  "guge/sources/statue_restoration": {
+    "src": "guge/sources/statue_restoration",
+    "original": {
+      "width": 2400,
+      "height": 1350,
+      "bytes": 401826
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/sources/statue_restoration-480.webp",
+      "guge/sources/statue_restoration-768.webp",
+      "guge/sources/statue_restoration-1200.webp",
+      "guge/sources/statue_restoration-1600.webp",
+      "guge/sources/statue_restoration-2048.webp"
+    ],
+    "avif": [
+      "guge/sources/statue_restoration-480.avif",
+      "guge/sources/statue_restoration-768.avif",
+      "guge/sources/statue_restoration-1200.avif",
+      "guge/sources/statue_restoration-1600.avif",
+      "guge/sources/statue_restoration-2048.avif"
+    ],
+    "lqip": "guge/sources/statue_restoration-lqip.webp",
+    "fallback": "guge/sources/statue_restoration-2048.jpg"
+  },
+  "guge/deck/detail_cast": {
+    "src": "guge/deck/detail_cast",
+    "original": {
+      "width": 1800,
+      "height": 1200,
+      "bytes": 694751
+    },
+    "aspect": 1.5,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/detail_cast-480.webp",
+      "guge/deck/detail_cast-768.webp",
+      "guge/deck/detail_cast-1200.webp",
+      "guge/deck/detail_cast-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/detail_cast-480.avif",
+      "guge/deck/detail_cast-768.avif",
+      "guge/deck/detail_cast-1200.avif",
+      "guge/deck/detail_cast-1600.avif"
+    ],
+    "lqip": "guge/deck/detail_cast-lqip.webp",
+    "fallback": "guge/deck/detail_cast-1600.jpg"
+  },
+  "guge/deck/ppt_01": {
+    "src": "guge/deck/ppt_01",
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "bytes": 403423
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/ppt_01-480.webp",
+      "guge/deck/ppt_01-768.webp",
+      "guge/deck/ppt_01-1200.webp",
+      "guge/deck/ppt_01-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/ppt_01-480.avif",
+      "guge/deck/ppt_01-768.avif",
+      "guge/deck/ppt_01-1200.avif",
+      "guge/deck/ppt_01-1600.avif"
+    ],
+    "lqip": "guge/deck/ppt_01-lqip.webp",
+    "fallback": "guge/deck/ppt_01-1600.jpg"
+  },
+  "guge/deck/ppt_02": {
+    "src": "guge/deck/ppt_02",
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "bytes": 382905
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/ppt_02-480.webp",
+      "guge/deck/ppt_02-768.webp",
+      "guge/deck/ppt_02-1200.webp",
+      "guge/deck/ppt_02-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/ppt_02-480.avif",
+      "guge/deck/ppt_02-768.avif",
+      "guge/deck/ppt_02-1200.avif",
+      "guge/deck/ppt_02-1600.avif"
+    ],
+    "lqip": "guge/deck/ppt_02-lqip.webp",
+    "fallback": "guge/deck/ppt_02-1600.jpg"
+  },
+  "guge/deck/ppt_03": {
+    "src": "guge/deck/ppt_03",
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "bytes": 303871
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/ppt_03-480.webp",
+      "guge/deck/ppt_03-768.webp",
+      "guge/deck/ppt_03-1200.webp",
+      "guge/deck/ppt_03-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/ppt_03-480.avif",
+      "guge/deck/ppt_03-768.avif",
+      "guge/deck/ppt_03-1200.avif",
+      "guge/deck/ppt_03-1600.avif"
+    ],
+    "lqip": "guge/deck/ppt_03-lqip.webp",
+    "fallback": "guge/deck/ppt_03-1600.jpg"
+  },
+  "guge/deck/ppt_04": {
+    "src": "guge/deck/ppt_04",
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "bytes": 475769
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/ppt_04-480.webp",
+      "guge/deck/ppt_04-768.webp",
+      "guge/deck/ppt_04-1200.webp",
+      "guge/deck/ppt_04-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/ppt_04-480.avif",
+      "guge/deck/ppt_04-768.avif",
+      "guge/deck/ppt_04-1200.avif",
+      "guge/deck/ppt_04-1600.avif"
+    ],
+    "lqip": "guge/deck/ppt_04-lqip.webp",
+    "fallback": "guge/deck/ppt_04-1600.jpg"
+  },
+  "guge/deck/ppt_05": {
+    "src": "guge/deck/ppt_05",
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "bytes": 285801
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/ppt_05-480.webp",
+      "guge/deck/ppt_05-768.webp",
+      "guge/deck/ppt_05-1200.webp",
+      "guge/deck/ppt_05-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/ppt_05-480.avif",
+      "guge/deck/ppt_05-768.avif",
+      "guge/deck/ppt_05-1200.avif",
+      "guge/deck/ppt_05-1600.avif"
+    ],
+    "lqip": "guge/deck/ppt_05-lqip.webp",
+    "fallback": "guge/deck/ppt_05-1600.jpg"
+  },
+  "guge/deck/ppt_06": {
+    "src": "guge/deck/ppt_06",
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "bytes": 282695
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/ppt_06-480.webp",
+      "guge/deck/ppt_06-768.webp",
+      "guge/deck/ppt_06-1200.webp",
+      "guge/deck/ppt_06-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/ppt_06-480.avif",
+      "guge/deck/ppt_06-768.avif",
+      "guge/deck/ppt_06-1200.avif",
+      "guge/deck/ppt_06-1600.avif"
+    ],
+    "lqip": "guge/deck/ppt_06-lqip.webp",
+    "fallback": "guge/deck/ppt_06-1600.jpg"
+  },
+  "guge/deck/ppt_07": {
+    "src": "guge/deck/ppt_07",
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "bytes": 381646
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/ppt_07-480.webp",
+      "guge/deck/ppt_07-768.webp",
+      "guge/deck/ppt_07-1200.webp",
+      "guge/deck/ppt_07-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/ppt_07-480.avif",
+      "guge/deck/ppt_07-768.avif",
+      "guge/deck/ppt_07-1200.avif",
+      "guge/deck/ppt_07-1600.avif"
+    ],
+    "lqip": "guge/deck/ppt_07-lqip.webp",
+    "fallback": "guge/deck/ppt_07-1600.jpg"
+  },
+  "guge/deck/ppt_08": {
+    "src": "guge/deck/ppt_08",
+    "original": {
+      "width": 1920,
+      "height": 1080,
+      "bytes": 321968
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/deck/ppt_08-480.webp",
+      "guge/deck/ppt_08-768.webp",
+      "guge/deck/ppt_08-1200.webp",
+      "guge/deck/ppt_08-1600.webp"
+    ],
+    "avif": [
+      "guge/deck/ppt_08-480.avif",
+      "guge/deck/ppt_08-768.avif",
+      "guge/deck/ppt_08-1200.avif",
+      "guge/deck/ppt_08-1600.avif"
+    ],
+    "lqip": "guge/deck/ppt_08-lqip.webp",
+    "fallback": "guge/deck/ppt_08-1600.jpg"
+  },
+  "guge/hero/poster_key": {
+    "src": "guge/hero/poster_key",
+    "original": {
+      "width": 3152,
+      "height": 1330,
+      "bytes": 4160279
+    },
+    "aspect": 2.3699,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/hero/poster_key-480.webp",
+      "guge/hero/poster_key-768.webp",
+      "guge/hero/poster_key-1200.webp",
+      "guge/hero/poster_key-1600.webp",
+      "guge/hero/poster_key-2048.webp"
+    ],
+    "avif": [
+      "guge/hero/poster_key-480.avif",
+      "guge/hero/poster_key-768.avif",
+      "guge/hero/poster_key-1200.avif",
+      "guge/hero/poster_key-1600.avif",
+      "guge/hero/poster_key-2048.avif"
+    ],
+    "lqip": "guge/hero/poster_key-lqip.webp",
+    "fallback": "guge/hero/poster_key-2048.jpg"
+  },
+  "guge/hero/site_and_meido_card": {
+    "src": "guge/hero/site_and_meido_card",
+    "original": {
+      "width": 1860,
+      "height": 1200,
+      "bytes": 301004
+    },
+    "aspect": 1.55,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/hero/site_and_meido_card-480.webp",
+      "guge/hero/site_and_meido_card-768.webp",
+      "guge/hero/site_and_meido_card-1200.webp",
+      "guge/hero/site_and_meido_card-1600.webp"
+    ],
+    "avif": [
+      "guge/hero/site_and_meido_card-480.avif",
+      "guge/hero/site_and_meido_card-768.avif",
+      "guge/hero/site_and_meido_card-1200.avif",
+      "guge/hero/site_and_meido_card-1600.avif"
+    ],
+    "lqip": "guge/hero/site_and_meido_card-lqip.webp",
+    "fallback": "guge/hero/site_and_meido_card-1600.jpg"
+  },
+  "guge/hero/site_and_meido_portrait": {
+    "src": "guge/hero/site_and_meido_portrait",
+    "original": {
+      "width": 1200,
+      "height": 1395,
+      "bytes": 168435
+    },
+    "aspect": 0.8602,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "webp": [
+      "guge/hero/site_and_meido_portrait-480.webp",
+      "guge/hero/site_and_meido_portrait-768.webp",
+      "guge/hero/site_and_meido_portrait-1200.webp"
+    ],
+    "avif": [
+      "guge/hero/site_and_meido_portrait-480.avif",
+      "guge/hero/site_and_meido_portrait-768.avif",
+      "guge/hero/site_and_meido_portrait-1200.avif"
+    ],
+    "lqip": "guge/hero/site_and_meido_portrait-lqip.webp",
+    "fallback": "guge/hero/site_and_meido_portrait-1200.jpg"
+  },
+  "guge/play/core_gameplay": {
+    "src": "guge/play/core_gameplay",
+    "original": {
+      "width": 1600,
+      "height": 900,
+      "bytes": 293029
+    },
+    "aspect": 1.7778,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600
+    ],
+    "webp": [
+      "guge/play/core_gameplay-480.webp",
+      "guge/play/core_gameplay-768.webp",
+      "guge/play/core_gameplay-1200.webp",
+      "guge/play/core_gameplay-1600.webp"
+    ],
+    "avif": [
+      "guge/play/core_gameplay-480.avif",
+      "guge/play/core_gameplay-768.avif",
+      "guge/play/core_gameplay-1200.avif",
+      "guge/play/core_gameplay-1600.avif"
+    ],
+    "lqip": "guge/play/core_gameplay-lqip.webp",
+    "fallback": "guge/play/core_gameplay-1600.jpg"
+  },
+  "guge/play/scene_red_temple": {
+    "src": "guge/play/scene_red_temple",
+    "original": {
+      "width": 2761,
+      "height": 1519,
+      "bytes": 485710
+    },
+    "aspect": 1.8176,
+    "widths": [
+      480,
+      768,
+      1200,
+      1600,
+      2048
+    ],
+    "webp": [
+      "guge/play/scene_red_temple-480.webp",
+      "guge/play/scene_red_temple-768.webp",
+      "guge/play/scene_red_temple-1200.webp",
+      "guge/play/scene_red_temple-1600.webp",
+      "guge/play/scene_red_temple-2048.webp"
+    ],
+    "avif": [
+      "guge/play/scene_red_temple-480.avif",
+      "guge/play/scene_red_temple-768.avif",
+      "guge/play/scene_red_temple-1200.avif",
+      "guge/play/scene_red_temple-1600.avif",
+      "guge/play/scene_red_temple-2048.avif"
+    ],
+    "lqip": "guge/play/scene_red_temple-lqip.webp",
+    "fallback": "guge/play/scene_red_temple-2048.jpg"
   }
 }

@@ -82,9 +82,13 @@ export function ParticleShowcase({
         </Reveal>
 
         <Reveal variant="masked" delay={60}>
-          <h3 className="type-lg type-display tone-fg mt-8">
+          {/* h2, not h3: this is the section's own title, exactly like the ones
+              `CaseSectionBlock` renders for every other chapter. As an h3 it made
+              the qinghua page go h1 → h3 → h2, so heading navigation skipped a
+              level on the way in (found 2026-09-20). */}
+          <h2 className="type-lg type-display tone-fg mt-8">
             <BiOnly zh={sequence.titleZh} en={sequence.titleEn} />
-          </h3>
+          </h2>
         </Reveal>
 
         <Reveal variant="rise" delay={120}>

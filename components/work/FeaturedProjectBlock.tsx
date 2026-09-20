@@ -270,8 +270,17 @@ export function FeaturedProjectBlock({ project, index, priority, layout: request
   if (layout === 'hero') {
     return (
       <article ref={rootRef} style={toneStyle} className="min-w-0 grid gap-8 md:gap-12">
-        <MotionReveal disabled={motionDisabled} variant="masked" delay={projectDelay} duration={1.15}>
-          <div data-featured-media className="bleed relative min-w-0">
+        {/* `bleed` sits on the Reveal, not inside it: the masked wipe clips to the
+            mask's own box, which would otherwise trim the full-bleed media back to
+            the shell width. See the same note in home/GugeFeature.tsx. */}
+        <MotionReveal
+          disabled={motionDisabled}
+          variant="masked"
+          delay={projectDelay}
+          duration={1.15}
+          className="bleed"
+        >
+          <div data-featured-media className="relative min-w-0">
             <FeaturedMedia
               project={project}
               priority={priority}

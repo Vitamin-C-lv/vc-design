@@ -31,6 +31,29 @@ export interface VcImageProps {
   priority?: boolean;
   /** Override the derived aspect ratio. */
   aspect?: number;
+  /**
+   * How the bitmap fills its reserved box. Defaults to `cover`.
+   *
+   * `contain` exists for artwork whose whole frame IS the work — a phone UI
+   * screenshot cropped to a landscape tile loses 70% of the interface, which is
+   * the opposite of showing the work. The reserved box keeps its ratio and the
+   * image sits inside it complete; the surrounding surface is the same paper the
+   * screenshots were shot on, so it reads as one plane rather than a letterbox.
+   */
+  fit?: 'cover' | 'contain';
+  /**
+   * Art direction: a different asset for wide viewports.
+   *
+   * Emitted as `<source media="…">` inside the existing `<picture>`, so the
+   * browser downloads exactly one of the two files. That matters here — the
+   * alternative (two `<VcImage>`s toggled by `hidden`/`lg:block`) makes phones
+   * fetch the desktop hero as well, on the LCP element.
+   *
+   * The reason it is needed at all: `guge/hero/site_and_meido` is a 3.19:1
+   * banner, and the phone plate is a 54vh box (0.86:1). `cover` kept 27% of the
+   * frame — a soft, characterless slice of rock with the protagonist outside it.
+   */
+  art?: { media: MediaRef; from: string };
   /** Fill the parent instead of reserving ratio (parent must be positioned). */
   fill?: boolean;
   /** Rounded corners etc. applied to the inner image. */
@@ -45,11 +68,14 @@ export function VcImage({
   priority = false,
   aspect,
   fill = false,
+  fit = 'cover',
+  art,
   imgClassName,
 }: VcImageProps) {
   const [loaded, setLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const resolved = resolveMedia(media);
+  const wide = art ? resolveMedia(art.media) : null;
   const ratio = aspect ?? resolved.aspect;
 
   /*
@@ -143,6 +169,12 @@ export function VcImage({
         wrapper already reserves space with `aspect-ratio`, so nothing is lost.
       */}
       <picture className="absolute inset-0 block">
+        {wide && art && wide.avifSrcSet ? (
+          <source media={art.from} type="image/avif" srcSet={wide.avifSrcSet} sizes={sizes} />
+        ) : null}
+        {wide && art && wide.webpSrcSet ? (
+          <source media={art.from} type="image/webp" srcSet={wide.webpSrcSet} sizes={sizes} />
+        ) : null}
         {resolved.avifSrcSet ? (
           <source type="image/avif" srcSet={resolved.avifSrcSet} sizes={sizes} />
         ) : null}
@@ -171,7 +203,7 @@ export function VcImage({
           // image on the site invisible to a visitor without scripting.
           data-vc-media=""
           data-loaded={loaded ? 'true' : undefined}
-          style={{ objectPosition: resolved.focal }}
+          style={{ objectPosition: resolved.focal, objectFit: fit }}
           className={cx('media-cover transition-opacity duration-[900ms] ease-[var(--ease-vc-out)]', imgClassName)}
         />
       </picture>

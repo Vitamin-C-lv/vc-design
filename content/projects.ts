@@ -11,201 +11,898 @@
  * Media keys resolve through `lib/media.ts` against `public/works/_manifest.json`.
  */
 
-import type { MoreWorkItem, Project } from './types';
+import type { MoreWorkItem, Project, VideoRef } from './types';
 
 /* ==========================================================================
-   FEATURED 01 — 古格王朝 AI 智能导览系统
-   The first and largest flagship: proof that VC can carry a genuinely complex
-   problem from cultural research all the way to a running interactive system.
+   FEATURED 01 — 梦回古格 / DREAM GUGE
+   The flagship. Proof that VC can carry a genuinely complex problem from
+   cultural research and field work, through world building, 3D and AI, all the
+   way to a running interactive system — and then design how all of that gets
+   explained to someone else.
+
+   ── Naming, resolved ──────────────────────────────────────────────────────
+   The project carries four names in its own material, and they are not
+   synonyms:
+     梦回古格 / DREAM GUGE            the project's name                 → the site's title
+     古格拾忆录                        the competition / exhibition edition of the boards
+     梦回古格——尘封的凝望              the Milan Design Week entry title
+     数字重建古格王朝文化遗产          the SRTP research课题's full name
+   The boards are physical artefacts and keep the name printed on them; the case
+   study says so out loud in chapter 09 rather than pretending one title wins.
+
+   ── Structure ────────────────────────────────────────────────────────────
+   Eleven chapters, and the light/dark rhythm is *directed* rather than
+   alternated: two light chapters (the technical plate, the evidence wall) give
+   the long dark acts somewhere to breathe. See `GugeCaseStudy` for the curve.
    ========================================================================== */
+
+/* The three silent loops. All three are real screen recordings, trimmed and
+   re-encoded — never synthesised, and never presented as a stage the footage
+   does not actually contain. */
+const gugeRebuildLoop: VideoRef = {
+  mp4: '/works/guge/video/rebuild-loop.mp4',
+  webm: '/works/guge/video/rebuild-loop.webm',
+  poster: '/works/guge/video/poster-rebuild.jpg',
+  aspect: 16 / 9,
+  caption: '点云彩色分区：地形与建筑被逐块归类（项目实机录屏，6 秒静音循环）',
+};
+
+const gugeProcessReel: VideoRef = {
+  mp4: '/works/guge/video/process-reel.mp4',
+  webm: '/works/guge/video/process-reel.webm',
+  poster: '/works/guge/video/poster-reel.jpg',
+  aspect: 16 / 9,
+  caption: '三维制作过程节选：网格 → 地形 → 材质与大气 → 最终世界（12 秒，静音）',
+};
+
+const gugePlayLoop: VideoRef = {
+  mp4: '/works/guge/video/play-loop.mp4',
+  webm: '/works/guge/video/play-loop.webm',
+  poster: '/works/guge/video/poster-play.jpg',
+  aspect: 16 / 9,
+  caption: 'Unity 第一人称漫游：红殿内部与壁画检视（10 秒静音循环）',
+};
+
+const gugeGuideLoop: VideoRef = {
+  mp4: '/works/guge/video/guide-loop.mp4',
+  webm: '/works/guge/video/guide-loop.webm',
+  poster: '/works/guge/video/poster-guide.jpg',
+  aspect: 16 / 9,
+  caption: 'AI 导览对话：提问、基于知识库回答、给出下一步线索（静音循环）',
+};
+
+/** The five boards-and-film stills shared across chapters. */
+const gugeFilm: VideoRef = {
+  mp4: '/works/guge/video/mengu-loop.mp4',
+  webm: '/works/guge/video/mengu-loop.webm',
+  poster: '/works/guge/video/poster-1600.jpg',
+  posterSrcSet:
+    '/works/guge/video/poster-1200.jpg 1200w, /works/guge/video/poster-1600.jpg 1600w, /works/guge/video/poster-2048.jpg 2048w',
+  aspect: 3838 / 2160,
+  caption: '《梦回古格》项目实拍：阿里札达土林与古格遗址（静音循环）',
+};
 
 export const guge: Project = {
   slug: 'guge',
   order: 1,
   featured: true,
-  title: 'GUGE',
-  titleZh: '古格王朝 AI 智能导览系统',
-  tagline:
-    'A RAG-grounded AI guide inside a VR reconstruction of a lost kingdom.',
-  taglineZh: '把一个消失的王朝，做成可以被走进、被提问的世界。',
-  tags: ['AI', 'VR', 'RAG', 'INTERACTION', 'CULTURAL EXPERIENCE', '3D'],
+  title: 'DREAM GUGE',
+  titleZh: '梦回古格',
+  tagline: 'A vanished kingdom you can walk into, and ask questions of.',
+  taglineZh: '一个消失的王朝，一套可以走进去、可以提问的完整系统。',
+  tags: ['AI', 'VR', '3D', 'VISUAL STORYTELLING'],
   year: '2025',
   accent: '#C9A227',
   badge: 'NATIONAL AWARDS ×3',
+  /*
+   * The banner is 3.19:1; the shared `/work` tile is 1.55:1 and kept 48% of it —
+   * half the banner, with the figure against the right edge. This crop is
+   * composed for that tile from the same source, so the tile shows a picture
+   * rather than a slice.
+   */
+  coverTile: {
+    key: 'guge/hero/site_and_meido_card',
+    alt: '《梦回古格》主视觉：土林遗址与手持酥油灯的主角梅朵',
+    focal: '50% 50%',
+  },
   cover: {
-    key: 'guge/guge_landscape_01',
-    alt: '古格王朝土林遗址全景，黄昏暖色光线下的城堡废墟',
-    focal: '50% 45%',
+    key: 'guge/hero/site_and_meido',
+    alt: '古格王朝遗址山体与《梦回古格》主角梅朵，暖金色黄昏光线下的项目主视觉',
+    focal: '40% 46%',
   },
   meta: [
-    { label: 'TYPE', value: 'AI + VR 沉浸式导览系统' },
-    { label: 'SCOPE', value: '文化研究 / 信息架构 / 视觉系统 / 3D / AI / 交互' },
-    { label: 'STACK', value: 'RAG 知识引擎 · 实时三维场景 · VR 交互' },
-    { label: 'STATUS', value: '可运行原型' },
+    { label: 'PROJECT', value: '数字重建古格王朝文化遗产（SRTP 课题）' },
+    { label: 'TYPE', value: 'AI + VR 沉浸式文化体验' },
+    { label: 'SCOPE', value: '文化研究 / 视觉系统 / 三维构建 / 交互叙事 / AI / 展陈设计' },
+    { label: 'STACK', value: 'RAG 知识引擎 · LLM · 语音克隆 · 实时三维 · VR' },
+    { label: 'STATUS', value: '可运行原型 + 完整展陈方案' },
   ],
   summary:
-    '文化遗产的信息量极大，却很难被普通人真正理解：资料散落在文献、壁画与考古报告里，传统展陈又停留在静态图文。这个项目把古格王朝的历史、人物与遗址整理成一套三级世界结构，再用 RAG 知识引擎驱动一个可以对话的 AI 导览，让观众在 VR 里走进遗址、遇到 NPC、提出自己的问题。从文化研究到三维资产、从知识库到交互实现，整套系统由同一条链路完成。',
+    '古格王朝留下的不是一件可以单独陈列的展品，而是一整片遗址、壁画、造像与文献——信息分散、门槛高、而且正在消失。这个项目先做了实地考察与资料考证，再把庞杂的文化材料整理成「人物／剧情／地点」三层结构，用实景扫描与三维流程重建可以走进去的世界，再用 RAG 知识引擎驱动一个叫梅朵的 AI 导览。从研究、世界构建、三维与 AI，到最终的展板与演示设计，整套成果由同一条链路完成。',
   summaryEn:
-    'Research → visual extraction → digital translation → interaction. One continuous chain, from cultural material to a running experience.',
+    'Field research → world building → 3D → AI → interaction → and the design of how all of it is explained.',
   sections: [
+    /* ------------------------------------------------------------------ 00 */
     {
-      id: 'context',
+      id: 'dream',
+      index: '00',
+      eyebrow: 'DREAM GUGE',
+      title: 'DREAM GUGE',
+      titleZh: '梦回古格',
+      body: [],
+      layout: 'full',
+      media: [
+        {
+          key: 'guge/hero/site_and_meido',
+          alt: '古格王朝遗址山体与《梦回古格》主角梅朵，暖金色黄昏光线下的项目主视觉',
+          focal: '40% 46%',
+        },
+      ],
+    },
+
+    /* ------------------------------------------------------------------ 01 */
+    {
+      id: 'site',
       index: '01',
-      eyebrow: 'CONTEXT / CHALLENGE',
-      title: 'A kingdom that survives as fragments.',
-      titleZh: '信息很多，入口很少。',
+      eyebrow: 'THE REAL SITE',
+      tone: 'paper',
+      title: 'BEFORE REBUILDING THE WORLD, WE WENT TO SEE WHAT WAS LEFT.',
+      titleZh: '在重建这个世界之前，我们先去看了剩下什么。',
       body: [
-        '古格王朝留下的不是一个可以被单独陈列的展品，而是一整片遗址、壁画、造像与文献。信息分散在考古资料与历史叙述中，彼此之间没有一条现成的线索。',
-        '传统展陈以静态图文为主。观众看得到图，却很难把「看过的图」和「发生过的事」连起来 —— 理解门槛高，注意力也很难维持。',
-      ],
-      bullets: [
-        '资料体量大、来源分散，缺少统一的数字化整合与知识结构',
-        '内容专业度高，普通公众理解门槛高，缺少面向青年群体的入口',
-        '静态展示无法承载叙事，沉浸感与情境体验不足',
-        '数字内容以单向传播为主，互动与参与体验薄弱',
-      ],
-      media: [
-        {
-          key: 'guge/guge_landscape_01',
-          alt: '古格王朝土林遗址全景，黄昏光线下的城堡废墟与土林地貌',
-          caption: '古格王朝遗址：土林、洞窟与山顶王城构成的空间关系',
-          focal: '50% 50%',
-        },
+        '古格王朝在西藏阿里存在了七百年，留下了遗址、壁画、造像与文献。但这些材料不是为某个项目准备好的：它们散落在考古报告、学术论文、地方资料与图像档案里，彼此之间没有一条现成的线索。',
+        '更紧迫的是，它们正在消失。那些见证过历史的精美壁画和石窟，正随着岁月的剥蚀和自然环境的恶化，逐渐从世人的记忆中褪色。',
       ],
       layout: 'full',
+      blocks: [
+        {
+          kind: 'media',
+          span: 'full',
+          media: {
+            key: 'guge/field/site_hero_01',
+            alt: '古格王朝遗址所在的土林与荒原全景，蓝天白云下可见远处层叠的山体',
+            caption: '古格王朝遗址：土林、洞窟与山顶王城构成的空间关系（2025 年 6 月实地拍摄）',
+          },
+        },
+        {
+          kind: 'compare',
+          left: {
+            label: 'ARCHIVE',
+            zh: '历史资料与壁画',
+            media: {
+              key: 'guge/field/mural_before',
+              alt: '古格壁画与造像的历史影像资料',
+              caption: '资料中的壁画与造像',
+            },
+          },
+          right: {
+            label: 'NOW',
+            zh: '遗址现状',
+            media: {
+              key: 'guge/field/mural_after',
+              alt: '古格遗址现存壁画与洞窟的现状照片',
+              caption: '今天还能看到的残存',
+            },
+          },
+        },
+        {
+          kind: 'quote',
+          zh: '在半山腰一个逼仄的洞窟里，我们遇到了一位当地居民。他日复一日地守在这里，只为保护里屋墙上仅存的壁画。',
+          attribution: '《梦回古格》项目实地考察记录',
+        },
+        /*
+         * `guge/field/cave_guardian` was here. The file is 1600×900 at 51 KB —
+         * a mountain-and-cloud landscape that both looked blown up at full
+         * width and did not show the cave interior its alt text described. The
+         * asset stays registered for use as a background; the sentence it
+         * carried is kept as a note.
+         */
+        {
+          kind: 'note',
+          zh: '古格不只是冰冷的遗迹，它依然是鲜活的信仰与传承。',
+        },
+        {
+          kind: 'mediaRow',
+          columns: 4,
+          mobile: 'scroll',
+          items: [
+            {
+              key: 'guge/field/survey_01',
+              alt: '实地考察照片：用卷尺丈量壁画的残损与裂隙',
+              caption: '壁画现状勘察',
+            },
+            {
+              key: 'guge/field/survey_02',
+              alt: '实地考察照片：崖壁上的洞窟群与下方的河谷',
+              caption: '洞窟与崖壁',
+            },
+            {
+              /*
+               * Was `guge/field/survey_03`, which is a photograph of the red
+               * temple's interior — not the site panorama its caption claimed.
+               * This is an actual aerial of the ruins, from the same shoot.
+               */
+              key: 'guge/field/site_aerial_01',
+              alt: '实地考察照片：从空中俯瞰古格遗址的城墙、殿宇与土林地貌',
+              caption: '遗址全景',
+            },
+            {
+              key: 'guge/field/cave_arch',
+              alt: '由洞窟内部向外望去的框景，远处是土林与山谷',
+              caption: '洞窟框景',
+            },
+          ],
+        },
+      ],
+      note: '考察影像为项目团队 2025 年 6 月在西藏阿里札达实地拍摄的原始素材。',
     },
+
+    /* ------------------------------------------------------------------ 02 */
     {
-      id: 'concept',
+      id: 'story',
       index: '02',
-      eyebrow: 'SYSTEM CONCEPT',
-      title: 'Not a film. A place you can ask questions in.',
-      titleZh: '不做一支宣传片，做一套可以被提问的系统。',
+      eyebrow: 'FROM SITE TO STORY',
+      tone: 'ink',
+      title: 'FROM SITE TO STORY.',
+      titleZh: '从遗址，到可以被走进去的叙事结构。',
       body: [
-        '核心判断是：文化内容不应该被「讲完」，而应该被组织成一张可以被漫游的知识地图。观众不是被动地看完一段介绍，而是自己决定先看哪里、问什么、走到哪里去。',
-        '因此最终交付的不是视频或图册，而是一套完整的交互系统：一个可进入的三维遗址、一个有知识依据的 AI 导览、一条把两者串起来的任务叙事。',
+        '把庞杂的文化资料整理成能同时被程序与叙事使用的三层结构，是整个项目最关键的一次抽象。资料先被归位，才可能被漫游。',
+        '三层的分工是逐层收敛的：底层给出真实的物理空间，中层把事件与动线挂到具体地点上，上层承载人物、文物与信仰线索。三者在同一套坐标里对齐——观众走到哪里，故事和人就在哪里出现。',
       ],
       bullets: [
-        '可探索：场景本身就是导航，观众用行走来理解空间',
-        '可提问：AI 导览基于真实资料回答，而不是自由发挥',
-        '可继续发现：每一次对话都会推荐下一个值得看的点',
+        'LEVEL 1 · 人物与展品 —— 承载文化记忆与信仰线索：人物、文物、壁画与信仰脉络',
+        'LEVEL 2 · 剧情结构 —— 把事件与动线挂到具体地点上：古格遗址、洞窟场景、第 85 窟',
+        'LEVEL 3 · 场景与地点 —— 还原地理地貌与建筑遗址，为叙事搭建真实的空间载体',
       ],
-      media: [
-        {
-          key: 'guge/guge_master_poster',
-          alt: '《梦回古格——尘封的凝望》项目主视觉版面，包含角色、分层地图、技术路线与场景渲染',
-          caption: '项目总版面：角色、分层地图、RAG 技术路线与场景渲染',
-          focal: '50% 22%',
-        },
-      ],
-      layout: 'split',
-    },
-    {
-      id: 'world',
-      index: '03',
-      eyebrow: 'WORLD / INFORMATION ARCHITECTURE',
-      title: 'Three layers: people, places, ruins.',
-      titleZh: '三级世界结构：角色、剧情地点、遗址空间。',
-      body: [
-        '把庞杂的文化资料整理成可被程序与叙事同时使用的三层结构，是整个项目最关键的一次抽象。资料先被归位，才可能被漫游。',
-        '三层的分工是逐层收敛：底层给出真实的物理空间，中层把事件与动线挂到具体地点上，上层承载人物、文物与信仰线索。三者在同一套坐标里对齐 —— 观众走到哪里，故事和人就在哪里出现。',
-      ],
-      bullets: [
-        '底层 · 遗址山体与空间基底 —— 还原地理地貌与建筑遗址，搭建真实空间载体',
-        '中层 · 剧情地点与交互路径 —— 串联关键地点与事件脉络，形成探索与任务动线（古格遗址、洞窟场景、第 85 窟）',
-        '上层 · 人物、文物、壁画与信仰线索 —— 承载文化记忆与信仰脉络，构建叙事与象征系统（年玛喇嘛、顿珠格布、丹增守护者）',
-      ],
-      media: [
-        {
-          key: 'guge/guge_world_layers',
-          alt: '古格项目三级世界结构图：上层为人物与文物，中层为剧情地点，下层为遗址山体，三层以轴线对齐',
-          caption: '底层遗址空间 → 中层剧情地点 → 上层人物与文物：三层在同一套坐标里对齐',
-          surface: 'light',
-        },
-      ],
+      piece: 'layers',
       layout: 'full',
-      note: '场景不是单纯建模，而是承载叙事、任务与文化理解的空间系统。',
-    },
-    {
-      id: 'ai-guide',
-      index: '04',
-      eyebrow: 'AI GUIDE / RAG',
-      title: 'An AI guide that is required to be right.',
-      titleZh: '一个必须说对的 AI 导览。',
-      body: [
-        '把资料直接交给大模型并不可靠。文化类内容一旦出现事实性错误，体验建立起来的信任会立刻归零 —— 而在文化场景里，张冠李戴是最常见、也最致命的错误。',
-        '因此导览系统采用检索增强生成（RAG）：先把文献、壁画、造像与考古资料整理成结构化知识库，模型回答时基于检索到的真实资料组织语言，而不是凭记忆生成。导览的交互被设计成一条六步闭环，让每一次提问都能通向下一处值得看的地方。',
-      ],
-      bullets: [
-        '知识库覆盖壁画知识库、文物数据库、历史文献、专家解读、考古资料与多模态资料',
-        '观众提问先命中资料，再进入生成环节 —— 回答有来源，而不是凭记忆组织',
-        '六步闭环：进入场景 → 唤醒 AI 导览 → 提问 → 基于知识库回答 → 推荐相关线索 → 继续探索',
-        '延伸推荐把话题接回真实藏品：第 85 窟·成道图、菩提树纹瓦当、铜鎏金释迦牟尼佛像',
-      ],
-      note: 'AI 导览的流程、知识库结构与检索链路依据项目设计文档整理；页面结构以代码绘制，不使用概念截图。',
-      layout: 'diagram',
-      diagram: 'rag-pipeline',
-    },
-    {
-      id: 'vr',
-      index: '05',
-      eyebrow: 'VR / 3D EXPERIENCE',
-      title: 'Walk in. Talk to someone. Finish a task.',
-      titleZh: 'VR 探索、NPC 对话、任务系统与智能导览。',
-      body: [
-        '体验层由四部分构成：VR 探索提供空间与方向感；NPC 对话把人物变成可以交流的对象；任务系统给漫游一个理由；智能导览在需要的时候递上知识。',
-        '四者共用同一套世界数据，因此观众在场景中遇到的角色、走到的地方、问出的问题，始终指向同一份资料，而不是四套互不相通的内容。',
-      ],
-      bullets: [
-        'VR 探索 —— 第一人称漫游遗址环境，空间本身承担信息组织',
-        'NPC 对话 —— 角色依据自身设定与所处地点回应，把人物变成可以交流的对象',
-        '任务系统 —— 以具体目标驱动动线，例如「寻找壁画线索 0/3」：找图、解读、提交记录',
-        'AI 导览 —— 随时可召唤的问答与延伸推荐',
-      ],
-      layout: 'full',
-      note: '交互链路：自由探索 → 沉浸对话 → 任务驱动 → 智能导览。四者共用同一套世界数据。',
-    },
-    {
-      id: 'process',
-      index: '06',
-      eyebrow: 'PROCESS',
-      title: 'From reading the sources to shipping the build.',
-      titleZh: '从读资料到跑起来，一条链路做完。',
-      body: [
-        '整个项目建立在一条四层递进的框架上：文化研究 → 视觉提取 → 数字转译 → 交互传播，从文化认知走向数字体验。',
-        '技术路线把这条框架拆成八个连续环节，每一环都直接服务下一环：研究产出的结构成为三维与交互的输入，三维资产又反过来决定知识库需要挂载哪些地点与角色。',
-      ],
-      bullets: [
-        '01 资料收集 —— 文献研究、影像资料、实地调研、数据整理',
-        '02 案例分析 —— 国内外案例对比、经验总结、可行性评估',
-        '03 文化元素提取 —— 视觉符号、纹样与色彩、语义解读',
-        '04 视觉系统整理 —— 风格定义、图形语言、色彩体系、字体与版式规范',
-        '05 三维资产构建 —— 场景建模、文物建模、材质与贴图、动画与灯光',
-        '06 交互叙事设计 —— 叙事结构、交互逻辑、用户路径、多媒体内容整合',
-        '07 沉浸式展示方案 —— 展示形式、沉浸体验规划、空间氛围、多端适配',
-        '08 测试与优化 —— 功能测试、用户体验评估、性能优化、迭代完善',
-      ],
       media: [
         {
-          key: 'guge/guge_landscape_03',
-          alt: '古格王朝遗址侧向视角，土林与洞窟群层层分布',
-          caption: '遗址空间研究：地形、洞窟与建筑的层级关系',
+          key: 'guge/world/guge_world_map',
+          alt: '古格项目三层世界结构图：上层为人物与展品，中层为剧情结构，下层为遗址场景与地点，三层以轴线对齐',
+          caption: '底层场景与地点 → 中层剧情结构 → 上层人物与展品：三层在同一套坐标里对齐',
           focal: '50% 50%',
         },
       ],
-      layout: 'sequence',
+      note: '结构图出自项目展板。三层共用一套坐标，是场景、剧情与导览数据能够互相对齐的前提。',
     },
+
+    /* ------------------------------------------------------------------ 03 */
+    {
+      id: 'people',
+      index: '03',
+      eyebrow: 'A WORLD OF PEOPLE',
+      tone: 'ink',
+      title: "WE DIDN'T JUST REBUILD A SITE. WE BUILT A WORLD AROUND IT.",
+      titleZh: '我们不只重建了一处遗址，我们在它周围建了一个世界。',
+      body: [
+        '遗址本身不构成体验。真正让这个项目成立的，是围绕遗址建立起的人物关系网：王宫画师顿珠、他的女儿梅朵、边境守将丹增、母亲卓玛，以及把果沃琴和古老史诗传下去的祖母。',
+        '项目围绕少女「梅朵」的成长与情感线，构建了完整的人物关系网。作为玩家的向导与伙伴，梅朵不只是剧情的推动者，也是连接过去与现在的纽带。',
+      ],
+      piece: 'panorama',
+      layout: 'full',
+      media: [
+        {
+          key: 'guge/people/character_scroll',
+          alt: '古格项目人物关系长卷：释迦牟尼像与卓玛、弹奏果沃琴的祖母、壁画师顿珠、披甲的少女梅朵、骑马守将丹增，以及来自现代的玩家',
+          caption: '人物关系长卷：信仰、家族、王族与守护，以及走进这个世界的玩家',
+        },
+        {
+          key: 'guge/people/scroll_seg_01',
+          alt: '人物关系长卷第一段：释迦牟尼像、卓玛与年幼的梅朵在佛殿祈福',
+          caption: '01 · 遗址与信仰 —— 卓玛与年幼的梅朵在古格佛殿祈福',
+        },
+        {
+          key: 'guge/people/scroll_seg_02',
+          alt: '人物关系长卷第二段：祖母弹奏果沃琴，壁画师顿珠在墙壁上绘制壁画',
+          caption: '02 · 家族与手艺 —— 祖母的果沃琴，顿珠的壁画',
+        },
+        {
+          key: 'guge/people/scroll_seg_03',
+          alt: '人物关系长卷第三段：披甲的少女梅朵与骑马戍边的守将丹增',
+          caption: '03 · 王族与守护 —— 梅朵与丹增',
+        },
+        {
+          key: 'guge/people/scroll_seg_04',
+          alt: '人物关系长卷第四段：身着现代服装的玩家走向古格的世界',
+          caption: '04 · 玩家进入世界 —— 从现代走进古格',
+        },
+      ],
+      blocks: [
+        {
+          kind: 'quote',
+          zh: '城墙会倒。人会死。可歌声不会。',
+          attribution: '祖母 · 剧情设定',
+        },
+        {
+          kind: 'quote',
+          zh: '壁画会比人活得更久。',
+          attribution: '顿珠 · 剧情设定',
+        },
+        {
+          kind: 'pillars',
+          columns: 4,
+          items: [
+            { label: '梅朵', zh: '王宫画师顿珠之女。玩家的向导与伙伴，连接过去与现在的纽带。' },
+            { label: '顿珠', zh: '宫廷壁画师。他把女儿的发辫样式悄悄画进壁画角落，成了藏在信仰里的家庭暗号。' },
+            { label: '丹增', zh: '边境守将，梅朵的恋人。出征前把佩刀交给她保管。' },
+            { label: '卓玛 · 祖母', zh: '母亲与祖母——信仰、果沃琴、宣舞与羌姆的传续者。' },
+          ],
+        },
+        {
+          kind: 'note',
+          zh: '人物与台词出自项目剧情设定文档。三版剧情大纲（穿越、学徒、遗物触发）中的角色体系一致，此处引用的是它们共同的部分。',
+        },
+      ],
+    },
+
+    /* ------------------------------------------------------------------ 04 */
+    {
+      id: 'rebuild',
+      index: '04',
+      eyebrow: 'REBUILDING THE SITE',
+      tone: 'paper',
+      title: 'FROM REAL SITE TO DIGITAL TERRAIN.',
+      titleZh: '从真实遗址，到可以走进去的数字地形。',
+      body: [
+        '三维不是凭想象搭出来的。项目先通过实景扫描获取遗址的精确数据，再逐层清理、分区、重构地形与建筑，最后才进入材质与灯光——从白模到上色，每一步都留下了记录。',
+        '为了让这些模型能在实时环境里跑动，团队使用了「中心聚焦式梯度压缩」（LOD）：远处降低精度、近处保留细节，在极致还原的同时保障探索过程的流畅。',
+      ],
+      layout: 'full',
+      blocks: [
+        {
+          kind: 'flow',
+          label: 'PIPELINE',
+          steps: ['REAL SITE', 'SCAN', 'POINT CLOUD', 'SEGMENTATION', 'TERRAIN', 'RENDER'],
+        },
+        { kind: 'video', video: gugeRebuildLoop },
+        /* 分组规则：同一排里的图，比例要接近，否则矮的那张下面会空出一大块。
+           两张点云同为 1.77 配对；竖版展板（0.89）与白模（1.35）配对；
+           3.57:1 的图纸条独占整幅——它塞进任何半栏都会变成一条缝。 */
+        {
+          kind: 'mediaRow',
+          columns: 2,
+          items: [
+            {
+              key: 'guge/rebuild/point_cloud',
+              alt: '由实景扫描得到的点云模型',
+              caption: '扫描点云',
+            },
+            {
+              key: 'guge/rebuild/lod_segmentation',
+              alt: '按 LOD 分区的点云模型，不同区域以不同颜色标注',
+              caption: 'LOD 分区',
+            },
+          ],
+        },
+        /*
+         * This row used to pair the exploded diagram with
+         * `guge/rebuild/wireframe`, captioned 「白模：未上色的地形与建筑网格」.
+         * That file is a dark, atmospheric landscape render — no mesh, no white
+         * model — and the source material has no untextured model to swap in
+         * (the only candidate on the boards is 520×320, which would ship blurry
+         * again). The row is now the diagram alone, re-cut from the 5486px board
+         * so it carries its five layer labels at full resolution.
+         */
+        {
+          kind: 'media',
+          span: 'plate',
+          media: {
+            key: 'guge/rebuild/red_temple_layers',
+            alt: '红殿拆解分层图：从屋顶层、结构层、内部空间、围墙层到地基层的红殿结构拆解',
+            caption: '红殿拆解分层：屋顶层 / 结构层 / 内部空间 / 围墙层 / 地基层',
+          },
+        },
+        {
+          kind: 'media',
+          span: 'full',
+          media: {
+            key: 'guge/rebuild/red_temple_drawings',
+            alt: '红殿的正视图、侧视图、俯视图与平面图',
+            caption: '红殿正视图 / 侧视图 / 俯视图与平面图',
+          },
+        },
+      ],
+      note: '点云分区与地形重建来自项目真实录屏；建筑图纸出自展板上的红殿拆解图。',
+    },
+
+    /* ------------------------------------------------------------------ 05 */
+    {
+      id: 'built',
+      index: '05',
+      eyebrow: 'BUILT IN 3D',
+      tone: 'ink',
+      title: 'BUILT IN 3D. DESIGNED FOR THE STORY.',
+      titleZh: '在三维里建出来，为故事而设计。',
+      body: [
+        '项目里的大量画面是实际构建与渲染的结果，不是 AI 生成的概念图。地形、建筑、材质、大气与最终镜头，全部在三维流程里完成。',
+        '下面这段过程影片是真实工作录屏的节选：从点云与网格，到地形几何，再到材质与大气，最后落到成片里的世界。',
+      ],
+      layout: 'full',
+      blocks: [
+        { kind: 'video', video: gugeProcessReel },
+        {
+          kind: 'flow',
+          label: 'THREE-DIMENSIONAL PROCESS',
+          steps: ['MESH', 'TERRAIN', 'MATERIAL & ATMOSPHERE', 'FINAL WORLD'],
+        },
+        {
+          kind: 'mediaRow',
+          columns: 3,
+          items: [
+            {
+              key: 'guge/reel/render_01',
+              alt: '红殿内部渲染：壁画与殿内结构在暖光下被照亮',
+              caption: '红殿交互壁画 · དམར་ཐང་ འཇུག་ ཕྱོགས་ བརྗོད་',
+            },
+            {
+              key: 'guge/reel/render_02',
+              alt: '红殿外景渲染：雪地与建筑在高对比天光下',
+              caption: '红殿外景 · དམར་ཐང་ ཕྱི་ རོལ་',
+            },
+            {
+              key: 'guge/reel/render_03',
+              alt: '梅朵与母亲在佛殿祈福的场景渲染',
+              caption: '梅朵与母亲祈福场景 · མེ་ཏོག་ དང་ ཨ་མ་',
+            },
+          ],
+        },
+        {
+          kind: 'mediaRow',
+          columns: 2,
+          items: [
+            {
+              key: 'guge/reel/render_04',
+              alt: '红殿建筑外观渲染：白墙红顶的殿体与土林背景',
+              caption: '红殿建筑图 · དམར་ཐང་ གི་ བཟོ་ བཀོད་',
+            },
+            {
+              key: 'guge/reel/render_05',
+              alt: '梅朵低语场景渲染：少女手持酥油灯的近景',
+              caption: '梅朵低语场景 · མེ་ཏོག་ གི་ སྐད་ཆ་',
+            },
+          ],
+        },
+        {
+          kind: 'media',
+          span: 'full',
+          media: {
+            key: 'guge/reel/render_06',
+            alt: '古格大场景渲染：土林、峡谷与遗址整体在云层之下',
+            caption: '古格大场景 · གུ་གེ་ ཡི་ ཡོངས་ སུ་ གནས་ པ།',
+          },
+        },
+      ],
+      note: '渲染图与过程影片均来自项目自身的三维制作与展板，未使用 AI 生成图像。',
+    },
+
+    /* ------------------------------------------------------------------ 06 */
+    {
+      id: 'inside',
+      index: '06',
+      eyebrow: 'STEP INSIDE',
+      tone: 'ink',
+      title: 'STEP INSIDE THE RUINS.',
+      titleZh: '走进遗址内部。',
+      body: [
+        '体验层由四部分构成：VR 探索、NPC 对话、任务系统与智能导览。玩家以第一人称视角在深度还原的红殿与洞窟之间行走，遇到角色、接受任务、提出问题。',
+        '背包、壁画解谜与果沃琴解谜把「看」变成「做」：循着残破壁画的痕迹补全丢失的内容，还原壁画的真实样貌，以此解锁尘封的乐谱，奏响曾在这片土地上久久回响的古老乐曲。',
+      ],
+      layout: 'full',
+      blocks: [
+        {
+          kind: 'media',
+          span: 'full',
+          media: {
+            key: 'guge/play/experience_main',
+            alt: 'Unity 实时场景：玩家第一人称视角下的红殿内部与壁画',
+            caption: '第一人称视角下的红殿：玩家可以走近、检视并解读每一幅壁画',
+          },
+        },
+        { kind: 'video', video: gugePlayLoop },
+        {
+          kind: 'mediaRow',
+          columns: 2,
+          items: [
+            {
+              /*
+               * Was captioned 「背包界面」. The file is an in-game view of a
+               * multi-armed deity mural with the interaction cursor on it —
+               * there is no inventory UI in the frame, and no screenshot of
+               * one exists in the source material (the only candidate is a
+               * 300px panel inside the deck page below, which would ship
+               * blurry). Caption now describes what is actually shown.
+               */
+              key: 'guge/play/node_inventory',
+              alt: '游戏内场景：第一人称凑近检视多臂神像壁画，画面中央为交互光标',
+              caption: '壁画检视 —— 凑近看每一处细节',
+            },
+            {
+              key: 'guge/play/node_mural',
+              alt: '壁画解谜界面：对比壁画细节并填写解读',
+              caption: '壁画解谜 —— 找图、解读、提交记录',
+            },
+          ],
+        },
+        {
+          kind: 'mediaRow',
+          columns: 2,
+          items: [
+            {
+              /* Same situation: the frame is a stone offering table, not the
+                 lute-playing UI the old caption described. */
+              key: 'guge/play/node_guowoqin',
+              alt: '游戏内场景特写：红墙前的石供桌，桌面刻有盘长纹样，右侧为交互高光',
+              caption: '供桌与盘长纹样',
+            },
+            {
+              key: 'guge/play/node_npc',
+              alt: 'NPC 深度互动界面：与角色梅朵的对话面板',
+              caption: 'NPC 深度互动 —— 与梅朵并肩同行',
+            },
+          ],
+        },
+        {
+          kind: 'mediaRow',
+          columns: 2,
+          items: [
+            {
+              key: 'guge/play/scene_red_temple',
+              alt: '演示页面：核心交互场景红殿 —— 团队 VR 测试实拍、Unity 编辑器界面，以及艺术巅峰之地、NPC 深度互动、历史探索使命三栏说明',
+              caption: '核心交互场景：红殿',
+            },
+            {
+              key: 'guge/play/core_gameplay',
+              alt: '演示页面：核心交互玩法 —— 供桌、壁画解谜、背包与果沃琴弹奏界面，以及果沃琴解谜说明',
+              caption: '核心交互玩法',
+            },
+          ],
+        },
+      ],
+      note: '以上为项目实机界面截图与 Unity 录屏，不是设计稿或效果图。',
+    },
+
+    /* ------------------------------------------------------------------ 07 */
+    {
+      id: 'guide',
+      index: '07',
+      eyebrow: 'MEIDO · AI GUIDE',
+      tone: 'ink',
+      title: 'A CHARACTER THAT KNOWS THE WORLD.',
+      titleZh: '一个真正懂这个世界的角色。',
+      body: [
+        '梅朵不只是向导，她是玩家的伙伴。玩家可以随时向她提问，她会基于真实资料回答，并把话题引回场景里值得看的地方。',
+        '这背后是三条链路：RAG 知识库负责事实，LLM 负责表达，语音克隆负责声线；再加上智能寻路，让每一次回答都能落到具体地点与下一步线索上。',
+      ],
+      layout: 'full',
+      blocks: [
+        {
+          kind: 'media',
+          span: 'half',
+          media: {
+            key: 'guge/guide/meido_portrait',
+            alt: '《梦回古格》主角梅朵的形象：少女手持酥油灯，闭眼祈福',
+            caption: '梅朵 —— 玩家的向导与伙伴',
+          },
+        },
+        {
+          kind: 'pillars',
+          columns: 4,
+          items: [
+            { label: 'KNOWLEDGE', zh: '知识库：壁画、文物、历史文献、考古资料与专家解读，先归位再检索。' },
+            { label: 'MEMORY', zh: '记忆：记住玩家问过什么、走到哪里，让对话接得上。' },
+            { label: 'VOICE', zh: '语音：语音转文字进入模型，语音克隆还原角色声线。' },
+            { label: 'NAVIGATION', zh: '寻路：回答之后给出下一步线索，把话题接回场景。' },
+            { label: 'NARRATIVE', zh: '叙事：回答按角色设定与所处地点组织，而不是通用百科口吻。' },
+          ],
+        },
+        {
+          kind: 'flow',
+          steps: ['提问', '检索知识库', '基于真实资料回答', '给出下一步探索线索'],
+        },
+        {
+          kind: 'media',
+          span: 'wide',
+          media: {
+            key: 'guge/guide/rag_pipeline',
+            alt: 'RAG 增强生成式 AI 助手链路图：用户经语音转文字进入 LLM，检索 RAG 知识库后生成引导指令与文本，再由语音合成输出到虚拟角色',
+            caption: 'RAG 增强生成式 AI 助手链路（出自项目技术说明）',
+          },
+        },
+        {
+          kind: 'mediaRow',
+          columns: 2,
+          items: [
+            {
+              key: 'guge/guide/ui_dialogue',
+              alt: '游戏内 AI 导览对话界面：玩家提问与角色回答',
+              caption: '导览对话界面（实机）',
+            },
+            {
+              key: 'guge/guide/ui_voice',
+              alt: '游戏内语音输入界面',
+              caption: '语音输入界面（实机）',
+            },
+          ],
+        },
+        { kind: 'video', video: gugeGuideLoop },
+      ],
+      note: '对话界面为项目实机截图；链路图出自项目自身的技术说明。',
+    },
+
+    /* ------------------------------------------------------------------ 08 */
+    {
+      id: 'proof',
+      index: '08',
+      eyebrow: 'SOURCES & RECONSTRUCTION',
+      tone: 'paper',
+      title: 'NOT IMAGINED. RECONSTRUCTED.',
+      titleZh: '不是想象出来的，是考证出来的。',
+      body: [
+        '文化类内容一旦出现事实性错误，前面建立的信任会立刻归零。所以项目里每一件物品——从弓箭、短剑到果沃琴——都要求有史料依据。',
+        '团队查阅了 1991 年《古格故城》考古报告，并与札达县博物馆馆藏文物进行仔细比对，确保数字重建的准确性与严谨性。',
+      ],
+      layout: 'full',
+      blocks: [
+        {
+          kind: 'quote',
+          zh: '数字重建并非凭空想象，而是建立在严谨的史料考证之上。',
+          attribution: '项目资产溯源说明',
+        },
+        {
+          kind: 'mediaRow',
+          columns: 2,
+          items: [
+            {
+              key: 'guge/sources/archaeology_report',
+              alt: '1991 年《古格故城》考古报告书影',
+              caption: '1991 年《古格故城》考古报告（西藏自治区文物管理委员会编）',
+            },
+            {
+              key: 'guge/sources/artifact_evidence',
+              alt: '文物依据图解：武器的形制与结构示意',
+              caption: '物品形制依据：每一件道具都能追到具体出处',
+            },
+          ],
+        },
+        {
+          kind: 'pillars',
+          columns: 4,
+          items: [
+            { label: 'FIELD RESEARCH', zh: '实地考察：2025 年 6 月，西藏阿里札达。' },
+            { label: 'ARCHAEOLOGICAL RECORDS', zh: '考古报告：1991 年《古格故城》。' },
+            { label: 'MUSEUM COLLECTIONS', zh: '馆藏比对：札达县博物馆藏品。' },
+            { label: 'DIGITAL RECONSTRUCTION', zh: '数字复原：塑像、壁画、乐器和器物。' },
+          ],
+        },
+        {
+          kind: 'media',
+          span: 'wide',
+          media: {
+            key: 'guge/sources/statue_restoration',
+            alt: '红殿释迦牟尼塑像复原工程：依据考古资料重建的造像三维形象',
+            caption: '重点文物复原：红殿释迦牟尼塑像——消失半世纪的庄严法相',
+          },
+        },
+        {
+          kind: 'mediaRow',
+          columns: 3,
+          items: [
+            {
+              key: 'guge/sources/museum_01',
+              alt: '札达县博物馆馆藏文物照片',
+              caption: '札达县博物馆藏品',
+            },
+            {
+              key: 'guge/sources/museum_02',
+              alt: '札达县博物馆馆藏文物照片',
+              caption: '札达县博物馆藏品',
+            },
+            {
+              key: 'guge/sources/museum_03',
+              alt: '札达县博物馆馆藏文物照片',
+              caption: '札达县博物馆藏品',
+            },
+          ],
+        },
+        {
+          kind: 'mediaRow',
+          columns: 2,
+          items: [
+            {
+              key: 'guge/sources/mural_ref_01',
+              alt: '敦煌研究院整理的古格壁画画册资料',
+              caption: '壁画参考资料（敦煌研究院）',
+            },
+            {
+              key: 'guge/sources/mural_ref_02',
+              alt: '敦煌研究院整理的古格壁画画册资料',
+              caption: '壁画参考资料（敦煌研究院）',
+            },
+          ],
+        },
+      ],
+      note: '本页所有来源均为项目自身引用过的资料：1991 年《古格故城》考古报告、札达县博物馆馆藏、敦煌研究院壁画资料，以及团队实地拍摄的影像。',
+    },
+
+    /* ------------------------------------------------------------------ 09 */
+    {
+      id: 'craft',
+      index: '09',
+      eyebrow: 'PRESENTATION & VISUAL SYSTEM',
+      tone: 'ink',
+      title: 'THE PROJECT WAS COMPLEX. SO WAS THE CHALLENGE OF EXPLAINING IT.',
+      titleZh: '项目本身很复杂，把它讲清楚是另一件难事。',
+      body: [
+        '研究、三维、交互和考据叠在一起，很容易变成一堆谁也看不懂的图。这个项目最终交付的不只是系统，还有一整套把它讲清楚的视觉方案：展板、演示文稿、界面规范与信息图表。',
+      ],
+      layout: 'full',
+      piece: 'mosaic',
+      media: [
+        {
+          key: 'guge/deck/detail_04',
+          alt: '展板局部特写：语音链路与 RAG 检索流程的信息图表',
+          caption: '技术架构 · 语音为桥，RAG 为证',
+          focal: '35% 50%',
+        },
+        {
+          key: 'guge/deck/detail_cast',
+          alt: '展板局部特写：人物关系长卷，卓玛、祖母、顿珠、少女梅朵与丹增各有中藏双语标注与说明',
+          caption: '场景与角色关系 · 一群有名字的人',
+          focal: '50% 50%',
+        },
+        {
+          key: 'guge/deck/detail_02',
+          alt: '展板局部特写：界面设计规范中的色彩与图标系统',
+          caption: 'UI / 图标系统 · 色板与图形语言',
+          focal: '42% 50%',
+        },
+        {
+          key: 'guge/deck/detail_03',
+          alt: '展板局部特写：红殿建筑结构的拆解与标注',
+          caption: '三维结构 / 信息图 · 把建筑讲成一张图',
+          focal: '50% 42%',
+        },
+      ],
+      blocks: [
+        {
+          kind: 'mediaLinkRow',
+          columns: 4,
+          layered: true,
+          label: '02 / PORTFOLIO WALL · 展板墙',
+          items: [
+            {
+              href: '/works/guge/deck/board_01-2048.jpg',
+              label: 'BOARD 01',
+              note: '主视觉与设计说明',
+              media: {
+                key: 'guge/deck/board_01',
+                alt: '《古格拾忆录》展板一：总览版',
+                caption: '总览版',
+              },
+            },
+            {
+              href: '/works/guge/deck/board_02-2048.jpg',
+              label: 'BOARD 02',
+              note: '信息结构与技术图解',
+              media: {
+                key: 'guge/deck/board_02',
+                alt: '《古格拾忆录》展板二：叙事与技术版',
+                caption: '叙事与技术',
+              },
+            },
+            {
+              href: '/works/guge/deck/board_03-2048.jpg',
+              label: 'BOARD 03',
+              note: '玩法流程与 AI 链路',
+              media: {
+                key: 'guge/deck/board_03',
+                alt: '《古格拾忆录》展板三：玩法与 AI 版',
+                caption: '玩法与 AI',
+              },
+            },
+            {
+              href: '/works/guge/deck/board_04-2048.jpg',
+              label: 'BOARD 04',
+              note: '考据资料与界面规范',
+              media: {
+                key: 'guge/deck/board_04',
+                alt: '《古格拾忆录》展板四：考据与界面版',
+                caption: '考据与界面',
+              },
+            },
+          ],
+        },
+        {
+          kind: 'deckMosaic',
+          label: '03 / PRESENTATION DESIGN · 演示设计',
+          zh: '两套演示文稿共五十余页，这里放视觉最强的八页。要证明的是「被设计过」，不是「页数多」。',
+          items: [
+            {
+              key: 'guge/deck/ppt_01',
+              alt: '演示文稿第 3 页：01 掩埋在土林中的回音，项目背景与价值',
+              caption: '章节页 · 项目背景与价值',
+            },
+            {
+              key: 'guge/deck/ppt_02',
+              alt: '演示文稿第 5 页：七百年的辉煌骤然消亡，配壁画与遗址照片',
+              caption: '叙事页 · 七百年的辉煌骤然消亡',
+            },
+            {
+              key: 'guge/deck/ppt_03',
+              alt: '演示文稿第 9 页：02 VR 实机演示与交互设计',
+              caption: '章节页 · VR 实机演示与交互设计',
+            },
+            {
+              key: 'guge/deck/ppt_04',
+              alt: '演示文稿第 11 页：核心玩法——第一人称视角的深度探索',
+              caption: '玩法页 · 第一人称深度探索',
+            },
+            {
+              key: 'guge/deck/ppt_05',
+              alt: '演示文稿第 12 页：核心交互场景红殿，三栏信息结构',
+              caption: '场景页 · 红殿',
+            },
+            {
+              key: 'guge/deck/ppt_06',
+              alt: '演示文稿第 15 页：核心交互玩法 NPC 深度互动与 RAG 链路',
+              caption: 'AI 页 · NPC 深度互动',
+            },
+            {
+              key: 'guge/deck/ppt_07',
+              alt: '演示文稿第 21 页：重点文物复原——红殿释迦牟尼塑像复原工程',
+              caption: '考据页 · 塑像复原工程',
+            },
+            {
+              key: 'guge/deck/ppt_08',
+              alt: '演示文稿第 23 页：资产溯源，引用 1991 年《古格故城》考古报告',
+              caption: '考据页 · 资产溯源',
+            },
+          ],
+        },
+        {
+          kind: 'flow',
+          label: 'ONE LINE THROUGH ALL OF IT',
+          steps: ['RESEARCH', 'SYSTEM', 'STORY', 'PRESENTATION'],
+        },
+        {
+          kind: 'quote',
+          size: 'lg',
+          zh: '我们做作品，也做作品被看懂的方式。',
+          en: 'WE DESIGN THE WORK. AND HOW THE WORK IS UNDERSTOOD.',
+        },
+        {
+          kind: 'note',
+          zh: '展板上印的标题是《古格拾忆录》，那是本项目的参赛与展陈版次；课题与叙事的正式名称是《梦回古格》。两者是同一套成果的不同版次，展板实物保持原样。',
+        },
+      ],
+    },
+
+    /* ------------------------------------------------------------------ 10 */
     {
       id: 'outcome',
-      index: '07',
-      eyebrow: 'OUTCOME / RECOGNITION',
-      title: 'A prototype that runs — and travelled.',
-      titleZh: '可运行的原型，以及三个全国总决赛奖项。',
+      index: '10',
+      eyebrow: 'OUTCOME',
+      tone: 'ink',
+      title: "A DIGITAL GUGE THAT DOESN'T COLLAPSE.",
+      titleZh: '一座不会坍塌的数字古格。',
       body: [
-        '项目交付了可运行的交互原型（见上方演示），并带着完整的系统方案参加了多个全国性设计竞赛，在三个不同的评审体系中获得全国总决赛奖项。',
-        '这些奖项对客户的意义不在于名次本身，而在于它证明：这套从研究到实现的完整链路，经得起外部专业评审的检验。',
+        '项目最终交付了可运行的交互原型与完整的展陈方案：扫描与建模数据、Unity 实时场景、由 RAG 知识引擎驱动的 AI 导览，以及四张展板与两套演示文稿。',
+        '这些材料随后参加了多个全国性设计竞赛，在三个不同的评审体系中获得全国总决赛奖项。奖项的意义不在名次，而在于它证明：从研究到实现的完整链路，经得起外部专业评审的检验。',
       ],
-      note: '关于协作：本项目为团队协作完成的研究与设计实践成果，所获奖项归属于项目本身。',
-      layout: 'statement',
+      layout: 'full',
+      blocks: [
+        {
+          kind: 'media',
+          span: 'full',
+          media: {
+            key: 'guge/finale/plateau',
+            alt: '《梦回古格》项目实拍：阿里高原与古格遗址的开场画面',
+            caption: '古格王朝（约 10 世纪—17 世纪）——虽已消失，但从未被遗忘',
+          },
+        },
+        { kind: 'video', video: gugeFilm },
+      ],
+      note: '本项目为团队协作完成的研究与设计实践成果，所获奖项归属于项目本身。',
     },
   ],
   recognition: [
@@ -229,41 +926,55 @@ export const guge: Project = {
     },
   ],
   /*
-   * Credits state authorship plainly and stay within what is actually known.
-   * An earlier draft ended with "现有资料未逐项记录协作方分工" — a research note
-   * about our own sources, which reads as a disclaimer on a sales page and
-   * undercuts the work it is meant to attribute.
+   * Credits state authorship plainly and stay inside what is actually known.
+   * The project is a five-person SRTP team; VC's part is named, and nothing is
+   * claimed about anyone else's contribution.
    */
   credits: [
     '本项目为团队协作完成的研究与设计实践，所获奖项归属于项目本身。',
     'VC 参与文化研究、视觉提取、视觉系统与三维资产设计。',
     'VC 参与交互叙事、AI 导览方案与交互原型实现。',
   ],
+  video: gugeFilm,
   /*
-   * The real project film.
+   * The home-page mini case.
    *
-   * An earlier version of this slot pointed at `0001-0120.mp4`, which turned out
-   * to be a **Blender render of an old residential stairwell** — a 三维与可视化
-   * piece, mis-filed with the 古格 material. It has been removed; see the note in
-   * the removed block's history. This is the actual 梦回古格 footage: a five-minute
-   * project film supplied as 464MB of 4K with audio.
-   *
-   * The page needs a silent loop, not a film, so `_video-manifest.json` records
-   * what was taken from it: the opening 12 seconds, which are pure location
-   * footage of the plateau and the ruins — no title card and no burned-in
-   * subtitles, so the loop reads as landscape rather than as a cropped subtitle
-   * track. Re-encoded to 1440px, audio dropped: 1.5MB instead of 464MB.
+   * Guge is the one project broad enough that a cover image alone undersells it:
+   * a visitor could reasonably read any single frame as "a culture-themed VR
+   * student project". Three slices — a built world, three-dimensional craft, and
+   * a working AI guide — are the minimum that makes the real scale legible. Each
+   * one links to the chapter that proves it, so the home page promises and the
+   * case page delivers.
    */
-  video: {
-    mp4: '/works/guge/video/mengu-loop.mp4',
-    webm: '/works/guge/video/mengu-loop.webm',
-    poster: '/works/guge/video/poster-1600.jpg',
-    posterSrcSet:
-      '/works/guge/video/poster-1200.jpg 1200w, /works/guge/video/poster-1600.jpg 1600w, /works/guge/video/poster-2048.jpg 2048w',
-    // Full frame, uncropped: the loop keeps the film's own 16:9.
-    aspect: 3838 / 2160,
-    caption: '《梦回古格》项目实拍：阿里札达土林与古格遗址（静音循环）',
-  },
+  homeSlices: [
+    {
+      label: 'WORLD BUILDING',
+      zh: '不是复原一处废墟，是围绕它建起一个有人的世界。',
+      anchor: 'people',
+      media: {
+        key: 'guge/people/scroll_seg_03',
+        alt: '古格项目人物关系长卷第三段：披甲的少女梅朵与骑马戍边的守将丹增',
+      },
+    },
+    {
+      label: '3D / BLENDER / CGI',
+      zh: '地形、建筑、材质与大气，全部在三维流程里建出来并渲染。',
+      anchor: 'built',
+      media: {
+        key: 'guge/reel/render_06',
+        alt: '古格大场景渲染：土林、峡谷与遗址整体在云层之下',
+      },
+    },
+    {
+      label: 'AI / VR',
+      zh: 'RAG 知识库驱动的角色梅朵，在 Unity 实时场景里回答问题、给出线索。',
+      anchor: 'guide',
+      media: {
+        key: 'guge/guide/meido_portrait',
+        alt: '《梦回古格》主角梅朵的形象：少女手持酥油灯，闭眼祈福',
+      },
+    },
+  ],
 };
 
 /* ==========================================================================
@@ -285,6 +996,15 @@ export const lihuahua: Project = {
   year: '2026',
   accent: '#A9714A',
   badge: 'WORKING PROTOTYPE',
+  /*
+   * The three Lihuahua covers are portrait phone screenshots (0.45). Forced into
+   * the shared landscape tile with `cover` they kept 29–34% of the frame — the
+   * dog survived, the app did not: header, input and the whole control row were
+   * outside the box. The screenshots were shot on a warm off-white (252,246,241)
+   * that is within a couple of values of this site's paper, so `contain` reads as
+   * the screen resting on the same surface rather than a letterboxed image.
+   */
+  coverFit: 'contain',
   cover: {
     key: 'lihuahua/relaxed',
     alt: '李花花手机界面：一只像素风格的伯恩山犬，显示当前状态与情绪数值',
@@ -639,7 +1359,13 @@ export const qinghua: Project = {
   meta: [
     { label: 'TYPE', value: '网页 / 交互式数字体验' },
     { label: 'SCOPE', value: '概念 / 交互设计 / 视觉语言 / 前端实现' },
-    { label: 'MEDIUM', value: 'Web · 五道工序 · 桌面与移动端各自编排' },
+    /*
+     * 「五道」 is the craft stages; the particle section further down counts
+     * seven because it renders the five plus the start and end states. Calling
+     * both simply 「工序」 read as a contradiction (found 2026-09-20), so the
+     * craft count names itself.
+     */
+    { label: 'MEDIUM', value: 'Web · 五道制瓷工序 · 桌面与移动端各自编排' },
     { label: 'STATUS', value: 'Live experience' },
   ],
   summary:
@@ -663,7 +1389,7 @@ export const qinghua: Project = {
       index: '02',
       eyebrow: 'NARRATIVE STRUCTURE',
       title: 'Five craft stages, numbered like a workshop.',
-      titleZh: '五道工序，按编号推进。',
+      titleZh: '五道制瓷工序，按编号推进。',
       body: [
         '体验被切成编号工序（01 → 05），底部有进度指示与当前工序名，每一步必须先完成手上的操作，才能进入下一步。',
         '仪式感来自节奏被明确划分，而不是来自页面有多长；观众始终知道自己做到哪了、还剩几道。',

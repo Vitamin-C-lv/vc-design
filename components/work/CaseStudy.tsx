@@ -10,8 +10,21 @@ import { CaseNav } from './CaseNav';
 import { RecognitionList } from './RecognitionList';
 import { ParticleShowcase } from './ParticleShowcase';
 import { EmbeddedProduct } from './EmbeddedProduct';
+import { GugeCaseStudy } from './guge/GugeCaseStudy';
 
 export function CaseStudy({ project }: { project: Project }) {
+  /*
+   * The Guge flagship is directed rather than alternated (see GugeCaseStudy for
+   * the tone curve and the reasoning behind it). It reads the same `Project`
+   * content model as everything else — the only difference is which renderer
+   * walks it. Keeping the branch here, instead of adding more `layout` values to
+   * the shared renderer, is what leaves the other three flagships on exactly the
+   * code path they were verified on.
+   */
+  if (project.slug === 'guge') {
+    return <GugeCaseStudy project={project} />;
+  }
+
   return (
     <div style={{ '--project-accent': project.accent } as React.CSSProperties}>
       {/*

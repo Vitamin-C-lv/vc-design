@@ -17,7 +17,101 @@
   },
   "poster": {
     "sourceTimeSeconds": 0.2,
-    "jpg": ["poster-1200.jpg", "poster-1600.jpg", "poster-2048.jpg"],
+    "jpg": [
+      "poster-1200.jpg",
+      "poster-1600.jpg",
+      "poster-2048.jpg"
+    ],
     "lqip": "poster-lqip.jpg"
-  }
+  },
+  "rebuild": {
+    "source": "屏幕录制 2026-04-04 234124.mp4",
+    "sourceSpec": "3012x1698, 30fps, 11.541313s, h264 + aac",
+    "interval": {
+      "startSeconds": 0.5,
+      "endSeconds": 6.5,
+      "seconds": 6
+    },
+    "crop": "3012x1694, vertical center",
+    "outputSpec": "1600x900, h264 crf 30 preset veryslow / vp9 crf 46, silent",
+    "mp4": "rebuild-loop.mp4",
+    "webm": "rebuild-loop.webm",
+    "mp4Bytes": 1814857,
+    "webmBytes": 1917937,
+    "poster": "poster-rebuild.jpg",
+    "posterSourceTimeSeconds": 0.8,
+    "posterBytes": 303272,
+    "note": "由项目真实点云分区录屏裁出 6 秒静音循环；不做任何合成或补帧。"
+  },
+  "processReel": {
+    "source": "20260403-0912-37.1073483.mp4",
+    "sourceSpec": "3840x2160, 30fps, 46.200000s, h264 + aac",
+    "intervals": [
+      [
+        0,
+        3
+      ],
+      [
+        14,
+        17
+      ],
+      [
+        28,
+        31
+      ],
+      [
+        43,
+        46
+      ]
+    ],
+    "seconds": 12,
+    "outputSpec": "1920x1080, h264 crf 25 / vp9 crf 33, silent",
+    "mp4": "process-reel.mp4",
+    "webm": "process-reel.webm",
+    "mp4Bytes": 1534917,
+    "webmBytes": 1515504,
+    "poster": "poster-reel.jpg",
+    "posterSourceTimeSeconds": 11.0,
+    "posterBytes": 293470,
+    "note": "由 46.2 秒三维制作过程录屏按 0-3 / 14-17 / 28-31 / 43-46s 四段拼成 12 秒；阶段划分来自素材本身，未伪造任何不存在的工序。"
+  },
+  "play": {
+    "source": "AI npc 3D - Dialog - Windows, Mac, Linux - Unity 6.2 (6000.2.8f1) _DX12_ 2026-04-05 04-23-18.mp4",
+    "sourceSpec": "1920x1020, 59.94fps, 59.669034s, h264 + aac",
+    "interval": {
+      "startSeconds": 12.0,
+      "endSeconds": 22.0,
+      "seconds": 10
+    },
+    "crop": "1813x1020, horizontal center",
+    "outputSpec": "1600x900, h264 crf 26 / vp9 crf 34, silent",
+    "mp4": "play-loop.mp4",
+    "webm": "play-loop.webm",
+    "mp4Bytes": 802083,
+    "webmBytes": 553082,
+    "poster": "poster-play.jpg",
+    "posterSourceTimeSeconds": 17.0,
+    "posterBytes": 121244,
+    "note": "Unity 第一人称红殿漫游，裁 12-22s 作 10 秒静音循环。"
+  },
+  "guide": {
+    "source": "AI npc 3D - Dialog - Windows, Mac, Linux - Unity 6.2 (6000.2.8f1)_ _DX12_ 2026-04-01 23-27-30.mp4",
+    "sourceSpec": "1920x1040, 59.94fps, 377.885133s, h264 + aac",
+    "interval": {
+      "startSeconds": 60.0,
+      "endSeconds": 68.0,
+      "seconds": 8
+    },
+    "crop": "1849x1040 at x=35, horizontal center",
+    "outputSpec": "1600x900, h264 crf 26 / vp9 crf 36, silent",
+    "mp4": "guide-loop.mp4",
+    "webm": "guide-loop.webm",
+    "mp4Bytes": 982371,
+    "webmBytes": 567205,
+    "poster": "poster-guide.jpg",
+    "posterSourceTimeSeconds": 64.0,
+    "posterBytes": 74996,
+    "note": "AI 导览对话段，取 60-68s 作 8 秒静音循环。"
+  },
+  "policy": "所有视频均为真实录屏的截取与转码，禁止合成、禁止 AI 生成、禁止补帧伪造过程。8K 延时原片（154 Mbps）只抽帧当静图，不下发视频。"
 }

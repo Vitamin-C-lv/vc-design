@@ -58,7 +58,14 @@ export function DiagramNode({ children, delay = 0, className, label }: { childre
   );
 
   const content = (
-    <div ref={nodeRef} className={cx('h-full min-w-0 border border-[var(--tone-line)] bg-[var(--tone-surface)] p-4 md:p-5', className)}>
+    <div ref={nodeRef} /*
+   * Padding is viewport-aware because these nodes sit in a flex row that can be
+   * as narrow as 42px at 1024 — where `p-5` left a *two pixel* content box and
+   * forced every character onto its own line. 32px of the 42 went to padding.
+   * `md:px-2` gives the glyphs room to pair up; wider viewports keep the airy
+   * version.
+   */
+  className={cx('h-full min-w-0 border border-[var(--tone-line)] bg-[var(--tone-surface)] p-4 md:px-2 md:py-4 xl:px-5 xl:py-5', className)}>
       {label ? <p className="type-label-sm tone-accent-text mb-3">{label}</p> : null}
       <div className="type-label tone-fg leading-relaxed">{children}</div>
     </div>

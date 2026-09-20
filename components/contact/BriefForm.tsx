@@ -272,6 +272,11 @@ export function BriefForm() {
             </label>
             <textarea
               id="brief-detail"
+              /* A form control without a `name` is not submitted. Harmless
+                 while `formEndpoint` is empty (the button copies the brief
+                 instead), but it would silently drop the visitor's text the day
+                 the endpoint is filled in. */
+              name="detail"
               value={detail}
               onChange={(event) => {
                 setDetail(event.target.value);
