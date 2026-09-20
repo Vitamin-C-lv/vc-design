@@ -237,9 +237,19 @@ export function GugeHero({ project, section }: { project: Project; section: Case
               as="p"
             />
           ) : null}
+          {/*
+           * `en` must not be `project.summary`.
+           *
+           * `Line` is the crossed echo — in Chinese mode the big line is `zh`
+           * and the small line under it is `en`. Passing the Chinese summary
+           * as both printed the same 187-character paragraph twice, once at
+           * 17px and again at 11px mono, and left English mode showing Chinese.
+           * This is the same expression the other three case pages use in
+           * `CaseHero`; keep the two in step.
+           */}
           <Line
             zh={project.summary}
-            en={project.summary}
+            en={project.summaryEn ?? project.summary}
             className="type-lead tone-fg mt-6 max-w-[58ch]"
           />
         </Reveal>
