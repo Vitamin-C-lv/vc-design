@@ -356,8 +356,7 @@ export const guge: Project = {
         },
         { kind: 'video', video: gugeRebuildLoop },
         /* 分组规则：同一排里的图，比例要接近，否则矮的那张下面会空出一大块。
-           两张点云同为 1.77 配对；竖版展板（0.89）与白模（1.35）配对；
-           3.57:1 的图纸条独占整幅——它塞进任何半栏都会变成一条缝。 */
+           两张点云同为 1.77，配对。 */
         {
           kind: 'mediaRow',
           columns: 2,
@@ -375,13 +374,15 @@ export const guge: Project = {
           ],
         },
         /*
-         * This row used to pair the exploded diagram with
-         * `guge/rebuild/wireframe`, captioned 「白模：未上色的地形与建筑网格」.
-         * That file is a dark, atmospheric landscape render — no mesh, no white
-         * model — and the source material has no untextured model to swap in
-         * (the only candidate on the boards is 520×320, which would ship blurry
-         * again). The row is now the diagram alone, re-cut from the 5486px board
-         * so it carries its five layer labels at full resolution.
+         * 拆解图与三视图在 2026-09-20 换成了项目自己的源文件。
+         *
+         * 在那之前这两幅都是从 5486px 展板上切下来的：拆解图带着展板的深色纹样底，
+         * 地基层被下边缘切掉；三视图那条更糟，三个视图的上半截全被裁掉，只剩下半。
+         * 用户随后直接投喂了原文件（带标注的完整拆解图 + 正/侧/俯三张测绘图纸），
+         * 干净、完整、分辨率也够，所以展板切图整个撤掉了。
+         *
+         * 三视图不再挤成一条 3.57:1 的长条：它们各自比例不同（1.76 / 1.98 / 1.16），
+         * 排成 mediaRow 后按自身比例分列，同排自动等高；手机上一列一张，看得清。
          */
         {
           kind: 'media',
@@ -389,20 +390,37 @@ export const guge: Project = {
           media: {
             key: 'guge/rebuild/red_temple_layers',
             alt: '红殿拆解分层图：从屋顶层、结构层、内部空间、围墙层到地基层的红殿结构拆解',
-            caption: '红殿拆解分层：屋顶层 / 结构层 / 内部空间 / 围墙层 / 地基层',
+            caption: '红殿拆解分层图',
           },
         },
         {
-          kind: 'media',
-          span: 'full',
-          media: {
-            key: 'guge/rebuild/red_temple_drawings',
-            alt: '红殿的正视图、侧视图、俯视图与平面图',
-            caption: '红殿正视图 / 侧视图 / 俯视图与平面图',
-          },
+          kind: 'mediaRow',
+          columns: 3,
+          items: [
+            {
+              key: 'guge/rebuild/red_temple_front',
+              alt: '红殿正视图：柱网、佛像与佛堂内景的实测图',
+              caption: '正视图 —— 柱网与佛堂内景',
+            },
+            {
+              key: 'guge/rebuild/red_temple_side',
+              alt: '红殿侧视图：纵向剖面与柱列',
+              caption: '侧视图 —— 纵向剖面',
+            },
+            {
+              key: 'guge/rebuild/red_temple_plan',
+              alt: '红殿俯视图：柱网平面与入口踏道',
+              caption: '俯视图 —— 柱网平面与入口踏道',
+            },
+          ],
         },
       ],
-      note: '点云分区与地形重建来自项目真实录屏；建筑图纸出自展板上的红殿拆解图。',
+      /*
+       * 旧的三视图长条上印着一条实测信息（纵梁原为 5×6 共 30 根、为虚拟交互博物馆
+       * 做了削减）。那行字随展板切图一起没了，但它值得留，所以搬进 note 当正文——
+       * 顺带把展板上印错的《古格古城》更正为 1991 年《古格故城》考古报告。
+       */
+      note: '点云分区与地形重建来自项目真实录屏。红殿支撑纵梁原为 5×6 共 30 根，因场景定位是虚拟交互博物馆而做了削减，其余部分完全按照 1991 年《古格故城》考古报告重建。',
     },
 
     /* ------------------------------------------------------------------ 05 */

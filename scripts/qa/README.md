@@ -44,6 +44,7 @@ BASE=http://127.0.0.1:3000 node scripts/qa/verify-header-contrast.mjs
 | `verify-share-card.mjs` | 首页社交分享卡与 canonical metadata | `og:title` / `og:description` / `og:url` / 绝对 `og:image`、1200×630 声明与真实 PNG 像素、Twitter card、绝对 canonical；线上 `BASE` 另验 `og:url` host 一致 |
 | `verify-header-contrast.mjs` | 页头控件在 tone 翻转时的真实像素对比度 | `phone-390` / `desktop-1600` × `/`、`/work`、`/lab` × 浅色顶部 / 深色段落；截图裁剪后逐个可见页头控件按 WCAG 计算，全部 `>= 4.5:1` |
 | `opening-sequence.mjs` | 首屏开片 A–E 关键帧、桌面/手机录像，以及 reduced-motion、无 JS、同 tab 二次访问和单一 signal-red 像素红线 | A/B 片头不存在时明确 `skipped: no-intro`；C/D/E 有真实截图；三条降级路径和像素红线失败时退出码非 0 并落失败截图 |
+| `shot-guge-rebuild.mjs` | 定点拍古格第 04 章的四张图（拆解图 + 正/侧/俯三视图）× 1600/390 | 四张都加载、可见尺寸非零、无 4xx；产物 `_qa-output/guge-rebuild/`。**刻意不是整页长图**——整页 42 屏读不了，而且 `fullPage` 会重新触发滚动动画、截到中途帧 |
 
 `verify-header-contrast.mjs` 防止语言开关或移动菜单按钮丢失 `tone-fg`，再次继承 body 的骨白色并在浅色段落上变成白字白底。它必须连接已运行的站点，例如：
 

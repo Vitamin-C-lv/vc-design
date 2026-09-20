@@ -2128,46 +2128,14 @@
     "lqip": "guge/rebuild/point_cloud-lqip.webp",
     "fallback": "guge/rebuild/point_cloud-1600.jpg"
   },
-  "guge/rebuild/red_temple_drawings": {
-    "src": "guge/rebuild/red_temple_drawings",
-    "original": {
-      "width": 2200,
-      "height": 616,
-      "bytes": 195982
-    },
-    "aspect": 3.5714,
-    "widths": [
-      480,
-      768,
-      1200,
-      1600,
-      2048
-    ],
-    "webp": [
-      "guge/rebuild/red_temple_drawings-480.webp",
-      "guge/rebuild/red_temple_drawings-768.webp",
-      "guge/rebuild/red_temple_drawings-1200.webp",
-      "guge/rebuild/red_temple_drawings-1600.webp",
-      "guge/rebuild/red_temple_drawings-2048.webp"
-    ],
-    "avif": [
-      "guge/rebuild/red_temple_drawings-480.avif",
-      "guge/rebuild/red_temple_drawings-768.avif",
-      "guge/rebuild/red_temple_drawings-1200.avif",
-      "guge/rebuild/red_temple_drawings-1600.avif",
-      "guge/rebuild/red_temple_drawings-2048.avif"
-    ],
-    "lqip": "guge/rebuild/red_temple_drawings-lqip.webp",
-    "fallback": "guge/rebuild/red_temple_drawings-2048.jpg"
-  },
   "guge/rebuild/red_temple_layers": {
     "src": "guge/rebuild/red_temple_layers",
     "original": {
-      "width": 2012,
-      "height": 2697,
-      "bytes": 6368429
+      "width": 1960,
+      "height": 2424,
+      "bytes": 4095293
     },
-    "aspect": 0.746,
+    "aspect": 0.8086,
     "widths": [
       480,
       768,
@@ -2870,5 +2838,74 @@
     ],
     "lqip": "guge/play/scene_red_temple-lqip.webp",
     "fallback": "guge/play/scene_red_temple-2048.jpg"
+  },
+  "guge/rebuild/red_temple_front": {
+    "src": "guge/rebuild/red_temple_front",
+    "original": {
+      "width": 885,
+      "height": 503,
+      "bytes": 184640
+    },
+    "aspect": 1.7594,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/rebuild/red_temple_front-480.webp",
+      "guge/rebuild/red_temple_front-768.webp"
+    ],
+    "avif": [
+      "guge/rebuild/red_temple_front-480.avif",
+      "guge/rebuild/red_temple_front-768.avif"
+    ],
+    "lqip": "guge/rebuild/red_temple_front-lqip.webp",
+    "fallback": "guge/rebuild/red_temple_front-768.jpg"
+  },
+  "guge/rebuild/red_temple_plan": {
+    "src": "guge/rebuild/red_temple_plan",
+    "original": {
+      "width": 1027,
+      "height": 887,
+      "bytes": 30089
+    },
+    "aspect": 1.1578,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/rebuild/red_temple_plan-480.webp",
+      "guge/rebuild/red_temple_plan-768.webp"
+    ],
+    "avif": [
+      "guge/rebuild/red_temple_plan-480.avif",
+      "guge/rebuild/red_temple_plan-768.avif"
+    ],
+    "lqip": "guge/rebuild/red_temple_plan-lqip.webp",
+    "fallback": "guge/rebuild/red_temple_plan-768.jpg"
+  },
+  "guge/rebuild/red_temple_side": {
+    "src": "guge/rebuild/red_temple_side",
+    "original": {
+      "width": 1133,
+      "height": 573,
+      "bytes": 36511
+    },
+    "aspect": 1.9773,
+    "widths": [
+      480,
+      768
+    ],
+    "webp": [
+      "guge/rebuild/red_temple_side-480.webp",
+      "guge/rebuild/red_temple_side-768.webp"
+    ],
+    "avif": [
+      "guge/rebuild/red_temple_side-480.avif",
+      "guge/rebuild/red_temple_side-768.avif"
+    ],
+    "lqip": "guge/rebuild/red_temple_side-lqip.webp",
+    "fallback": "guge/rebuild/red_temple_side-768.jpg"
   }
 }
