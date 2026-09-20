@@ -160,7 +160,7 @@ export const guge: Project = {
           media: {
             key: 'guge/field/site_hero_01',
             alt: '古格王朝遗址所在的土林与荒原全景，蓝天白云下可见远处层叠的山体',
-            caption: '古格王朝遗址：土林、洞窟与山顶王城构成的空间关系（2025 年 6 月实地拍摄）',
+            caption: '札达土林 —— 古格王朝遗址所在的地貌环境（2025 年 6 月实地拍摄）',
           },
         },
         {
@@ -598,7 +598,7 @@ export const guge: Project = {
           span: 'half',
           media: {
             key: 'guge/guide/meido_portrait',
-            alt: '《梦回古格》主角梅朵的形象：少女手持酥油灯，闭眼祈福',
+            alt: '梅朵闭眼侧脸的双重曝光：土红色衣饰与珠串叠在红殿壁画纹样上',
             caption: '梅朵 —— 玩家的向导与伙伴',
           },
         },
@@ -672,12 +672,12 @@ export const guge: Project = {
           items: [
             {
               key: 'guge/sources/archaeology_report',
-              alt: '1991 年《古格故城》考古报告书影',
-              caption: '1991 年《古格故城》考古报告（西藏自治区文物管理委员会编）',
+              alt: '《古格故城》考古报告中的刀、矛实测线图，附比例尺与器物编号',
+              caption: '1991 年《古格故城》考古报告中的器物图版：铁刀、铁刀身与铁矛头',
             },
             {
               key: 'guge/sources/artifact_evidence',
-              alt: '文物依据图解：武器的形制与结构示意',
+              alt: '道具溯源流程：模糊的道具界面缩略图沿金色连线串起，指向各自的出处',
               caption: '物品形制依据：每一件道具都能追到具体出处',
             },
           ],
@@ -989,7 +989,7 @@ export const guge: Project = {
       anchor: 'guide',
       media: {
         key: 'guge/guide/meido_portrait',
-        alt: '《梦回古格》主角梅朵的形象：少女手持酥油灯，闭眼祈福',
+        alt: '梅朵闭眼侧脸的双重曝光：土红色衣饰与珠串叠在红殿壁画纹样上',
       },
     },
   ],
